@@ -31,8 +31,11 @@ int main()
 
     string test_config_path = "test_config.conf";
     bool read_config_works = test_read_config(test_config_path);
-
     cout << "read_config works: " << read_config_works << endl;
+
+    string test_language_file_path = "test_language_file.csv";
+    bool get_language_map_works = test_get_language_map(test_language_file_path);
+    cout << "get_language_map works: " << get_language_map_works << endl;
 
     string test_filepath = "test_codewords.csv";
     vector<vector<int>> test_numbers = readCSVIntegers(test_filepath);

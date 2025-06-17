@@ -8,8 +8,8 @@
 #include "basic_functions.h"
 
 
-std::map<std::string, std::string> get_language_map(const std::string& filepath) {
-    std::map<std::string, std::string> language_map;
+std::map<std::string, std::map<std::string, std::string>> get_language_map(const std::string& filepath) {
+    std::map<std::string, std::map<std::string, std::string>> language_map;
 
     std::ifstream infile(filepath);
     std::string line, currentSection;
@@ -17,6 +17,31 @@ std::map<std::string, std::string> get_language_map(const std::string& filepath)
     if (!infile) {
         std::cerr << "Error: Cannot open file '" << filepath << "'\n";
         return language_map;
+    }
+    std::vector<std::string> first_line;
+    std::vector<std::string> split_line;
+
+    while (std::getline(infile, line)) {
+        
+        line = remove_whitespace(line);
+        if (line.empty() || line[0] == '#') continue;
+
+        split_line = split_string(line, ';');
+        if (first_line.empty()) {
+            first_line = split_line;
+            for (int i = 1; i < first_line.size(); i++) {
+                if (first_line[i] == "") break;
+
+                language_map[first_line[i]] = std::map<std::string, std::string>();
+            }
+            continue;
+        }
+
+        for (int i = 1; i < first_line.size(); i++) {
+            if (first_line[i] == "") break;
+            
+            language_map[first_line[i]][split_line[0]] = split_line[i];
+        }
     }
 
     return language_map;
@@ -34,10 +59,8 @@ std::map<std::string, std::map<std::string, std::string>> read_config(const std:
     }
 
     while (std::getline(infile, line)) {
-        // Remove leading/trailing whitespace
-        line.erase(0, line.find_first_not_of(" \t\r\n"));
-        line.erase(line.find_last_not_of(" \t\r\n") + 1);
-
+        
+        line = remove_whitespace(line);
         if (line.empty() || line[0] == '#') continue;
 
         if (line.front() == '[' && line.back() == ']') {
@@ -50,10 +73,8 @@ std::map<std::string, std::map<std::string, std::string>> read_config(const std:
                 std::string value = line.substr(eqPos + 1);
 
                 // Trim whitespace
-                key.erase(0, key.find_first_not_of(" \t\r\n"));
-                key.erase(key.find_last_not_of(" \t\r\n") + 1);
-                value.erase(0, value.find_first_not_of(" \t\r\n"));
-                value.erase(value.find_last_not_of(" \t\r\n") + 1);
+                key = remove_whitespace(key);
+                value = remove_whitespace(value);
 
                 config_map[currentSection][key] = value;
             }

@@ -80,6 +80,25 @@ bool test_read_config(string test_default_filepath)
 
 bool test_get_language_map(string test_language_file_path)
 {
-    map<string, string> language_map = get_language_map(test_language_file_path);
-    return false;
+    bool passing = true;
+    map<string, map<string, string>> language_map = get_language_map(test_language_file_path);
+
+    string lang_fi = "fi";
+    string lang_en = "en";
+    string key1 = "yes";
+    string key2 = "no";
+
+    bool passing1 = language_map[lang_fi][key1] == "kyllä";
+    passing = passing && passing1;
+
+    bool passing2 = language_map[lang_en][key1] == key1;
+    passing = passing && passing2;
+
+    bool passing3 = language_map[lang_fi][key2] == "ei";
+    passing = passing && passing3;
+
+    bool passing4 = language_map[lang_en][key2] == key2;
+    passing = passing && passing4;
+
+    return passing;
 }
