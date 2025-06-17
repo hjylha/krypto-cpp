@@ -7,7 +7,7 @@
 #include "file_operations.h"
 #include "codewordpuzzle.h"
 
-using std::string, std::map, std::vector;
+using std::string, std::map, std::vector, std::pair;
 
 
 bool test_remove_whitespace() {
@@ -98,6 +98,45 @@ bool test_get_language_map(string test_language_file_path)
     passing = passing && passing3;
 
     bool passing4 = language_map[lang_en][key2] == key2;
+    passing = passing && passing4;
+
+    return passing;
+}
+
+bool test_get_wordlist(string test_wordlist_path) {
+    vector<string> wordlist = get_wordlist(test_wordlist_path);
+    vector<string> expected_wordlist = {"some", "words", "here", "to", "be", "read", "by", "someone", "or", "something", "cola", "camp"};
+
+    bool passing = wordlist == expected_wordlist;
+
+    return passing;
+}
+
+bool test_get_codewords(string test_codeword_path) {
+    bool passing = true;
+    vector<string> expected_comments = {"this is a comment", "another line"};
+    vector<vector<int>> expected_codewords;
+    expected_codewords.push_back({1, 2, 3, 4, 5, 6});
+    expected_codewords.push_back({3, 7, 9});
+    expected_codewords.push_back({8, 10, 11});
+    expected_codewords.push_back({10, 12, 13});
+    expected_codewords.push_back({3, 22, 24, 15});
+    expected_codewords.push_back({21, 15, 13, 11});
+
+    pair<vector<string>, vector<vector<int>>> result = get_codewords(test_codeword_path);
+
+    bool passing1 = result.first == expected_comments;
+    passing = passing && passing1;
+
+    vector<vector<int>> actual_codewords = result.second;
+
+    bool passing2 = actual_codewords[0] == expected_codewords[0];
+    passing = passing && passing2;
+
+    bool passing3 = actual_codewords[1] == expected_codewords[1];
+    passing = passing && passing3;
+
+    bool passing4 = actual_codewords[2] == expected_codewords[2];
     passing = passing && passing4;
 
     return passing;

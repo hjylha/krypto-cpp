@@ -9,7 +9,7 @@
 #include "file_operations.h"
 #include "codewordpuzzle.h"
 
-using std::cout, std::endl, std::string, std::map, std::vector;
+using std::cout, std::endl, std::string, std::map, std::vector, std::pair;
 
 // basic_functions
 bool test_remove_whitespace();
@@ -18,5 +18,7 @@ bool test_split_string();
 // file_operations
 bool test_read_config(string test_default_filepath);
 bool test_get_language_map(string test_language_file_path);
+bool test_get_wordlist(string test_wordlist_path);
+bool test_get_codewords(string test_codeword_path);
 
 #endif

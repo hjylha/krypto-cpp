@@ -12,6 +12,8 @@
 
 std::map<std::string, std::map<std::string, std::string>> get_language_map(const std::string& filepath);
 std::map<std::string, std::map<std::string, std::string>> read_config(const std::string& filepath);
+std::vector<std::string> get_wordlist(const std::string& filepath);
+std::pair<std::vector<std::string>, std::vector<std::vector<int>>> get_codewords(const std::string& filepath);
 std::vector<std::vector<int>> readCSVIntegers(const std::string& filepath);
 
 #endif

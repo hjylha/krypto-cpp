@@ -37,21 +37,27 @@ int main()
     bool get_language_map_works = test_get_language_map(test_language_file_path);
     cout << "get_language_map works: " << get_language_map_works << endl;
 
-    string test_filepath = "test_codewords.csv";
-    vector<vector<int>> test_numbers = readCSVIntegers(test_filepath);
-    for (auto& row : test_numbers)
-    {
-        for (int num : row) {
-            cout << num << " ";
-        }
-        cout << endl;
-    }
+    string test_wordlist_path = "test_wordlist.txt";
+    bool get_wordlist_works = test_get_wordlist(test_wordlist_path);
+    cout << "get_wordlist works: " << get_wordlist_works << endl;
+
+    string test_codeword_path = "test_codewords.csv";
+    bool get_codewords_works = test_get_codewords(test_codeword_path);
+    cout << "get_codewords works: " << get_codewords_works << endl;
+    // vector<vector<int>> test_numbers = readCSVIntegers(test_filepath);
+    // for (auto& row : test_numbers)
+    // {
+    //     for (int num : row) {
+    //         cout << num << " ";
+    //     }
+    //     cout << endl;
+    // }
     
 
     auto end_time = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);
 
-    cout << "Time elapsed to do things: " << duration.count() << " microseconds" << endl;
+    cout << "\nTime elapsed to do things: " << duration.count() << " microseconds" << endl;
 
     return 0;
 }
