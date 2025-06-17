@@ -2,9 +2,57 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <iostream>
+#include "basic_functions.h"
+#include "file_operations.h"
 #include "codewordpuzzle.h"
 
-using std::cout, std::endl, std::string, std::map, std::vector;
+using std::string, std::map, std::vector;
+
+
+bool test_remove_whitespace() {
+    bool passing = true;
+    std::string expected_result = "hello";
+    
+    std::string text = "  hello   ";
+    bool passing1 = remove_whitespace(text) == expected_result;
+    passing = passing && passing1;
+
+    text = "\nhello\t";
+    bool passing2 = remove_whitespace(text) == expected_result;
+    passing = passing && passing2;
+
+    text = " \n \thello  \r";
+    bool passing3 = remove_whitespace(text) == expected_result;
+    passing = passing && passing3;
+
+    text = " \nno \n way\t";
+    expected_result = "no \n way";
+    bool passing4 = remove_whitespace(text) == expected_result;
+    passing = passing && passing4;
+
+    return passing;
+}
+
+
+bool test_split_string() {
+    bool passing = true;
+
+    std::string text = "abc,def,ghi";
+    char delimiter = ',';
+    std::vector<std::string> expected_result = {"abc", "def", "ghi"};
+    bool passing1 = split_string(text, delimiter) == expected_result;
+    passing = passing && passing1;
+
+    text = "  ;123";
+    delimiter = ';';
+    expected_result = {"  ", "123"};
+    bool passing2 = split_string(text, delimiter) == expected_result;
+    passing = passing && passing2;
+
+    return passing;
+}
+
 
 bool test_read_config(string test_default_filepath)
 {

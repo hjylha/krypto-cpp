@@ -1,8 +1,11 @@
+
+#include <map>
 #include <vector>
 #include <string>
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include "basic_functions.h"
 
 
 std::map<std::string, std::string> get_language_map(const std::string& filepath) {
@@ -13,14 +16,14 @@ std::map<std::string, std::string> get_language_map(const std::string& filepath)
 
     if (!infile) {
         std::cerr << "Error: Cannot open file '" << filepath << "'\n";
-        return config_map;
+        return language_map;
     }
 
-    return language_map
+    return language_map;
 }
 
 
-std::map<std::string, std::map<std::string, std::string> read_config(const std::string& filepath) {
+std::map<std::string, std::map<std::string, std::string>> read_config(const std::string& filepath) {
     std::ifstream infile(filepath);
     std::map<std::string, std::map<std::string, std::string>> config_map;
     std::string line, currentSection;

@@ -11,13 +11,5 @@ public:
     ~Krypto();
 };
 
-Krypto::Krypto(/* args */)
-{
-}
-
-Krypto::~Krypto()
-{
-}
-
 
 #endif

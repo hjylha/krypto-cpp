@@ -5,8 +5,9 @@
 #include <iostream>
 // #include <ctime>
 #include <chrono>
-#include "codewordpuzzle.h"
+#include "basic_functions.h"
 #include "file_operations.h"
+#include "codewordpuzzle.h"
 #include "test_functions.h"
 
 using std::cout, std::endl, std::string, std::map, std::vector;
@@ -15,14 +16,25 @@ int main()
 {
     auto start_time = std::chrono::high_resolution_clock::now();
 
-    cout << "Hello world!" << endl;
+    cout << "\nTesting basic_functions:" << endl;
+
+    bool remove_whitespace_works = test_remove_whitespace();
+    cout << "remove_whitespace works: " << remove_whitespace_works << endl;
+
+    bool split_string_works = test_split_string();
+    cout << "split_string works: " << split_string_works << endl;
+    // string text = "hello world!";
+    // cout << text << " has a comma at: " << text.find(',') << endl;
+
+
+    cout << "\nTesting file_operations:" << endl;
 
     string test_config_path = "test_config.conf";
     bool read_config_works = test_read_config(test_config_path);
 
     cout << "read_config works: " << read_config_works << endl;
 
-    string test_filepath = "test_codewords";
+    string test_filepath = "test_codewords.csv";
     vector<vector<int>> test_numbers = readCSVIntegers(test_filepath);
     for (auto& row : test_numbers)
     {
