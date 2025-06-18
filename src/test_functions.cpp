@@ -34,6 +34,33 @@ bool test_remove_whitespace() {
     return passing;
 }
 
+bool test_add_whitespace() {
+    string text = "hello";
+    int total_length = 7;
+    string expected_text = "hello  ";
+    bool passing = add_whitespace(text, total_length) == expected_text;
+
+    text = "world";
+    total_length = 4;
+    expected_text = "worl";
+    bool passing1 = add_whitespace(text, total_length) == expected_text;
+    passing = passing && passing1;
+
+    text = "longer";
+    total_length = 10;
+    expected_text = "longer    ";
+    bool passing2 = add_whitespace(text, total_length) == expected_text;
+    passing = passing && passing2;
+
+    text = "uncharacteristic";
+    total_length = 16;
+    expected_text = "uncharacteristic";
+    bool passing3 = add_whitespace(text, total_length) == expected_text;
+    passing = passing && passing3;
+
+    return passing;
+}
+
 bool test_split_string() {
     bool passing = true;
 
@@ -74,6 +101,24 @@ bool test_uppercase() {
     expected_text = "ABC123D E F";
     bool passing1 = uppercase(text) == expected_text;
     passing = passing && passing1;
+
+    return passing;
+}
+
+bool test_codeword_as_str() {
+    vector<int> codeword = {1, 1, 1, 1};
+    string expected_text = "1,1,1,1";
+    bool passing = codeword_as_str(codeword) == expected_text;
+
+    codeword = {1, 2, 3};
+    expected_text = "1,2,3";
+    bool passing1 = codeword_as_str(codeword) == expected_text;
+    passing = passing && passing1;
+
+    codeword = {25, 30, 10, 0};
+    expected_text = "25,30,10,0";
+    bool passing2 = codeword_as_str(codeword) == expected_text;
+    passing = passing && passing2;
 
     return passing;
 }

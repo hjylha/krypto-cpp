@@ -2,13 +2,13 @@
 #define CODEWORDPUZZLE_H_INCLUDED
 
 
-class Krypto
+class CodewordPuzzle
 {
 private:
     /* data */
 public:
-    Krypto(/* args */);
-    ~Krypto();
+    CodewordPuzzle(/* args */);
+    ~CodewordPuzzle();
 };
 
 

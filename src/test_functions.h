@@ -13,9 +13,11 @@ using std::cout, std::endl, std::string, std::map, std::vector, std::pair;
 
 // basic_functions
 bool test_remove_whitespace();
+bool test_add_whitespace();
 bool test_split_string();
 bool test_lowercase();
 bool test_uppercase();
+bool test_codeword_as_str();
 bool test_are_letters_in_alphabet();
 bool test_does_word_match();
 

@@ -13,6 +13,9 @@ std::vector<std::string> split_string(std::string text, char delimiter);
 std::string lowercase(std::string text);
 std::string uppercase(std::string text);
 
+std::string codeword_as_str(std::vector<int> codeword);
+std::string mass_replace(std::string text, std::vector<std::string> replacements);
+
 bool are_letters_in_alphabet(std::string word, std::string alphabet);
 bool does_word_match(std::string word, std::vector<int> codeword);
 
