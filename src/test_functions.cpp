@@ -123,6 +123,34 @@ bool test_codeword_as_str() {
     return passing;
 }
 
+bool test_mass_replace() {
+    string text = "he%1%o";
+    vector<string> replacements = {"ll"};
+    string expected_text = "hello";
+    bool passing = mass_replace(text, replacements) == expected_text;
+
+    text = "w%1%r%2%d";
+    replacements = {"o", "l"};
+    expected_text = "world";
+    bool passing1 = mass_replace(text, replacements) == expected_text;
+    passing = passing && passing1;
+
+    text = "something %1% %2% strange %3%";
+    replacements = {"NOT", "particularly", "at all"};
+    expected_text = "something NOT particularly strange at all";
+    bool passing2 = mass_replace(text, replacements) == expected_text;
+    passing = passing && passing2;
+
+    text = "%1% me %2% others";
+    replacements = {"1"};
+    replacements.push_back("(2, 3)");
+    expected_text = "1 me (2, 3) others";
+    bool passing3 = mass_replace(text, replacements) == expected_text;
+    passing = passing && passing3;
+
+    return passing;
+}
+
 bool test_are_letters_in_alphabet() {
     string text = "abcdefghijklmnopqrstuvwxyz";
     string alphabet = "abcdefghijklmnopqrstuvwxyz";

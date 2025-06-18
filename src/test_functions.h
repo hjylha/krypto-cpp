@@ -18,6 +18,7 @@ bool test_split_string();
 bool test_lowercase();
 bool test_uppercase();
 bool test_codeword_as_str();
+bool test_mass_replace();
 bool test_are_letters_in_alphabet();
 bool test_does_word_match();
 

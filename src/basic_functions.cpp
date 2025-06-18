@@ -68,6 +68,15 @@ std::string codeword_as_str(std::vector<int> codeword) {
 
 std::string mass_replace(std::string text, std::vector<std::string> replacements) {
     // lots to do here
+    int start_index;
+    std::string text_to_find = "";
+    for (int i = 0; i < replacements.size(); i++) {
+        text_to_find = "%";
+        text_to_find += std::to_string(i + 1);
+        text_to_find += "%";
+        start_index = text.find(text_to_find);
+        text.replace(start_index, 3, replacements[i]);
+    }
     return text;
 }
 

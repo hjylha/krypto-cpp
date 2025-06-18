@@ -33,6 +33,9 @@ int main()
     bool codeword_as_str_works = test_codeword_as_str();
     cout << "codeword_as_str works: " << codeword_as_str_works << endl;
 
+    bool mass_replace_works = test_mass_replace();
+    cout << "mass_replace works: " << mass_replace_works << endl;
+
     bool are_letters_in_alphabet_works = test_are_letters_in_alphabet();
     cout << "are_letters_in_alphabet works: " << are_letters_in_alphabet_works << endl;
 
