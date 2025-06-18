@@ -1,6 +1,7 @@
 key;fi;en;
 yes;kyllä;yes;
 no;ei;no;
+alphabet;abcdefghijklmnopqrstuvwxyzåäö;abcdefghijklmnopqrstuvwxyz;
 help_text;Ole hyvä ja vastaa K tai E;Please answer Y or N for yes or no.;
 startup_time_text;Alustaviin toimiin kulunut aika: %1% sekuntia;Time taken to startup: %1% seconds;
 language;Kieli: %1%;Language: %1%;

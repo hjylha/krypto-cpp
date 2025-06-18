@@ -14,6 +14,10 @@ using std::cout, std::endl, std::string, std::map, std::vector, std::pair;
 // basic_functions
 bool test_remove_whitespace();
 bool test_split_string();
+bool test_lowercase();
+bool test_uppercase();
+bool test_are_letters_in_alphabet();
+bool test_does_word_match();
 
 // file_operations
 bool test_read_config(string test_default_filepath);

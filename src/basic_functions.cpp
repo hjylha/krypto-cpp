@@ -2,12 +2,19 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <cctype>
 #include <iostream>
 
 
 std::string remove_whitespace(std::string text) {
     text.erase(0, text.find_first_not_of(" \t\r\n"));
     text.erase(text.find_last_not_of(" \t\r\n") + 1);
+    return text;
+}
+
+std::string add_whitespace(std::string text, int total_length) {
+    text = text.substr(0, total_length);
+    // almost done...
     return text;
 }
 
@@ -30,4 +37,52 @@ std::vector<std::string> split_string(std::string text, char delimiter) {
     the_split.push_back(text);
 
     return the_split;
+}
+
+std::string lowercase(std::string text) {
+    for (int i = 0; i < text.length(); i++) {
+        text[i] = std::tolower(text[i]);
+    }
+    return text;
+}
+
+std::string uppercase(std::string text) {
+    for (int i = 0; i < text.length(); i++) {
+        text[i] = std::toupper(text[i]);
+    }
+    return text;
+}
+
+
+bool are_letters_in_alphabet(std::string word, std::string alphabet) {
+    for (auto letter : word) {
+        if (alphabet.find(std::tolower(letter)) == std::string::npos) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool does_word_match(std::string word, std::vector<int> codeword) {
+    if (word.length() != codeword.size()) {
+        return false;
+    }
+    char letter, letter_prev;
+    int num, num_prev;
+    for (int i = 0; i < word.length(); i++) {
+        letter = word[i];
+        num = codeword[i];
+        for (int j = 0; j < i; j++) {
+            letter_prev = word[j];
+            num_prev = codeword[j];
+            if (num == num_prev && letter != letter_prev) {
+                return false;
+            }
+            if (num != num_prev && letter == letter_prev) {
+                return false;
+            }
+            if (num == num_prev && letter == letter_prev) break;
+        }
+    }
+    return true;
 }

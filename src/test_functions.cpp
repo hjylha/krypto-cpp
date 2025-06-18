@@ -34,13 +34,12 @@ bool test_remove_whitespace() {
     return passing;
 }
 
-
 bool test_split_string() {
     bool passing = true;
 
-    std::string text = "abc,def,ghi";
+    string text = "abc,def,ghi";
     char delimiter = ',';
-    std::vector<std::string> expected_result = {"abc", "def", "ghi"};
+    vector<string> expected_result = {"abc", "def", "ghi"};
     bool passing1 = split_string(text, delimiter) == expected_result;
     passing = passing && passing1;
 
@@ -49,6 +48,73 @@ bool test_split_string() {
     expected_result = {"  ", "123"};
     bool passing2 = split_string(text, delimiter) == expected_result;
     passing = passing && passing2;
+
+    return passing;
+}
+
+bool test_lowercase() {
+    string text = "AbCdEfG";
+    string expected_text = "abcdefg";
+    bool passing = lowercase(text) == expected_text;
+
+    text = "abc123D e F";
+    expected_text = "abc123d e f";
+    bool passing1 = lowercase(text) == expected_text;
+    passing = passing && passing1;
+
+    return passing;
+}
+
+bool test_uppercase() {
+    string text = "AbCdEfG";
+    string expected_text = "ABCDEFG";
+    bool passing = uppercase(text) == expected_text;
+
+    text = "abc123D e F";
+    expected_text = "ABC123D E F";
+    bool passing1 = uppercase(text) == expected_text;
+    passing = passing && passing1;
+
+    return passing;
+}
+
+bool test_are_letters_in_alphabet() {
+    string text = "abcdefghijklmnopqrstuvwxyz";
+    string alphabet = "abcdefghijklmnopqrstuvwxyz";
+    bool passing = are_letters_in_alphabet(text, alphabet);
+
+    text = "abc";
+    alphabet = "def";
+    bool passing1 = !(are_letters_in_alphabet(text, alphabet));
+    passing = passing && passing1;
+
+    text = "no?";
+    alphabet = "abcdefghijklmnopqrstuvwxyz";
+    bool passing2 = !(are_letters_in_alphabet(text, alphabet));
+    passing = passing && passing2;
+
+    text = "yes?";
+    alphabet = "abcdefghijklmnopqrstuvwxyz?";
+    bool passing3 = are_letters_in_alphabet(text, alphabet);
+    passing = passing && passing3;
+
+    text = "älämölö";
+    alphabet = "abcdefghijklmnopqrstuvwxyzåäö";
+    bool passing4 = are_letters_in_alphabet(text, alphabet);
+    passing = passing && passing4;
+
+    return passing;
+}
+
+bool test_does_word_match() {
+    string word = "hello";
+    vector<int> codeword = {1, 2, 3, 3, 4};
+    bool passing = does_word_match(word, codeword);
+
+    word = "world";
+    codeword = {1, 2, 3, 4, 2};
+    bool passing1 = !(does_word_match(word, codeword));
+    passing = passing && passing1;
 
     return passing;
 }

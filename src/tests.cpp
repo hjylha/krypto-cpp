@@ -23,8 +23,18 @@ int main()
 
     bool split_string_works = test_split_string();
     cout << "split_string works: " << split_string_works << endl;
-    // string text = "hello world!";
-    // cout << text << " has a comma at: " << text.find(',') << endl;
+
+    bool lowercase_works = test_lowercase();
+    cout << "lowercase works: " << lowercase_works << endl;
+
+    bool uppercase_works = test_uppercase();
+    cout << "uppercase works: " << uppercase_works << endl;
+
+    bool are_letters_in_alphabet_works = test_are_letters_in_alphabet();
+    cout << "are_letters_in_alphabet works: " << are_letters_in_alphabet_works << endl;
+
+    bool does_word_match_works = test_does_word_match();
+    cout << "does_word_match works: " << does_word_match_works << endl;
 
 
     cout << "\nTesting file_operations:" << endl;
