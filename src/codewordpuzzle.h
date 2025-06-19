@@ -2,13 +2,49 @@
 #define CODEWORDPUZZLE_H_INCLUDED
 
 
+#include <map>
+#include <string>
+#include <utility>
+#include <vector>
+
+
+struct CodewordWordPair
+{
+private:
+
+public:
+    std::vector<int> codeword1;
+    std::vector<int> codeword2;
+    std::string word1;
+    std::string word2;
+    CodewordWordPair(std::vector<int> codeword1, std::vector<int> codeword2, std::string word1, std::string word2);
+};
+
+
 class CodewordPuzzle
 {
 private:
-    /* data */
+    std::vector<std::vector<int>> codewords;
+    std::string alphabet;
+    std::vector<std::string> wordlist;
+    std::vector<std::string> comments;
+    std::map<int, char> substitution_map;
+    std::map<int, std::vector<std::string>> wordlists;
+    std::vector<std::vector<std::string>> matched_words_all;
+    std::vector<std::vector<std::string>> matched_words;
 public:
-    CodewordPuzzle(/* args */);
+    CodewordPuzzle(std::vector<std::vector<int>> codewords, std::vector<std::string> wordlist, std::string alphabet, std::vector<std::string> comments);
     ~CodewordPuzzle();
+    bool is_codeword_solved(std::vector<int> codeword);
+    void set_matched_words();
+    void clear_substitution_map();
+    bool add_to_substitution_map(int num, char letter, std::map<std::string, int> issues, bool override);
+    int find_char_from_substitution_map(char letter);
+    std::vector<int> find_codeword_with_least_matches();
+    std::string get_decrypted_codeword(std::vector<int> codeword, char not_found_symbol);
+    std::vector<std::pair<std::string, std::string>> match_two_codewords(std::vector<int> codeword1, std::vector<int> codeword2, int maximum_matches);  
+    std::vector<CodewordWordPair> find_all_unique_pairs();
+    CodewordWordPair find_optimal_unique_pair();
 };
 
 
