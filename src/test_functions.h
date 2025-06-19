@@ -19,13 +19,19 @@ bool test_lowercase();
 bool test_uppercase();
 bool test_codeword_as_str();
 bool test_mass_replace();
+bool test_get_nums_in_codewords();
 bool test_are_letters_in_alphabet();
 bool test_does_word_match();
+bool test_get_matched_words();
 
 // file_operations
 bool test_read_config(string test_default_filepath);
 bool test_get_language_map(string test_language_file_path);
 bool test_get_wordlist(string test_wordlist_path);
 bool test_get_codewords(string test_codeword_path);
+
+// CodewordPuzzle
+bool test_CodewordWordPair();
+bool test_CodewordPuzzle(CodewordPuzzle puzzle);
 
 #endif

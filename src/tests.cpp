@@ -1,6 +1,7 @@
 
 #include <string>
 #include <map>
+#include <utility>
 #include <vector>
 #include <iostream>
 // #include <ctime>
@@ -10,7 +11,7 @@
 #include "codewordpuzzle.h"
 #include "test_functions.h"
 
-using std::cout, std::endl, std::string, std::map, std::vector;
+using std::cout, std::endl, std::string, std::map, std::vector, std::pair;
 
 int main()
 {
@@ -36,11 +37,17 @@ int main()
     bool mass_replace_works = test_mass_replace();
     cout << "mass_replace works: " << mass_replace_works << endl;
 
+    bool get_nums_in_codewords_works = test_get_nums_in_codewords();
+    cout << "get_nums_in_codewords works: " << get_nums_in_codewords_works << endl;
+
     bool are_letters_in_alphabet_works = test_are_letters_in_alphabet();
     cout << "are_letters_in_alphabet works: " << are_letters_in_alphabet_works << endl;
 
     bool does_word_match_works = test_does_word_match();
     cout << "does_word_match works: " << does_word_match_works << endl;
+
+    bool get_matched_words_works = test_get_matched_words();
+    cout << "get_matched_words works: " << get_matched_words_works << endl;
 
 
     cout << "\nTesting file_operations:" << endl;
@@ -68,6 +75,19 @@ int main()
     //     }
     //     cout << endl;
     // }
+
+    cout << "\nTesting CodewordPuzzle:" << endl;
+
+    bool codeword_word_pair_works = test_CodewordWordPair();
+    cout << "CodewordWordPair works: " << codeword_word_pair_works << endl;
+
+    pair<vector<string>, vector<vector<int>>> codewords_n_comments = get_codewords(test_codeword_path);
+    vector<vector<int>> codewords = codewords_n_comments.second;
+    vector<string> comments = codewords_n_comments.first;
+    vector<string> wordlist = get_wordlist(test_wordlist_path);
+    map<string, map<string, string>> config = read_config(test_config_path);
+    string alphabet = config["tag"]["alphabet"];
+    CodewordPuzzle puzzle = CodewordPuzzle(codewords, wordlist, alphabet, comments);
     
 
     auto end_time = std::chrono::high_resolution_clock::now();

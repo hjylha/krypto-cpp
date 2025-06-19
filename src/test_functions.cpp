@@ -151,6 +151,19 @@ bool test_mass_replace() {
     return passing;
 }
 
+bool test_get_nums_in_codewords() {
+    vector<vector<int>> codewords;
+    codewords.push_back({1, 2, 3, 4, 5, 6});
+    codewords.push_back({3, 7, 9});
+    codewords.push_back({8, 10, 11});
+    codewords.push_back({10, 12, 13});
+    codewords.push_back({3, 22, 24, 15});
+    codewords.push_back({21, 15, 13, 11});
+    vector<int> expected_nums = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 21, 22, 24};
+    bool passing = get_nums_in_codewords(codewords) == expected_nums;
+    return passing;
+}
+
 bool test_are_letters_in_alphabet() {
     string text = "abcdefghijklmnopqrstuvwxyz";
     string alphabet = "abcdefghijklmnopqrstuvwxyz";
@@ -189,6 +202,14 @@ bool test_does_word_match() {
     bool passing1 = !(does_word_match(word, codeword));
     passing = passing && passing1;
 
+    return passing;
+}
+
+bool test_get_matched_words() {
+    vector<int> codeword = {1, 2, 3, 3, 4};
+    vector<string> wordlist = {"hello", "world", "tiny", "english", "abccd"};
+    vector<string> expected_words = {"hello", "abccd"};
+    bool passing = get_matched_words(codeword, wordlist, -1) == expected_words;
     return passing;
 }
 
@@ -277,6 +298,45 @@ bool test_get_codewords(string test_codeword_path) {
 
     bool passing4 = actual_codewords[2] == expected_codewords[2];
     passing = passing && passing4;
+
+    return passing;
+}
+
+
+bool test_CodewordWordPair() {
+    vector<int> codeword1 = {};
+    vector<int> codeword2 = {};
+    string word1 = "";
+    string word2 = "";
+    CodewordWordPair cw_w_pair = CodewordWordPair(codeword1, codeword2, word1, word2);
+
+    bool passing = cw_w_pair.codeword1 == codeword1;
+    bool passing1 = cw_w_pair.codeword2 == codeword2;
+    passing = passing && passing1;
+
+    bool passing2 = cw_w_pair.word1 == word1;
+    passing = passing && passing2;
+    bool passing3 = cw_w_pair.word2 == word2;
+    passing = passing && passing3;
+
+    return passing;
+}
+
+bool test_CodewordPuzzle(CodewordPuzzle puzzle) {
+    vector<string> expected_comments = {"this is a comment", "another line"};
+    vector<vector<int>> expected_codewords;
+    expected_codewords.push_back({1, 2, 3, 4, 5, 6});
+    expected_codewords.push_back({3, 7, 9});
+    expected_codewords.push_back({8, 10, 11});
+    expected_codewords.push_back({10, 12, 13});
+    expected_codewords.push_back({3, 22, 24, 15});
+    expected_codewords.push_back({21, 15, 13, 11});
+
+    bool passing = puzzle.get_comments() == expected_comments;
+    bool passing1 = puzzle.get_codewords() == expected_codewords;
+    passing = passing && passing1;
+
+    // more things to test
 
     return passing;
 }

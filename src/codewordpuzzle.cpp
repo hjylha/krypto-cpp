@@ -1,4 +1,5 @@
 
+#include "basic_functions.h"
 #include "codewordpuzzle.h"
 #include <map>
 #include <string>
@@ -18,5 +19,41 @@ CodewordPuzzle::CodewordPuzzle(std::vector<std::vector<int>> codewords, std::vec
     alphabet = alphabet;
     wordlist = wordlist;
     comments = comments;
-    
+
+    std::vector<int> nums = get_nums_in_codewords(codewords);
+    for (int num : nums) {
+        substitution_map[num] = not_found_symbol;
+    }
+
+    for (std::vector<int> codeword : codewords) {
+        std::vector<std::string> words = get_matched_words(codeword, wordlist, -1);
+        matched_words.push_back(words);
+        matched_words_all.push_back(words);
+    }
+
+}
+
+CodewordPuzzle::~CodewordPuzzle() {
+
+}
+
+std::vector<std::vector<int>> CodewordPuzzle::get_codewords() {
+    return codewords;
+}
+
+std::vector<std::string> CodewordPuzzle::get_wordlist() {
+    return wordlist;
+}
+
+std::vector<std::string> CodewordPuzzle::get_comments() {
+    return comments;
+}
+
+bool CodewordPuzzle::is_codeword_solved(std::vector<int> codeword) {
+    for (int num : codeword) {
+        if (substitution_map[num] == not_found_symbol) {
+            return false;
+        }
+    }
+    return true;
 }

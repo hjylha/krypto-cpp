@@ -1,4 +1,5 @@
 
+#include <algorithm>
 #include <map>
 #include <vector>
 #include <string>
@@ -80,6 +81,19 @@ std::string mass_replace(std::string text, std::vector<std::string> replacements
     return text;
 }
 
+std::vector<int> get_nums_in_codewords(std::vector<std::vector<int>> codewords) {
+    std::vector<int> nums;
+    for (std::vector<int> codeword : codewords) {
+        for (int num : codeword) {
+            if (std::find(nums.begin(), nums.end(), num) == nums.end()) {
+                nums.push_back(num);
+            }
+        }
+    }
+    std::sort(nums.begin(), nums.end());
+    return nums;
+}
+
 
 bool are_letters_in_alphabet(std::string word, std::string alphabet) {
     for (auto letter : word) {
@@ -122,4 +136,22 @@ bool does_word_match(std::string word, std::vector<int> codeword) {
         // }
     }
     return true;
+}
+
+std::vector<std::string> get_matched_words(std::vector<int> codeword, std::vector<std::string> wordlist, int maximum_matches) {
+    std::vector<std::string> matched_words;
+    int num_of_matches = 0;
+    if (maximum_matches < 0) {
+        maximum_matches = wordlist.size();
+    }
+    for (std::string word : wordlist) {
+        if (does_word_match(word, codeword)) {
+            matched_words.push_back(word);
+            num_of_matches++;
+            if (num_of_matches >= maximum_matches) {
+                return matched_words;
+            }
+        }
+    }
+    return matched_words;
 }

@@ -24,6 +24,7 @@ public:
 class CodewordPuzzle
 {
 private:
+    char not_found_symbol = '_';
     std::vector<std::vector<int>> codewords;
     std::string alphabet;
     std::vector<std::string> wordlist;
@@ -35,13 +36,16 @@ private:
 public:
     CodewordPuzzle(std::vector<std::vector<int>> codewords, std::vector<std::string> wordlist, std::string alphabet, std::vector<std::string> comments);
     ~CodewordPuzzle();
+    std::vector<std::vector<int>> get_codewords();
+    std::vector<std::string> get_wordlist();
+    std::vector<std::string> get_comments();
     bool is_codeword_solved(std::vector<int> codeword);
     void set_matched_words();
     void clear_substitution_map();
     bool add_to_substitution_map(int num, char letter, std::map<std::string, int> issues, bool override);
     int find_char_from_substitution_map(char letter);
     std::vector<int> find_codeword_with_least_matches();
-    std::string get_decrypted_codeword(std::vector<int> codeword, char not_found_symbol);
+    std::string get_decrypted_codeword(std::vector<int> codeword);
     std::vector<std::pair<std::string, std::string>> match_two_codewords(std::vector<int> codeword1, std::vector<int> codeword2, int maximum_matches);  
     std::vector<CodewordWordPair> find_all_unique_pairs();
     CodewordWordPair find_optimal_unique_pair();
