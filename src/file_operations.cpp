@@ -97,7 +97,7 @@ std::vector<std::string> get_wordlist(const std::string& filepath) {
     while (std::getline(file, line)) {
         line = remove_whitespace(line);
         // lowercase?
-        wordlist.push_back(line);
+        wordlist.push_back(lowercase(line));
     }
     file.close();
 

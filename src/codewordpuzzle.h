@@ -24,13 +24,13 @@ public:
 class CodewordPuzzle
 {
 private:
-    char not_found_symbol = '_';
+    char empty_symbol = '_';
     std::vector<std::vector<int>> codewords;
     std::string alphabet;
     std::vector<std::string> wordlist;
     std::vector<std::string> comments;
-    std::map<int, char> substitution_map;
-    std::map<int, std::vector<std::string>> wordlists;
+    std::vector<char> substitution_vector;
+    // std::map<int, std::vector<std::string>> wordlists;
     std::vector<std::vector<std::string>> matched_words_all;
     std::vector<std::vector<std::string>> matched_words;
 public:
@@ -39,11 +39,13 @@ public:
     std::vector<std::vector<int>> get_codewords();
     std::vector<std::string> get_wordlist();
     std::vector<std::string> get_comments();
+    std::vector<char> get_letters_in_substitution_vector();
     bool is_codeword_solved(std::vector<int> codeword);
+    bool does_word_match_to_substitution_vector(std::string word, std::vector<int> codeword);
     void set_matched_words();
-    void clear_substitution_map();
-    bool add_to_substitution_map(int num, char letter, std::map<std::string, int> issues, bool override);
-    int find_char_from_substitution_map(char letter);
+    void clear_substitution_vector();
+    int add_to_substitution_vector(int num, char letter, std::map<std::string, int> issues, bool override);
+    int find_char_from_substitution_vector(char letter);
     std::vector<int> find_codeword_with_least_matches();
     std::string get_decrypted_codeword(std::vector<int> codeword);
     std::vector<std::pair<std::string, std::string>> match_two_codewords(std::vector<int> codeword1, std::vector<int> codeword2, int maximum_matches);  
