@@ -1,6 +1,7 @@
 
 #include <string>
 #include <map>
+#include <utility>
 #include <vector>
 #include <iostream>
 #include "basic_functions.h"
@@ -16,20 +17,20 @@ bool test_remove_whitespace() {
     
     std::string text = "  hello   ";
     bool passing1 = remove_whitespace(text) == expected_result;
-    passing = passing && passing1;
+    passing *= passing1;
 
     text = "\nhello\t";
     bool passing2 = remove_whitespace(text) == expected_result;
-    passing = passing && passing2;
+    passing *= passing2;
 
     text = " \n \thello  \r";
     bool passing3 = remove_whitespace(text) == expected_result;
-    passing = passing && passing3;
+    passing *= passing3;
 
     text = " \nno \n way\t";
     expected_result = "no \n way";
     bool passing4 = remove_whitespace(text) == expected_result;
-    passing = passing && passing4;
+    passing *= passing4;
 
     return passing;
 }
@@ -44,19 +45,19 @@ bool test_add_whitespace() {
     total_length = 4;
     expected_text = "worl";
     bool passing1 = add_whitespace(text, total_length) == expected_text;
-    passing = passing && passing1;
+    passing *= passing1;
 
     text = "longer";
     total_length = 10;
     expected_text = "longer    ";
     bool passing2 = add_whitespace(text, total_length) == expected_text;
-    passing = passing && passing2;
+    passing *= passing2;
 
     text = "uncharacteristic";
     total_length = 16;
     expected_text = "uncharacteristic";
     bool passing3 = add_whitespace(text, total_length) == expected_text;
-    passing = passing && passing3;
+    passing *= passing3;
 
     return passing;
 }
@@ -68,13 +69,13 @@ bool test_split_string() {
     char delimiter = ',';
     vector<string> expected_result = {"abc", "def", "ghi"};
     bool passing1 = split_string(text, delimiter) == expected_result;
-    passing = passing && passing1;
+    passing *= passing1;
 
     text = "  ;123";
     delimiter = ';';
     expected_result = {"  ", "123"};
     bool passing2 = split_string(text, delimiter) == expected_result;
-    passing = passing && passing2;
+    passing *= passing2;
 
     return passing;
 }
@@ -87,7 +88,7 @@ bool test_lowercase() {
     text = "abc123D e F";
     expected_text = "abc123d e f";
     bool passing1 = lowercase(text) == expected_text;
-    passing = passing && passing1;
+    passing *= passing1;
 
     return passing;
 }
@@ -100,7 +101,7 @@ bool test_uppercase() {
     text = "abc123D e F";
     expected_text = "ABC123D E F";
     bool passing1 = uppercase(text) == expected_text;
-    passing = passing && passing1;
+    passing *= passing1;
 
     return passing;
 }
@@ -113,12 +114,12 @@ bool test_codeword_as_str() {
     codeword = {1, 2, 3};
     expected_text = "1,2,3";
     bool passing1 = codeword_as_str(codeword) == expected_text;
-    passing = passing && passing1;
+    passing *= passing1;
 
     codeword = {25, 30, 10, 0};
     expected_text = "25,30,10,0";
     bool passing2 = codeword_as_str(codeword) == expected_text;
-    passing = passing && passing2;
+    passing *= passing2;
 
     return passing;
 }
@@ -133,20 +134,20 @@ bool test_mass_replace() {
     replacements = {"o", "l"};
     expected_text = "world";
     bool passing1 = mass_replace(text, replacements) == expected_text;
-    passing = passing && passing1;
+    passing *= passing1;
 
     text = "something %1% %2% strange %3%";
     replacements = {"NOT", "particularly", "at all"};
     expected_text = "something NOT particularly strange at all";
     bool passing2 = mass_replace(text, replacements) == expected_text;
-    passing = passing && passing2;
+    passing *= passing2;
 
     text = "%1% me %2% others";
     replacements = {"1"};
     replacements.push_back("(2, 3)");
     expected_text = "1 me (2, 3) others";
     bool passing3 = mass_replace(text, replacements) == expected_text;
-    passing = passing && passing3;
+    passing *= passing3;
 
     return passing;
 }
@@ -172,22 +173,22 @@ bool test_are_letters_in_alphabet() {
     text = "abc";
     alphabet = "def";
     bool passing1 = !(are_letters_in_alphabet(text, alphabet));
-    passing = passing && passing1;
+    passing *= passing1;
 
     text = "no?";
     alphabet = "abcdefghijklmnopqrstuvwxyz";
     bool passing2 = !(are_letters_in_alphabet(text, alphabet));
-    passing = passing && passing2;
+    passing *= passing2;
 
     text = "yes?";
     alphabet = "abcdefghijklmnopqrstuvwxyz?";
     bool passing3 = are_letters_in_alphabet(text, alphabet);
-    passing = passing && passing3;
+    passing *= passing3;
 
     text = "älämölö";
     alphabet = "abcdefghijklmnopqrstuvwxyzåäö";
     bool passing4 = are_letters_in_alphabet(text, alphabet);
-    passing = passing && passing4;
+    passing *= passing4;
 
     return passing;
 }
@@ -200,7 +201,7 @@ bool test_does_word_match() {
     word = "world";
     codeword = {1, 2, 3, 4, 2};
     bool passing1 = !(does_word_match(word, codeword));
-    passing = passing && passing1;
+    passing *= passing1;
 
     return passing;
 }
@@ -249,16 +250,16 @@ bool test_get_language_map(string test_language_file_path)
     string key2 = "no";
 
     bool passing1 = language_map[lang_fi][key1] == "kyllä";
-    passing = passing && passing1;
+    passing *= passing1;
 
     bool passing2 = language_map[lang_en][key1] == key1;
-    passing = passing && passing2;
+    passing *= passing2;
 
     bool passing3 = language_map[lang_fi][key2] == "ei";
-    passing = passing && passing3;
+    passing *= passing3;
 
     bool passing4 = language_map[lang_en][key2] == key2;
-    passing = passing && passing4;
+    passing *= passing4;
 
     return passing;
 }
@@ -286,19 +287,53 @@ bool test_get_codewords(string test_codeword_path) {
     pair<vector<string>, vector<vector<int>>> result = get_codewords(test_codeword_path);
 
     bool passing1 = result.first == expected_comments;
-    passing = passing && passing1;
+    passing *= passing1;
 
     vector<vector<int>> actual_codewords = result.second;
 
     bool passing2 = actual_codewords[0] == expected_codewords[0];
-    passing = passing && passing2;
+    passing *= passing2;
 
     bool passing3 = actual_codewords[1] == expected_codewords[1];
-    passing = passing && passing3;
+    passing *= passing3;
 
     bool passing4 = actual_codewords[2] == expected_codewords[2];
-    passing = passing && passing4;
+    passing *= passing4;
 
+    return passing;
+}
+
+
+bool test_get_matching_indices() {
+    vector<int> codeword1 = {1, 1};
+    vector<int> codeword2 = {2, 2};
+    MatchingIndicesAndOthers exp_match_ind_n_othr({}, {0}, {0});
+    MatchingIndicesAndOthers match_ind_n_othr = get_matching_indices(codeword1, codeword2);
+    bool passing = exp_match_ind_n_othr == match_ind_n_othr;
+
+    codeword1 = {1, 2};
+    codeword2 = {2, 1};
+    exp_match_ind_n_othr = MatchingIndicesAndOthers({pair<int, int>(0, 1), pair<int, int>(1, 0)}, {}, {});
+    bool passing1 = exp_match_ind_n_othr == get_matching_indices(codeword1, codeword2);
+    passing *= passing1;
+
+    codeword1 = {1, 2, 3, 3, 4};
+    codeword2 = {3, 5, 6, 2};
+    exp_match_ind_n_othr = MatchingIndicesAndOthers({pair<int, int>(1, 3), pair<int, int>(2, 0)}, {0, 4}, {1, 2});
+    bool passing2 = exp_match_ind_n_othr == get_matching_indices(codeword1, codeword2);
+    passing *= passing2;
+
+    return passing;
+}
+
+bool test_do_words_match_to_matching_indices() {
+    string word1 = "hello";
+    string word2 = "live";
+    vector<pair<int, int>> matching_indices = {pair<int, int>(1, 3), pair<int, int>(2, 0)};
+    vector<int> indices_in_word1 = {0, 4};
+    vector<int> indices_in_word2 = {1, 2};
+    MatchingIndicesAndOthers match_ind_n_othr(matching_indices, indices_in_word1, indices_in_word2);
+    bool passing = do_words_match_to_matching_indices(word1, word2, match_ind_n_othr);
     return passing;
 }
 
@@ -312,12 +347,12 @@ bool test_CodewordWordPair() {
 
     bool passing = cw_w_pair.codeword1 == codeword1;
     bool passing1 = cw_w_pair.codeword2 == codeword2;
-    passing = passing && passing1;
+    passing *= passing1;
 
     bool passing2 = cw_w_pair.word1 == word1;
-    passing = passing && passing2;
+    passing *= passing2;
     bool passing3 = cw_w_pair.word2 == word2;
-    passing = passing && passing3;
+    passing *= passing3;
 
     return passing;
 }
@@ -334,7 +369,7 @@ bool test_CodewordPuzzle(CodewordPuzzle puzzle) {
 
     bool passing = puzzle.get_comments() == expected_comments;
     bool passing1 = puzzle.get_codewords() == expected_codewords;
-    passing = passing && passing1;
+    passing *= passing1;
 
     // more things to test
 

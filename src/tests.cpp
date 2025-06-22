@@ -78,6 +78,12 @@ int main()
 
     cout << "\nTesting CodewordPuzzle:" << endl;
 
+    bool get_matching_indices_works = test_get_matching_indices();
+    cout << "get_matching_indices works: " << get_matching_indices_works << endl;
+
+    bool do_words_match_to_matching_indices_works = test_do_words_match_to_matching_indices();
+    cout << "do_words_match_to_matching_indices works: " << do_words_match_to_matching_indices_works << endl;
+
     bool codeword_word_pair_works = test_CodewordWordPair();
     cout << "CodewordWordPair works: " << codeword_word_pair_works << endl;
 

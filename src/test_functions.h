@@ -31,6 +31,8 @@ bool test_get_wordlist(string test_wordlist_path);
 bool test_get_codewords(string test_codeword_path);
 
 // CodewordPuzzle
+bool test_get_matching_indices();
+bool test_do_words_match_to_matching_indices();
 bool test_CodewordWordPair();
 bool test_CodewordPuzzle(CodewordPuzzle puzzle);
 

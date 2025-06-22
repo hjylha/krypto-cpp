@@ -8,6 +8,21 @@
 #include <vector>
 
 
+struct MatchingIndicesAndOthers
+{
+private:
+
+public:
+    std::vector<std::pair<int, int>> matching_indices;
+    std::vector<int> other_indices1;
+    std::vector<int> other_indices2;
+    MatchingIndicesAndOthers(std::vector<std::pair<int, int>> matching_indices, std::vector<int> other_indices1, std::vector<int> other_indices2);
+    bool operator==(MatchingIndicesAndOthers other);
+};
+
+MatchingIndicesAndOthers get_matching_indices(std::vector<int> codeword1, std::vector<int> codeword2);
+bool do_words_match_to_matching_indices(std::string word1, std::string word2, MatchingIndicesAndOthers matching_indices_n_others);
+
 struct CodewordWordPair
 {
 private:
@@ -48,7 +63,7 @@ public:
     int find_char_from_substitution_vector(char letter);
     std::vector<int> find_codeword_with_least_matches();
     std::string get_decrypted_codeword(std::vector<int> codeword);
-    std::vector<std::pair<std::string, std::string>> match_two_codewords(std::vector<int> codeword1, std::vector<int> codeword2, int maximum_matches);  
+    std::vector<std::pair<std::string, std::string>> match_two_codewords(std::vector<int> codeword1, std::vector<int> codeword2, int maximum_matches);
     std::vector<CodewordWordPair> find_all_unique_pairs();
     CodewordWordPair find_optimal_unique_pair();
 };
