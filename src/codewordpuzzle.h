@@ -33,6 +33,7 @@ public:
     std::string word1;
     std::string word2;
     CodewordWordPair(std::vector<int> codeword1, std::vector<int> codeword2, std::string word1, std::string word2);
+    bool empty();
 };
 
 
@@ -58,6 +59,7 @@ public:
     bool is_codeword_solved(std::vector<int> codeword);
     bool does_word_match_to_substitution_vector(std::string word, std::vector<int> codeword);
     void set_matched_words();
+    std::vector<int> sort_codewords();
     void clear_substitution_vector();
     int add_to_substitution_vector(int num, char letter, std::map<std::string, int> issues, bool override);
     int find_char_from_substitution_vector(char letter);
@@ -65,7 +67,7 @@ public:
     std::string get_decrypted_codeword(std::vector<int> codeword);
     std::vector<std::pair<std::string, std::string>> match_two_codewords(std::vector<int> codeword1, std::vector<int> codeword2, int maximum_matches);
     std::vector<CodewordWordPair> find_all_unique_pairs();
-    CodewordWordPair find_optimal_unique_pair();
+    std::pair<int, std::string> find_optimal_unique_pair();
 };
 
 
