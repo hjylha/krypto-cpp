@@ -4,7 +4,6 @@
 #include <vector>
 #include <string>
 #include <cctype>
-#include <iostream>
 
 
 std::string remove_whitespace(std::string text) {

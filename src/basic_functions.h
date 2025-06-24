@@ -4,7 +4,6 @@
 #include <map>
 #include <vector>
 #include <string>
-#include <iostream>
 
 
 std::string remove_whitespace(std::string);
