@@ -1,4 +1,6 @@
 
+#include <filesystem>
+#include <ostream>
 #include <string>
 #include <map>
 #include <utility>
@@ -215,6 +217,29 @@ bool test_get_matched_words() {
 }
 
 
+bool test_does_path_exist() {
+    string current_work_directory = std::filesystem::current_path().string();
+    bool passing = does_path_exist(current_work_directory);
+
+    string existing_file = "test_codewords.csv";
+    bool passing1 = does_path_exist(existing_file);
+    passing *= passing1;
+
+    string non_existing_file = "file_does_not_exists_here.txt";
+    bool passing2 = !does_path_exist(non_existing_file);
+    passing *= passing2;
+
+    string existing_directory = "test_folder/";
+    bool passing3 = does_path_exist(existing_directory);
+    passing *= passing3;
+
+    string existing_test_file = "test_folder/test.csv";
+    bool passing4 = does_path_exist(existing_test_file);
+    passing *= passing4;
+
+    return passing;
+}
+
 bool test_read_config(string test_default_filepath)
 {
     map<string, map<string, string>> config = read_config(test_default_filepath);
@@ -299,6 +324,29 @@ bool test_get_codewords(string test_codeword_path) {
 
     bool passing4 = actual_codewords[2] == expected_codewords[2];
     passing *= passing4;
+
+    return passing;
+}
+
+bool test_get_csv_files_in_folder() {
+    string folder_path = "";
+    vector<string> csv_files = get_csv_files_in_folder(folder_path);
+
+    // for (auto p: csv_files) {
+    //     std::cout << p << std::endl;
+    // }
+
+    string first_file = "test_codewords.csv";
+    bool passing = csv_files[0].substr(csv_files[0].length() - first_file.length(), first_file.length()) == first_file;
+    string second_file = "test_language_file.csv";
+    bool passing1 = csv_files[1].substr(csv_files[1].length() - second_file.length(), second_file.length()) == second_file;
+    passing *= passing1;
+
+    folder_path = "test_folder/";
+    csv_files = get_csv_files_in_folder(folder_path);
+    string only_file = "test.csv";
+    bool passing2 = csv_files[0].substr(csv_files[0].length() - only_file.length(), only_file.length()) == only_file;
+    passing *= passing2;
 
     return passing;
 }

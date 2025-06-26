@@ -25,10 +25,12 @@ bool test_does_word_match();
 bool test_get_matched_words();
 
 // file_operations
+bool test_does_path_exist();
 bool test_read_config(string test_default_filepath);
 bool test_get_language_map(string test_language_file_path);
 bool test_get_wordlist(string test_wordlist_path);
 bool test_get_codewords(string test_codeword_path);
+bool test_get_csv_files_in_folder();
 
 // CodewordPuzzle
 bool test_get_matching_indices();

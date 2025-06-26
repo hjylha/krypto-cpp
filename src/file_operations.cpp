@@ -5,8 +5,14 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <filesystem>
 #include "basic_functions.h"
 
+
+bool does_path_exist(std::string path) {
+    std::ifstream infile(path);
+    return infile.good();
+}
 
 std::map<std::string, std::map<std::string, std::string>> get_language_map(const std::string& filepath) {
     std::map<std::string, std::map<std::string, std::string>> language_map;
@@ -178,4 +184,33 @@ std::vector<std::vector<int>> readCSVIntegers(const std::string& filepath) {
 
     file.close();
     return result;
+}
+
+std::vector<std::string> get_csv_files_in_folder(std::string folder_path) {
+    std::vector<std::string> csv_files;
+    if (folder_path == "") {
+        folder_path = std::filesystem::current_path().string();
+    }
+
+    try {
+        for (const auto& entry : std::filesystem::directory_iterator(folder_path)) {
+            if (entry.is_regular_file() && entry.path().extension() == ".csv") {
+                // csv_files.push_back(entry.path().filename().string());
+                csv_files.push_back(entry.path().string());
+            }
+        }
+    } catch (const std::filesystem::filesystem_error& e) {
+        // std::string complete_folder_path = std::filesystem::current_path().string() + folder_path;
+        // try {
+        //     for (const auto& entry : std::filesystem::directory_iterator(complete_folder_path)) {
+        //         if (entry.is_regular_file() && entry.path().extension() == ".csv") {
+        //             csv_files.push_back(entry.path().filename().string());
+        //     }
+        //     }
+        // } catch (const std::filesystem::filesystem_error& e) {
+        //     std::cerr << "Filesystem error: " << e.what() << std::endl;
+        // }
+        std::cerr << "Filesystem error: " << e.what() << std::endl;
+    }
+    return csv_files;
 }

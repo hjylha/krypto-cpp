@@ -52,6 +52,9 @@ int main()
 
     cout << "\nTesting file_operations:" << endl;
 
+    bool does_path_exist_works = test_does_path_exist();
+    cout << "does_path_exist works: " << does_path_exist_works << endl;
+
     string test_config_path = "test_config.conf";
     bool read_config_works = test_read_config(test_config_path);
     cout << "read_config works: " << read_config_works << endl;
@@ -75,7 +78,10 @@ int main()
     //     }
     //     cout << endl;
     // }
+    bool get_csv_files_in_folder_works = test_get_csv_files_in_folder();
+    cout << "get_csv_files_in_folder works: " << get_csv_files_in_folder_works << endl;
 
+    
     cout << "\nTesting CodewordPuzzle:" << endl;
 
     bool get_matching_indices_works = test_get_matching_indices();
