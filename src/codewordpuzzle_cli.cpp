@@ -333,11 +333,26 @@ void PuzzleCLI::print_solving_stats(double elapsed_time) {
 }
 
 void PuzzleCLI::try_to_solve_puzzle_methodically() {
-
+    std::chrono::time_point<std::chrono::high_resolution_clock> start_time = std::chrono::high_resolution_clock::now();
+    try_to_solve_puzzle_methodically(start_time);
 }
 
 void PuzzleCLI::try_to_solve_puzzle_methodically(std::chrono::time_point<std::chrono::high_resolution_clock> start_time) {
+    int found_words = 0;
 
+    std::pair<int, std::string> optimal_pair = puzzle.find_optimal_unique_pair();
+    while (optimal_pair.first > -1) {
+        found_words++;
+
+        std::string codeword_str = codeword_as_str(puzzle.get_codewords()[optimal_pair.first]);
+        std::string part1 = add_whitespace(std::to_string(optimal_pair.first + 1), puzzle.max_num_size);
+        std::string part2 = add_whitespace(uppercase(optimal_pair.second), puzzle.max_word_length);
+        std::cout << add_whitespace(std::to_string(found_words), puzzle.max_num_size) << " " << current_language_map["best_match_text"] << part1 << "  " << part2 << std::endl;
+    }
+
+    auto end_time = std::chrono::high_resolution_clock::now();
+    double elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count() / 1000.0;
+    print_solving_stats(elapsed_time);
 }
 
 void PuzzleCLI::try_to_solve_puzzle_with_steps() {
@@ -345,19 +360,33 @@ void PuzzleCLI::try_to_solve_puzzle_with_steps() {
 }
 
 void PuzzleCLI::print_substitution_vector() {
-
+    
 }
 
 void PuzzleCLI::print_initial_info() {
-
+    std::cout << mass_replace(current_language_map["language"], {config[language]["name"]}) << std::endl;
+    std::cout << mass_replace(current_language_map["codewords_in_file"], {std::to_string(puzzle.num_of_codewords), codeword_path}) << std::endl;
+    std::cout << mass_replace(current_language_map["words_in_file"], {std::to_string(puzzle.num_of_words), wordlist_path}) << std::endl;
+    if (!puzzle.comments.empty()) {
+        std::cout << current_language_map["comments"] << std::endl;
+        for (std::string comment_line : puzzle.comments) {
+            std::cout << comment_line << std::endl;
+        }
+    }
 }
 
 void PuzzleCLI::print_missing_chars() {
-
+    std::cout << current_language_map["missing_letters_text"] << std::endl;
+    for (char letter : puzzle.get_alphabet()) {
+        if (puzzle.find_char_from_substitution_vector(letter) == -1) {
+            std::cout << std::toupper(letter) << "  ";
+        }
+    }
+    std::cout << std::endl;
 }
 
 void PuzzleCLI::print_codeword_progress() {
-
+    print_codeword_progress(puzzle.get_codewords());
 }
 
 void PuzzleCLI::print_codeword_progress(std::vector<std::vector<int>> codewords_here) {
