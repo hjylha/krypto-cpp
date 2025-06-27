@@ -47,11 +47,11 @@ public:
     void input_data_and_initialize_puzzle(std::string the_language, std::string the_codeword_path);
     void add_to_substitution_vector();
     void set_codeword_as_word();
-    void print_pairs(CodewordWordPair);
+    void print_pairs(CodewordWordPair codeword_word_pair);
     std::vector<CodewordWordPair> find_unique_pairs();
     void print_solving_stats(double elapsed_time);
     void try_to_solve_puzzle_methodically();
-    void try_to_solve_puzzle_methodically(double start_time);
+    void try_to_solve_puzzle_methodically(std::chrono::time_point<std::chrono::high_resolution_clock> start_time);
     void try_to_solve_puzzle_with_steps();
     void print_substitution_vector();
     void print_initial_info();

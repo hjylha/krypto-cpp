@@ -1,5 +1,4 @@
 
-#include "codewordpuzzle_cli.h"
 #include <cctype>
 #include <iterator>
 #include <map>
@@ -7,9 +6,11 @@
 #include <utility>
 #include <vector>
 #include <iostream>
+#include <chrono>
 #include "basic_functions.h"
 #include "file_operations.h"
 #include "codewordpuzzle.h"
+#include "codewordpuzzle_cli.h"
 
 
 bool yes_or_no_question(std::string question_text, std::pair<char, char> yes_no_pair, std::string help_text) {
@@ -240,12 +241,137 @@ void PuzzleCLI::add_to_substitution_vector() {
     
 void PuzzleCLI::set_codeword_as_word() {
 
-    std::cout << current_language_map["codeword_prompt"] << std::endl;
+    std::cout << current_language_map["codeword_prompt"];
+    std::string codeword_input;
+    std::getline(std::cin, codeword_input);
 
-    
+    std::vector<int> the_codeword = puzzle.find_codeword(codeword_input);
 
+    if (the_codeword.empty()) {
+        std::string invalid_codeword_text = mass_replace(current_language_map["invalid_codeword_text"], {codeword_input});
+        std::cout << invalid_codeword_text << std::endl;
+        return;
+    }
+
+    std::cout << current_language_map["word_prompt"];
+    std::string word_input;
+    std::getline(std::cin, word_input);
+    word_input = lowercase(word_input);
+
+    if (!does_word_match(word_input, the_codeword)) {
+        std::string no_match_text = mass_replace(current_language_map["no_match_text"], {word_input, codeword_as_str(the_codeword)});
+        std::cout << no_match_text << std::endl;
+        return;
+    }
+
+    // TODO: is word in wordlist
+
+    for (int i = 0; i < word_input.length(); i++) {
+        puzzle.add_to_substitution_vector(the_codeword[i], word_input[i], issues, true);
+    }
+    puzzle.set_matched_words();
 }
     
-void PuzzleCLI::print_pairs(CodewordWordPair) {
+void PuzzleCLI::print_pairs(CodewordWordPair codeword_word_pair) {
+    std::vector<int> codeword1 = codeword_word_pair.codeword1;
+    std::vector<int> codeword2 = codeword_word_pair.codeword2;
+    std::string word1 = codeword_word_pair.word1;
+    std::string word2 = codeword_word_pair.word2;
+
+    if (puzzle.is_codeword_solved(codeword1)) {
+        word1 += solved_char;
+    }
+    if (puzzle.is_codeword_solved(codeword2)) {
+        word2 += solved_char;
+    }
+
+    int codeword_index1 = puzzle.get_codeword_index(codeword1) + 1;
+    int codeword_index2 = puzzle.get_codeword_index(codeword2) + 1;
+
+    std::string codeword1_str = codeword_as_str(codeword1);
+    std::string codeword2_str = codeword_as_str(codeword2);
+
+    std::string part1 = add_whitespace(std::to_string(codeword_index1), puzzle.max_num_size);
+    part1 += " ";
+    part1 += add_whitespace(codeword1_str, puzzle.max_codeword_str_length);
+
+    std::string part2 = add_whitespace(std::to_string(codeword_index2), puzzle.max_num_size);
+    part1 += " ";
+    part1 += add_whitespace(codeword2_str, puzzle.max_codeword_str_length);
+
+    std::string part3 = add_whitespace(uppercase(word1), puzzle.max_word_length);
+    std::string part4 = add_whitespace(uppercase(word2), puzzle.max_word_length);
+
+    std::cout << part1 << "   " << part2 << "   " << part3 << "  " << part4 << std::endl; 
+}
+
+std::vector<CodewordWordPair> PuzzleCLI::find_unique_pairs() {
+    auto start_time = std::chrono::high_resolution_clock::now();
+    std::vector<CodewordWordPair> unique_pairs = puzzle.find_all_unique_pairs();
+    auto end_time = std::chrono::high_resolution_clock::now();
+
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+    double time_taken = duration.count() / 1000.0;
+    std::string unique_pairs_found_text = mass_replace(current_language_map["unique_pairs_found_text"], {std::to_string(unique_pairs.size()), std::to_string(time_taken)});
+    std::cout << unique_pairs_found_text << std::endl;
+
+    std::cout << mass_replace(current_language_map["solved_words_note"], {std::to_string(solved_char)}) << std::endl;
+
+    for (CodewordWordPair codeword_word_pair : unique_pairs) {
+        print_pairs(codeword_word_pair);
+    }
+    // is return necessary?
+    return unique_pairs;
+}
+
+void PuzzleCLI::print_solving_stats(double elapsed_time) {
+    std::cout << "\n" << mass_replace(current_language_map["solving_time_with_steps_text"], {std::to_string(elapsed_time)}) << std::endl;
+
+    int num_of_solved_codewords = 0;
+    int num_of_found_words = 0;
+
+}
+
+void PuzzleCLI::try_to_solve_puzzle_methodically() {
+
+}
+
+void PuzzleCLI::try_to_solve_puzzle_methodically(std::chrono::time_point<std::chrono::high_resolution_clock> start_time) {
+
+}
+
+void PuzzleCLI::try_to_solve_puzzle_with_steps() {
+
+}
+
+void PuzzleCLI::print_substitution_vector() {
+
+}
+
+void PuzzleCLI::print_initial_info() {
+
+}
+
+void PuzzleCLI::print_missing_chars() {
+
+}
+
+void PuzzleCLI::print_codeword_progress() {
+
+}
+
+void PuzzleCLI::print_codeword_progress(std::vector<std::vector<int>> codewords_here) {
+
+}
+
+void PuzzleCLI::choose_progress_to_show() {
+
+}
+
+void PuzzleCLI::show_matching_words() {
+
+}
+
+void PuzzleCLI::choose_main_choice() {
 
 }
