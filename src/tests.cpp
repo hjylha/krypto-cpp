@@ -100,12 +100,20 @@ int main()
     map<string, map<string, string>> config = read_config(test_config_path);
     string alphabet = config["tag"]["alphabet"];
     CodewordPuzzle puzzle = CodewordPuzzle(codewords, wordlist, alphabet, comments);
+
+    // cout << "alphabet: " << alphabet << endl;
+    // cout << "alphabet: " << puzzle.get_alphabet() << endl;
     
+    bool CodewordPuzzle_works = test_CodewordPuzzle(puzzle);
+    cout << "CodewordPuzzle works: " << CodewordPuzzle_works << endl;
+
+    bool substitution_vector_things_works = test_substitution_vector_things(puzzle);
+    cout << "substitution_vector_things works: " << substitution_vector_things_works << endl;
 
     auto end_time = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);
 
-    cout << "\nTime elapsed to do things: " << duration.count() << " microseconds" << endl;
+    cout << "\nTime elapsed to test things: " << duration.count() << " microseconds" << endl;
 
     return 0;
 }

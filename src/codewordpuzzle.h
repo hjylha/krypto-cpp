@@ -53,7 +53,7 @@ public:
     char empty_symbol = '_';
     int num_of_codewords, num_of_words, max_codeword_str_length, max_word_length, max_num_size;
     CodewordPuzzle();
-    CodewordPuzzle(std::vector<std::vector<int>> codewords, std::vector<std::string> wordlist, std::string alphabet, std::vector<std::string> comments);
+    CodewordPuzzle(std::vector<std::vector<int>> the_codewords, std::vector<std::string> the_wordlist, std::string the_alphabet, std::vector<std::string> the_comments);
     ~CodewordPuzzle();
     std::string get_alphabet();
     std::vector<std::vector<int>> get_codewords();

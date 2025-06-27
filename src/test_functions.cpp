@@ -423,8 +423,21 @@ bool test_CodewordPuzzle(CodewordPuzzle puzzle) {
     bool passing = puzzle.get_comments() == expected_comments;
     bool passing1 = puzzle.get_codewords() == expected_codewords;
     passing *= passing1;
-
     // more things to test
+
+    return passing;
+}
+
+bool test_substitution_vector_things(CodewordPuzzle puzzle) {
+    bool passing = puzzle.get_letters_in_substitution_vector().empty();
+
+    char the_letter = 'b';
+    int result = puzzle.add_to_substitution_vector(1, the_letter, std::map<string, int>(), false);
+    vector<char> expected_chars;
+    expected_chars.push_back(the_letter);
+    bool passing1 = puzzle.get_letters_in_substitution_vector() == expected_chars;
+    passing *= passing1;
+
 
     return passing;
 }

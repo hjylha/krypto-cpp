@@ -37,5 +37,6 @@ bool test_get_matching_indices();
 bool test_do_words_match_to_matching_indices();
 bool test_CodewordWordPair();
 bool test_CodewordPuzzle(CodewordPuzzle puzzle);
+bool test_substitution_vector_things(CodewordPuzzle puzzle);
 
 #endif

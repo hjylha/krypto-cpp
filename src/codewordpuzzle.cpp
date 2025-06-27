@@ -136,11 +136,11 @@ CodewordPuzzle::CodewordPuzzle() {
 
 }
 
-CodewordPuzzle::CodewordPuzzle(std::vector<std::vector<int>> codewords, std::vector<std::string> wordlist, std::string alphabet, std::vector<std::string> comments) {
-    codewords = codewords;
-    alphabet = lowercase(alphabet);
-    wordlist = wordlist;
-    comments = comments;
+CodewordPuzzle::CodewordPuzzle(std::vector<std::vector<int>> the_codewords, std::vector<std::string> the_wordlist, std::string the_alphabet, std::vector<std::string> the_comments) {
+    codewords = the_codewords;
+    alphabet = lowercase(the_alphabet);
+    wordlist = the_wordlist;
+    comments = the_comments;
 
     num_of_codewords = codewords.size();
     num_of_words = wordlist.size();
