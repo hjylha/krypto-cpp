@@ -43,16 +43,15 @@ private:
     std::vector<std::vector<int>> codewords;
     std::string alphabet;
     std::vector<std::string> wordlist;
-    std::vector<std::string> comments;
     std::vector<char> substitution_vector;
     std::vector<char> substitution_vector_saved;
     // std::map<int, std::vector<std::string>> wordlists;
     std::vector<std::vector<std::string>> matched_words_all;
     std::vector<std::vector<std::string>> matched_words;
-    int num_of_codewords;
 public:
+    std::vector<std::string> comments;
     char empty_symbol = '_';
-    int max_codeword_str_length, max_word_length, max_num_size;
+    int num_of_codewords, num_of_words, max_codeword_str_length, max_word_length, max_num_size;
     CodewordPuzzle();
     CodewordPuzzle(std::vector<std::vector<int>> codewords, std::vector<std::string> wordlist, std::string alphabet, std::vector<std::string> comments);
     ~CodewordPuzzle();

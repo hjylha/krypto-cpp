@@ -143,6 +143,7 @@ CodewordPuzzle::CodewordPuzzle(std::vector<std::vector<int>> codewords, std::vec
     comments = comments;
 
     num_of_codewords = codewords.size();
+    num_of_words = wordlist.size();
 
     std::vector<int> nums = get_nums_in_codewords(codewords);
     int max_num = 0;
