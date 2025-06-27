@@ -79,6 +79,11 @@ bool test_split_string() {
     bool passing2 = split_string(text, delimiter) == expected_result;
     passing *= passing2;
 
+    text = "hello";
+    expected_result = {"hello"};
+    bool passing3 = split_string(text, delimiter) == expected_result;
+    passing *= passing3;
+
     return passing;
 }
 
