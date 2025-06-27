@@ -228,6 +228,14 @@ void CodewordPuzzle::load_substitution_vector() {
     }
 }
 
+int CodewordPuzzle::get_codeword_index(std::vector<int> codeword) {
+    auto it = std::find(codewords.begin(), codewords.end(), codeword);
+    if (it == codewords.end()) {
+        return -1;
+    }
+    return it - codewords.begin();
+}
+
 bool CodewordPuzzle::is_codeword_solved(std::vector<int> codeword) {
     for (int num : codeword) {
         if (substitution_vector[num] == empty_symbol) {

@@ -63,6 +63,7 @@ public:
     std::vector<char> get_letters_in_substitution_vector();
     void save_substitution_vector();
     void load_substitution_vector();
+    int get_codeword_index(std::vector<int> codeword);
     bool is_codeword_solved(std::vector<int> codeword);
     bool does_word_match_to_substitution_vector(std::string word, std::vector<int> codeword);
     void set_matched_words();
