@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cctype>
 #include <map>
+#include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
@@ -131,11 +132,17 @@ bool CodewordWordPair::empty() {
 }
 
 
+CodewordPuzzle::CodewordPuzzle() {
+
+}
+
 CodewordPuzzle::CodewordPuzzle(std::vector<std::vector<int>> codewords, std::vector<std::string> wordlist, std::string alphabet, std::vector<std::string> comments) {
     codewords = codewords;
     alphabet = lowercase(alphabet);
     wordlist = wordlist;
     comments = comments;
+
+    num_of_codewords = codewords.size();
 
     std::vector<int> nums = get_nums_in_codewords(codewords);
     int max_num = 0;
@@ -155,6 +162,7 @@ CodewordPuzzle::CodewordPuzzle(std::vector<std::vector<int>> codewords, std::vec
 
     for (int i = 0; i <= max_num; i++) {
         substitution_vector.push_back(empty_symbol);
+        substitution_vector_saved.push_back(empty_symbol);
     }
 
     for (std::vector<int> codeword : codewords) {
@@ -163,10 +171,27 @@ CodewordPuzzle::CodewordPuzzle(std::vector<std::vector<int>> codewords, std::vec
         matched_words_all.push_back(words);
     }
 
+    max_num_size = std::to_string(num_of_codewords).length();
+    max_codeword_str_length = 0;
+    max_word_length = 0;
+    std::string codeword_str;
+    for (std::vector<int> codeword : codewords) {
+        codeword_str = codeword_as_str(codeword);
+        if (codeword_str.length() > max_codeword_str_length) {
+            max_codeword_str_length = codeword_str.length();
+        }
+        if (codeword.size() > max_word_length) {
+            max_word_length = codeword.size();
+        }
+    }
 }
 
 CodewordPuzzle::~CodewordPuzzle() {
 
+}
+
+std::string CodewordPuzzle::get_alphabet() {
+    return alphabet;
 }
 
 std::vector<std::vector<int>> CodewordPuzzle::get_codewords() {
@@ -189,6 +214,18 @@ std::vector<char> CodewordPuzzle::get_letters_in_substitution_vector() {
         }
     }
     return letters_in_substitution_vector;
+}
+
+void CodewordPuzzle::save_substitution_vector() {
+    for (int i = 0; i < num_of_codewords; i++) {
+        substitution_vector_saved[i] = substitution_vector[i];
+    }
+}
+
+void CodewordPuzzle::load_substitution_vector() {
+    for (int i = 0; i < num_of_codewords; i++) {
+        substitution_vector[i] = substitution_vector_saved[i];
+    }
 }
 
 bool CodewordPuzzle::is_codeword_solved(std::vector<int> codeword) {
@@ -215,7 +252,7 @@ return true;
 }
 
 void CodewordPuzzle::set_matched_words() {
-    for (int i = 0; i < codewords.size(); i++) {
+    for (int i = 0; i < num_of_codewords; i++) {
         std::vector<std::string> new_matched_words;
         for (std::string word : matched_words_all[i]) {
             if (does_word_match_to_substitution_vector(word, codewords[i])) {
@@ -229,9 +266,8 @@ void CodewordPuzzle::set_matched_words() {
 std::vector<int> CodewordPuzzle::sort_codewords() {
     std::vector<int> sorted_indices;
     std::vector<int> comparison;
-    int len_of_codewords = codewords.size();
     // int comparison_num;
-    for (int i = 0; i < len_of_codewords; i++) {
+    for (int i = 0; i < num_of_codewords; i++) {
         sorted_indices.push_back(i);
         // comparison_num = matched_words[i].size();
         comparison.push_back(matched_words[i].size());
@@ -239,7 +275,7 @@ std::vector<int> CodewordPuzzle::sort_codewords() {
     std::sort(sorted_indices.begin(), sorted_indices.end(), [&comparison](int i1, int i2) {return comparison[i1] < comparison[i2];});
     std::vector<int> final_sorted_indices;
     int starting_index = 0;
-    for (int i = 0; i < len_of_codewords; i++) {
+    for (int i = 0; i < num_of_codewords; i++) {
         if (comparison[sorted_indices[i]] > 0) {
             final_sorted_indices.push_back(sorted_indices[i]);
         }
@@ -286,10 +322,42 @@ int CodewordPuzzle::find_char_from_substitution_vector(char letter) {
     return it - substitution_vector.begin();
 }
 
+std::vector<int> CodewordPuzzle::find_codeword(std::string search_string) {
+    std::vector<int> search_result;
+
+    search_string = remove_whitespace(search_string);
+    int codeword_index;
+    try {
+        codeword_index = std::stoi(search_string) - 1;
+        return codewords[codeword_index];
+    } catch (const std::invalid_argument&) {
+
+    }
+
+    std::vector<int> the_codeword;
+    std::vector<std::string> nums_as_str = split_string(search_string, ',');
+    for (std::string num_as_str : nums_as_str) {
+        num_as_str = remove_whitespace(num_as_str);
+        try {
+            the_codeword.push_back(std::stoi(num_as_str));
+        } catch (const std::invalid_argument&) {
+            return search_result;
+        }
+    }
+
+    for (std::vector<int> codeword : codewords) {
+        if (codeword == the_codeword) {
+            return the_codeword;
+        }
+    }
+
+    return search_result;
+}
+
 std::vector<int> CodewordPuzzle::find_codeword_with_least_matches() {
     std::vector<int> the_codeword;
     int least_matches = wordlist.size();
-    for (int i = 0; i < codewords.size(); i++) {
+    for (int i = 0; i < num_of_codewords; i++) {
         if (is_codeword_solved(codewords[i])) continue;
 
         int num_of_matches = matched_words[i].size();
