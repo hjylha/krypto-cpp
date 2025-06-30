@@ -36,6 +36,7 @@ private:
     CodewordPuzzle puzzle;
     
 public:
+    bool running = true;
     PuzzleCLI();
     ~PuzzleCLI();
     std::pair<char, char> get_yes_no_pair();
@@ -43,14 +44,16 @@ public:
     void set_language(std::string new_language);
     void choose_language();
     int choose_codeword_path();
-    void initialize_puzzle(std::string codeword_path, std::string wordlist_path);
+    void initialize_puzzle(std::string the_codeword_path, std::string the_wordlist_path);
     void input_data_and_initialize_puzzle(std::string the_language, std::string the_codeword_path);
+    void restart();
+    void exit_program();
     void add_to_substitution_vector();
     void set_codeword_as_word();
     void print_pairs(CodewordWordPair codeword_word_pair);
     std::vector<CodewordWordPair> find_unique_pairs();
     void print_solving_stats(double elapsed_time);
-    void try_to_solve_puzzle_methodically();
+    void try_to_solve_puzzle_fully_methodically();
     void try_to_solve_puzzle_methodically(std::chrono::time_point<std::chrono::high_resolution_clock> start_time);
     void try_to_solve_puzzle_with_steps();
     void print_substitution_vector();
