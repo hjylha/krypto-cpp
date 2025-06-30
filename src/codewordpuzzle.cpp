@@ -157,6 +157,7 @@ CodewordPuzzle::CodewordPuzzle(std::vector<std::vector<int>> the_codewords, std:
             min_num = num;
         }
     }
+    num_of_letters = max_num;
 
     // what to do with problems?
     // if (max_num == 0 || min_num < 0) {}
@@ -217,6 +218,40 @@ std::vector<char> CodewordPuzzle::get_letters_in_substitution_vector() {
     return letters_in_substitution_vector;
 }
 
+std::vector<std::string> CodewordPuzzle::substitution_vector_in_two_lines() {
+    std::vector<std::string> lines;
+    std::string line1 = "";
+    std::string line2 = "";
+    std::string delimiter = " | ";
+    char letter;
+    for (int i = 1; i <= num_of_letters; i++) {
+        if (i > 1) {
+            line1 += delimiter;
+            line2 += delimiter;
+        }
+        line1 += std::to_string(i);
+        if (substitution_vector[i] = empty_symbol) {
+            letter = ' ';
+        }
+        else {
+            letter = substitution_vector[i];
+        }
+        line2 += add_whitespace(std::to_string(letter), std::to_string(i).length());
+    }
+
+    return lines;
+}
+
+int CodewordPuzzle::count_solved_numbers() {
+    int num_of_solved_nums = 0;
+    for (int i = 1; i <= num_of_letters; i++) {
+        if (substitution_vector[i] != empty_symbol) {
+            num_of_solved_nums++;
+        }
+    }
+    return num_of_solved_nums;
+}
+
 void CodewordPuzzle::save_substitution_vector() {
     for (int i = 0; i < num_of_codewords; i++) {
         substitution_vector_saved[i] = substitution_vector[i];
@@ -246,6 +281,22 @@ bool CodewordPuzzle::is_codeword_solved(std::vector<int> codeword) {
     return true;
 }
 
+std::pair<int, int> CodewordPuzzle::count_solved_codewords() {
+    int num_of_solved_codewords = 0;
+    int num_of_words_in_wordlist = 0;
+    std::string word;
+    for (int i = 0; i < num_of_codewords; i++) {
+        if (is_codeword_solved(codewords[i])) {
+            num_of_solved_codewords++;
+            word = get_decrypted_codeword(codewords[i]);
+            if (std::find(matched_words_all[i].begin(), matched_words_all[i].end(), word) != matched_words_all[i].end()) {
+                num_of_words_in_wordlist++;
+            }
+        }
+    }
+    return std::pair<int, int>(num_of_solved_codewords, num_of_words_in_wordlist);
+}
+
 bool CodewordPuzzle::does_word_match_to_substitution_vector(std::string word, std::vector<int> codeword) {
     std::vector<char> letters_in_substitution_vector = get_letters_in_substitution_vector();
     for (int i = 0; i < word.length(); i++) {
@@ -270,6 +321,14 @@ void CodewordPuzzle::set_matched_words() {
         }
         matched_words[i] = new_matched_words;
     }
+}
+
+std::vector<std::string> CodewordPuzzle::get_matched_words_for_codeword(int index_of_codeword) {
+    return matched_words[index_of_codeword];
+}
+
+int CodewordPuzzle::get_num_of_matched_words(int index_of_codeword) {
+    return matched_words[index_of_codeword].size();
 }
 
 std::vector<int> CodewordPuzzle::sort_codewords() {
