@@ -16,7 +16,7 @@ public:
     std::vector<std::pair<int, int>> matching_indices;
     std::vector<int> other_indices1;
     std::vector<int> other_indices2;
-    MatchingIndicesAndOthers(std::vector<std::pair<int, int>> matching_indices, std::vector<int> other_indices1, std::vector<int> other_indices2);
+    MatchingIndicesAndOthers(std::vector<std::pair<int, int>> the_matching_indices, std::vector<int> the_other_indices1, std::vector<int> the_other_indices2);
     bool operator==(MatchingIndicesAndOthers other);
 };
 
@@ -32,7 +32,7 @@ public:
     std::vector<int> codeword2;
     std::string word1;
     std::string word2;
-    CodewordWordPair(std::vector<int> codeword1, std::vector<int> codeword2, std::string word1, std::string word2);
+    CodewordWordPair(std::vector<int> the_codeword1, std::vector<int> the_codeword2, std::string the_word1, std::string the_word2);
     bool empty();
 };
 

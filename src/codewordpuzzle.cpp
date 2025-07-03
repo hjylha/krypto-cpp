@@ -10,10 +10,10 @@
 #include <vector>
 #include <iostream>
 
-MatchingIndicesAndOthers::MatchingIndicesAndOthers(std::vector<std::pair<int, int>> matching_indices, std::vector<int> other_indices1, std::vector<int> other_indices2) {
-    matching_indices = matching_indices;
-    other_indices1 = other_indices1;
-    other_indices2 = other_indices2;
+MatchingIndicesAndOthers::MatchingIndicesAndOthers(std::vector<std::pair<int, int>> the_matching_indices, std::vector<int> the_other_indices1, std::vector<int> the_other_indices2) {
+    matching_indices = the_matching_indices;
+    other_indices1 = the_other_indices1;
+    other_indices2 = the_other_indices2;
 }
 
 MatchingIndicesAndOthers get_matching_indices(std::vector<int> codeword1, std::vector<int> codeword2) {
@@ -109,11 +109,11 @@ bool do_words_match_to_matching_indices(std::string word1, std::string word2, Ma
 }
 
 
-CodewordWordPair::CodewordWordPair(std::vector<int> codeword1, std::vector<int> codeword2, std::string word1, std::string word2) {
-    codeword1 = codeword1;
-    codeword2 = codeword2;
-    word1 = word1;
-    word2 = word2;
+CodewordWordPair::CodewordWordPair(std::vector<int> the_codeword1, std::vector<int> the_codeword2, std::string the_word1, std::string the_word2) {
+    codeword1 = the_codeword1;
+    codeword2 = the_codeword2;
+    word1 = the_word1;
+    word2 = the_word2;
 }
 
 bool CodewordWordPair::empty() {
@@ -266,6 +266,7 @@ void CodewordPuzzle::load_substitution_vector() {
     for (int i = 0; i < num_of_codewords; i++) {
         substitution_vector[i] = substitution_vector_saved[i];
     }
+    set_matched_words();
 }
 
 int CodewordPuzzle::get_codeword_index(std::vector<int> codeword) {
@@ -464,8 +465,26 @@ std::vector<std::pair<std::string, std::string>> CodewordPuzzle::match_two_codew
 
     MatchingIndicesAndOthers matching_indices_n_others = get_matching_indices(codeword1, codeword2);
 
+    // std::vector<std::pair<int, int>> m_indices = matching_indices_n_others.matching_indices;
+    // std::vector<int> o_i1 = matching_indices_n_others.other_indices1;
+    // std::vector<int> o_i2 = matching_indices_n_others.other_indices2;
+    // std::cout << "size of matching_indices: " << m_indices.size() << std::endl;
+    // for (auto p : m_indices) {
+    //     std::cout << p.first << ", " << p.second << std::endl;
+    // }
+    // for (int i : o_i1) {
+    //     std::cout << i << ", ";
+    // }
+    // std::cout << std::endl;
+    // for (int i : o_i2) {
+    //     std::cout << i << ", ";
+    // }
+    // std::cout << std::endl;
+
     int index1 = std::find(codewords.begin(), codewords.end(), codeword1) - codewords.begin();
     int index2 = std::find(codewords.begin(), codewords.end(), codeword2) - codewords.begin();
+
+    // std::cout << "index1=" << index1 << "   index2=" << index2 << std::endl;
 
     for (std::string word1 : matched_words[index1]) {
         for (std::string word2 : matched_words[index2]) {
