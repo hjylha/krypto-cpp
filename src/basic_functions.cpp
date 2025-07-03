@@ -108,10 +108,9 @@ bool does_word_match(std::string word, std::vector<int> codeword) {
         return false;
     }
     std::map<int, char> substitution_map;
+    std::vector<char> letters_found;
     char letter;
-    // char letter_prev;
     int num;
-    // int num_prev;
     for (int i = 0; i < word.length(); i++) {
         letter = word[i];
         num = codeword[i];
@@ -120,20 +119,33 @@ bool does_word_match(std::string word, std::vector<int> codeword) {
             return false;
         }
         if (it == substitution_map.end()) {
+            if (std::find(letters_found.begin(), letters_found.end(), letter) != letters_found.end()) {
+                return false;
+            }
             substitution_map[num] = letter;
+            letters_found.push_back(letter);
         }
-        // for (int j = 0; j < i; j++) {
-        //     letter_prev = word[j];
-        //     num_prev = codeword[j];
-        //     if (num == num_prev && letter != letter_prev) {
-        //         return false;
-        //     }
-        //     if (num != num_prev && letter == letter_prev) {
-        //         return false;
-        //     }
-        //     if (num == num_prev && letter == letter_prev) break;
-        // }
     }
+    // another way to do this
+    // char letter;
+    // char letter_prev;
+    // int num;
+    // int num_prev;
+    // for (int i = 0; i < word.length(); i++) {
+    //     letter = word[i];
+    //     num = codeword[i];
+    //     for (int j = 0; j < i; j++) {
+    //         letter_prev = word[j];
+    //         num_prev = codeword[j];
+    //         if (num == num_prev && letter != letter_prev) {
+    //             return false;
+    //         }
+    //         if (num != num_prev && letter == letter_prev) {
+    //             return false;
+    //         }
+    //         if (num == num_prev && letter == letter_prev) break;
+    //     }
+    // }
     return true;
 }
 
