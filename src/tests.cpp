@@ -72,6 +72,8 @@ int main()
     // cout << "does_path_exist works: " << does_path_exist_works << endl;
     show_test_result(test_does_path_exist(), "test_does_path_exist");
 
+    show_test_result(test_does_path_exist_folder_edition(), "test_does_path_exist_folder_edition (fails in windows?)");
+
     string test_config_path = "test_config.conf";
     // bool read_config_works = test_read_config(test_config_path);
     // cout << "read_config works: " << read_config_works << endl;
@@ -130,7 +132,13 @@ int main()
     // cout << "substitution_vector_things works: " << substitution_vector_things_works << endl;
     show_test_result(test_substitution_vector_things(puzzle), "test_substitution_vector_things");
 
-    
+    show_test_result(test_sort_codewords(puzzle), "test_sort_codewords");
+
+    show_test_result(test_match_two_codewords(puzzle), "test_match_two_codewords");
+
+    show_test_result(test_find_all_unique_pairs(puzzle), "test_find_all_unique_pairs");
+
+
 
     auto end_time = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);

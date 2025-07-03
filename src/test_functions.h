@@ -26,6 +26,7 @@ bool test_get_matched_words();
 
 // file_operations
 bool test_does_path_exist();
+bool test_does_path_exist_folder_edition();
 bool test_read_config(string test_default_filepath);
 bool test_get_language_map(string test_language_file_path);
 bool test_get_wordlist(string test_wordlist_path);
@@ -38,5 +39,8 @@ bool test_do_words_match_to_matching_indices();
 bool test_CodewordWordPair();
 bool test_CodewordPuzzle(CodewordPuzzle puzzle);
 bool test_substitution_vector_things(CodewordPuzzle puzzle);
+bool test_sort_codewords(CodewordPuzzle puzzle);
+bool test_match_two_codewords(CodewordPuzzle puzzle);
+bool test_find_all_unique_pairs(CodewordPuzzle puzzle);
 
 #endif

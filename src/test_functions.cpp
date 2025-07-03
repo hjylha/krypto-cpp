@@ -210,6 +210,11 @@ bool test_does_word_match() {
     bool passing1 = !(does_word_match(word, codeword));
     passing *= passing1;
 
+    word = "here";
+    codeword = {3, 22, 24, 15};
+    bool passing2 = !does_word_match(word, codeword);
+    passing *= passing2;
+
     return passing;
 }
 
@@ -223,24 +228,28 @@ bool test_get_matched_words() {
 
 
 bool test_does_path_exist() {
+
+    string existing_file = "test_codewords.csv";
+    bool passing = does_path_exist(existing_file);
+
+    string non_existing_file = "file_does_not_exists_here.txt";
+    bool passing1 = !does_path_exist(non_existing_file);
+    passing *= passing1;
+
+    string existing_test_file = "test_folder/test.csv";
+    bool passing2 = does_path_exist(existing_test_file);
+    passing *= passing2;
+
+    return passing;
+}
+
+bool test_does_path_exist_folder_edition() {
     string current_work_directory = std::filesystem::current_path().string();
     bool passing = does_path_exist(current_work_directory);
 
-    string existing_file = "test_codewords.csv";
-    bool passing1 = does_path_exist(existing_file);
-    passing *= passing1;
-
-    string non_existing_file = "file_does_not_exists_here.txt";
-    bool passing2 = !does_path_exist(non_existing_file);
-    passing *= passing2;
-
     string existing_directory = "test_folder/";
-    bool passing3 = does_path_exist(existing_directory);
-    passing *= passing3;
-
-    string existing_test_file = "test_folder/test.csv";
-    bool passing4 = does_path_exist(existing_test_file);
-    passing *= passing4;
+    bool passing1 = does_path_exist(existing_directory);
+    passing *= passing1;
 
     return passing;
 }
@@ -376,6 +385,12 @@ bool test_get_matching_indices() {
     bool passing2 = exp_match_ind_n_othr == get_matching_indices(codeword1, codeword2);
     passing *= passing2;
 
+    codeword1 = {3, 22, 24, 15};
+    codeword2 = {21, 15, 13, 11};
+    exp_match_ind_n_othr = MatchingIndicesAndOthers({pair<int, int>(3, 1)}, {0, 1, 2}, {0, 2, 3});
+    bool passing3 = exp_match_ind_n_othr == get_matching_indices(codeword1, codeword2);
+    passing *= passing3;
+
     return passing;
 }
 
@@ -425,19 +440,88 @@ bool test_CodewordPuzzle(CodewordPuzzle puzzle) {
     passing *= passing1;
     // more things to test
 
+    vector<vector<string>> expected_matches = {{}, {}, {}, {}, {"some", "read", "cola", "camp"}, {"some", "read", "cola", "camp"}};
+    bool passing2 = true;
+    vector<int> codeword;
+    vector<string> m_words;
+    for (int i = 0; i < expected_matches.size(); i++) {
+        m_words = puzzle.get_matched_words_for_codeword(i);
+        passing2 = m_words == expected_matches[i];
+        passing *= passing2;
+        if (!passing2) {
+            vector<int> codeword = puzzle.get_codewords()[i];
+            std::cout << "codeword" << std::endl;
+            for (int j = 0; j < codeword.size(); j++) {
+                std::cout << codeword[j] << "  ";
+            }
+            std::cout << std::endl << "matched words" << std::endl;
+            for (string word : m_words) {
+                std::cout << word << ", ";
+            }
+            std::cout << std::endl << "expected words" << std::endl;
+            for (string word : expected_matches[i]) {
+                std::cout << word << ", ";
+            }
+            std::cout << std::endl;
+            
+        }
+    }
+    // passing *= passing2;
+
     return passing;
 }
 
 bool test_substitution_vector_things(CodewordPuzzle puzzle) {
     bool passing = puzzle.get_letters_in_substitution_vector().empty();
 
+    int the_number = 1;
     char the_letter = 'b';
-    int result = puzzle.add_to_substitution_vector(1, the_letter, std::map<string, int>(), false);
+    int result = puzzle.add_to_substitution_vector(the_number, the_letter, std::map<string, int>(), false);
     vector<char> expected_chars;
     expected_chars.push_back(the_letter);
     bool passing1 = puzzle.get_letters_in_substitution_vector() == expected_chars;
     passing *= passing1;
 
+    bool passing2 = puzzle.count_solved_numbers() == 1;
+    passing *= passing2;
+
+    puzzle.clear_substitution_vector();
+    bool passing3 = puzzle.count_solved_numbers() == 0;
+    passing *= passing3;
+
+    return passing;
+}
+
+bool test_sort_codewords(CodewordPuzzle puzzle) {
+    vector<int> expected_indices = {4, 5};
+    bool passing = puzzle.sort_codewords() == expected_indices;
+    return passing;
+}
+
+bool test_match_two_codewords(CodewordPuzzle puzzle) {
+    vector<int> codeword1 = {3, 22, 24, 15};
+    vector<int> codeword2 = {21, 15, 13, 11};
+
+    std::vector<std::pair<std::string, std::string>> matching_pairs = puzzle.match_two_codewords(codeword1, codeword2, 999);
+
+    bool passing = matching_pairs.size() == 1;
+    // std::cout << "Found " << matching_pairs.size() << " pairs" << std::endl;
+
+    bool passing1 = matching_pairs[0].first == "some";
+    passing *= passing1;
+
+    bool passing2 = matching_pairs[0].second == "read";
+    passing *= passing2;
+
+    return passing;
+}
+
+bool test_find_all_unique_pairs(CodewordPuzzle puzzle) {
+    vector<CodewordWordPair> unique_pairs = puzzle.find_all_unique_pairs();
+
+    bool passing = unique_pairs.size() == 1;
+
+    // MORE TO COME
 
     return passing;
 }
