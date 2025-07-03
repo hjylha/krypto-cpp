@@ -43,9 +43,10 @@ PuzzleCLI::PuzzleCLI() {
     language_map = get_language_map(DEFAULT_LANGUAGE_FILE_PATH);
     config = read_config(DEFAULT_CONFIG_PATH);
 
-    for (auto p : language_map) {
+    for (auto p : config) {
         default_language = p.first;
-        break;
+        // std::cout << "Default language is " << default_language << std::endl;
+        // break;
     }
     language = default_language;
 
@@ -78,10 +79,25 @@ void PuzzleCLI::set_language(std::string new_language) {
     current_language_map = language_map[language];
 }
 
-void PuzzleCLI::choose_language() {
-    std::string languages = "";
+std::vector<std::string> PuzzleCLI::get_languages() {
+    std::vector<std::string> languages;
+    for (auto item : config) {
+        languages.push_back(item.first);
+    }
+    return languages;
+}
 
-    std::string choose_prompt = mass_replace(current_language_map["choose_language"], {languages});
+void PuzzleCLI::choose_language() {
+    std::vector<std::string> languages = get_languages();
+    std::string languages_str = languages[0];
+    if (languages.size() > 1) {
+        for (int i = 1; i < languages.size(); i++) {
+            languages_str += ", ";
+            languages_str += languages[i];
+        }
+    }
+
+    std::string choose_prompt = mass_replace(current_language_map["choose_language"], {languages_str});
 
     std::string language_answer;
     bool confirmed, try_again;
@@ -120,7 +136,7 @@ int PuzzleCLI::choose_codeword_path() {
     std::cout << found_csv_files_text << std::endl;
     std::vector<std::string> csv_files = get_csv_files_in_folder(config[language][CODEWORD_FOLDER_PATH_KEY]);
     for (std::string csv_file : csv_files) {
-        std::cout << "\t" << csv_file << std::endl;
+        std::cout << "    " << csv_file << std::endl;
     }
 
     std::string path_answer, possible_codeword_path, question_text;
@@ -131,6 +147,7 @@ int PuzzleCLI::choose_codeword_path() {
         possible_codeword_path = config[language][CODEWORD_FOLDER_PATH_KEY] + path_answer;
         if (does_path_exist(possible_codeword_path)) {
             codeword_path = possible_codeword_path;
+            // std::cout << "Chosen codeword path: " << codeword_path << std::endl;
             return 0;
         }
         question_text = mass_replace(current_language_map["file_not_found_try_again"], {path_answer});
@@ -166,13 +183,19 @@ void PuzzleCLI::input_data_and_initialize_puzzle(std::string the_language, std::
     if (the_language == "") {
         choose_language();
     }
+    else {
+        set_language(the_language);
+    }
     if (the_codeword_path == "") {
         int exit_code = choose_codeword_path();
         if (exit_code == -1) {
             return;
         }
     }
-    initialize_puzzle(the_codeword_path, "");
+    else if (does_path_exist(the_codeword_path)) {
+        codeword_path = the_codeword_path;
+    }
+    initialize_puzzle(codeword_path, "");
 }
 
 void PuzzleCLI::restart() {
@@ -200,6 +223,7 @@ void PuzzleCLI::add_to_substitution_vector() {
             numbers.push_back(num_input);
         } catch (const std::invalid_argument&) {
             // TODO: print something?
+            std::cout << "problems with numbers" << std::endl;
             return;
         }
     }
@@ -225,6 +249,7 @@ void PuzzleCLI::add_to_substitution_vector() {
         issue = puzzle.add_to_substitution_vector(numbers[i], letters[i], issues, false);
 
         if (issue == 0) {
+            // std::cout << "Added " << numbers[i] << " = " << letters[i] << std::endl;
             continue;
         }
 
@@ -246,6 +271,7 @@ void PuzzleCLI::add_to_substitution_vector() {
             std::cout << text_to_show << std::endl;
         }
     }
+    // print_substitution_vector();
 }
     
 void PuzzleCLI::set_codeword_as_word() {
@@ -324,7 +350,9 @@ std::vector<CodewordWordPair> PuzzleCLI::find_unique_pairs() {
     std::string unique_pairs_found_text = mass_replace(current_language_map["unique_pairs_found_text"], {std::to_string(unique_pairs.size()), std::to_string(time_taken)});
     std::cout << unique_pairs_found_text << std::endl;
 
-    std::cout << mass_replace(current_language_map["solved_words_note"], {std::to_string(solved_char)}) << std::endl;
+    std::string solved_marker = "";
+    solved_marker += solved_char;
+    std::cout << mass_replace(current_language_map["solved_words_note"], {solved_marker}) << std::endl;
 
     for (CodewordWordPair codeword_word_pair : unique_pairs) {
         print_pairs(codeword_word_pair);
@@ -359,11 +387,16 @@ void PuzzleCLI::try_to_solve_puzzle_methodically(std::chrono::time_point<std::ch
         found_words++;
 
         std::string codeword_str = codeword_as_str(puzzle.get_codewords()[optimal_pair.first]);
-        std::string part1 = add_whitespace(std::to_string(optimal_pair.first + 1), puzzle.max_num_size);
-        std::string part2 = add_whitespace(uppercase(optimal_pair.second), puzzle.max_word_length);
-        std::cout << add_whitespace(std::to_string(found_words), puzzle.max_num_size) << " " << current_language_map["best_match_text"] << part1 << "  " << part2 << std::endl;
+        std::string part1 = add_whitespace(std::to_string(found_words), puzzle.max_num_size);
+        std::string part2 = current_language_map["best_match_text"];
+        std::string part3 = add_whitespace(std::to_string(optimal_pair.first + 1), puzzle.max_num_size);
+        std::string part4 = add_whitespace(uppercase(optimal_pair.second), puzzle.max_word_length);
+        std::cout << part1 << " " << part2 << part3 << "  " << part4 << std::endl;
+        
+        puzzle.set_codeword_to_word(optimal_pair.first, optimal_pair.second);
+        puzzle.set_matched_words();
 
-        // ?????????????
+        optimal_pair = puzzle.find_optimal_unique_pair();
     }
 
     auto end_time = std::chrono::high_resolution_clock::now();
@@ -378,7 +411,7 @@ void PuzzleCLI::try_to_solve_puzzle_with_steps() {
 void PuzzleCLI::print_substitution_vector() {
     std::vector<std::string> lines = puzzle.substitution_vector_in_two_lines();
     for (std::string line : lines) {
-        std::cout << line << std::endl;
+        std::cout << uppercase(line) << std::endl;
     }
 }
 
@@ -397,9 +430,12 @@ void PuzzleCLI::print_initial_info() {
 
 void PuzzleCLI::print_missing_chars() {
     std::cout << current_language_map["missing_letters_text"] << std::endl;
+    std::string letter_str = "";
     for (char letter : puzzle.get_alphabet()) {
         if (puzzle.find_char_from_substitution_vector(letter) == -1) {
-            std::cout << std::toupper(letter) << "  ";
+            letter_str = "";
+            letter_str += letter;
+            std::cout << uppercase(letter_str) << "  ";
         }
     }
     std::cout << std::endl;
@@ -410,18 +446,18 @@ void PuzzleCLI::print_codeword_progress() {
 }
 
 void PuzzleCLI::print_codeword_progress(std::vector<std::vector<int>> codewords_here) {
-    int index_of_codeword, num_of_matched_words;
+    int actual_index, num_of_matched_words;
     std::string word, codeword_str, part1, part2, part3, part4;
     for (std::vector<int> codeword : codewords_here) {
-        index_of_codeword = puzzle.get_codeword_index(codeword);
+        actual_index = puzzle.get_codeword_index(codeword);
         word = puzzle.get_decrypted_codeword(codeword);
         codeword_str = codeword_as_str(codeword);
-        num_of_matched_words = puzzle.get_num_of_matched_words(index_of_codeword);
-        part1 = add_whitespace(std::to_string(index_of_codeword), puzzle.max_num_size);
+        num_of_matched_words = puzzle.get_num_of_matched_words(actual_index);
+        part1 = add_whitespace(std::to_string(actual_index + 1), puzzle.max_num_size);
         part2 = uppercase(add_whitespace(word, puzzle.max_word_length));
         part3 = add_whitespace(codeword_str, puzzle.max_codeword_str_length);
         part4 = mass_replace(current_language_map["matching_words_text"], {std::to_string(num_of_matched_words)});
-        std::cout << part1 << " " << part2 << " \t " << part3 << " \t " << part4 << std::endl;
+        std::cout << part1 << " " << part2 << "    " << part3 << "    " << part4 << std::endl;
     }
 }
 
@@ -429,7 +465,7 @@ void PuzzleCLI::choose_progress_to_show() {
     int default_option = 1;
     std::vector<std::string> options = {current_language_map["show_unsolved_text"], current_language_map["show_all_text"], current_language_map["show_solved_text"]};
 
-    std::cout << mass_replace(current_language_map["choose_progress_shown_text"], {std::to_string(default_option)});
+    std::cout << mass_replace(current_language_map["choose_progress_shown_text"], {std::to_string(default_option)}) << std::endl;;
     int ordinal;
     for (int i = 0; i < options.size(); i++) {
         ordinal = i + 1;
@@ -491,10 +527,10 @@ void PuzzleCLI::show_matching_words() {
         return;
     }
 
-    int index_of_codeword = puzzle.get_codeword_index(the_codeword) + 1;
-    std::vector<std::string> words = puzzle.get_matched_words_for_codeword(index_of_codeword - 1);
+    int index_to_show = puzzle.get_codeword_index(the_codeword) + 1;
+    std::vector<std::string> words = puzzle.get_matched_words_for_codeword(index_to_show - 1);
     std::string codeword_str = codeword_as_str(the_codeword);
-    std::cout << mass_replace(current_language_map["words_matching_codeword_text"], {std::to_string(words.size()), std::to_string(index_of_codeword), codeword_str});
+    std::cout << mass_replace(current_language_map["words_matching_codeword_text"], {std::to_string(words.size()), std::to_string(index_to_show), codeword_str}) << std::endl;
     
     for (std::string word : words) {
         std::cout << uppercase(word) << std::endl;
@@ -506,8 +542,8 @@ void PuzzleCLI::choose_main_choice() {
     print_substitution_vector();
     std::cout << std::endl;
 
-    // std::pair<std::string, std::function<void()>> fpair = (current_language_map["set_number_letter"], add_to_substitution_vector);
-    // std::vector<std::function<void(PuzzleCLI&)>> fvector = {add_to_substitution_vector};
+    // std::function<void()> func = std::bind(&PuzzleCLI::add_to_substitution_vector, *this);
+    // PuzzleCLI&
 
     std::vector<std::pair<std::string, std::function<void(PuzzleCLI&)>>> choices = {
         std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["set_number_letter"], add_to_substitution_vector),
@@ -516,7 +552,7 @@ void PuzzleCLI::choose_main_choice() {
         std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["show_progress"], choose_progress_to_show),
         std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["show_matching_words"], show_matching_words),
         std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["find_unique_pairs"], find_unique_pairs),
-        std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["solve_with_steps"], try_to_solve_puzzle_with_steps),
+        // std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["solve_with_steps"], try_to_solve_puzzle_with_steps),
         std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["solve_methodically"], try_to_solve_puzzle_fully_methodically),
         std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["restart"], restart),
         // std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["clear_screen"], clear_screen),
@@ -544,7 +580,7 @@ void PuzzleCLI::choose_main_choice() {
         else {
             ordinal = i + 1;
         }
-        std::cout << ordinal << "\t" << choices[i].first << std::endl;
+        std::cout << ordinal << "    " << choices[i].first << std::endl;
     }
     std::cout << std::endl;
 
@@ -580,5 +616,6 @@ void PuzzleCLI::choose_main_choice() {
     }
 
     choices[choice_num].second(*this);
+    // choices[choice_num].second();
 
 }

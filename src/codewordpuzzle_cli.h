@@ -42,6 +42,7 @@ public:
     std::pair<char, char> get_yes_no_pair();
     bool yes_no_question(std::string question_text);
     void set_language(std::string new_language);
+    std::vector<std::string> get_languages();
     void choose_language();
     int choose_codeword_path();
     void initialize_puzzle(std::string the_codeword_path, std::string the_wordlist_path);
