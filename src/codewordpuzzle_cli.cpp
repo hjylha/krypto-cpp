@@ -368,7 +368,7 @@ void PuzzleCLI::print_solving_stats(double elapsed_time) {
     int num_of_solved_codewords = word_counts.first;
     int num_of_found_words = word_counts.second;
     std::cout << mass_replace(current_language_map["found_codewords_text"], {std::to_string(num_of_solved_codewords), std::to_string(puzzle.num_of_codewords)}) << std::endl;
-    std::cout << mass_replace(current_language_map["found_codewords_in_wordlist_text"], {std::to_string(num_of_found_words)});
+    std::cout << mass_replace(current_language_map["found_codewords_in_wordlist_text"], {std::to_string(num_of_found_words)}) << std::endl;
 
     int num_of_solved_numbers = puzzle.count_solved_numbers();
     std::cout << mass_replace(current_language_map["substitution_table_decipher_text"], {std::to_string(num_of_solved_numbers), std::to_string(puzzle.num_of_letters)});
