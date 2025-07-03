@@ -1,4 +1,5 @@
 
+#include <algorithm>
 #include <string>
 #include <vector>
 #include <iostream>
@@ -8,14 +9,31 @@
 #include "codewordpuzzle.h"
 #include "codewordpuzzle_cli.h"
 
-int main()
+int main(int argc, char* argv[])
 {
     // auto start_time = std::chrono::high_resolution_clock::now();
+    std::string lang = "";
+    std::string cw_path = "";
 
-    std::cout << "Hello world!" << std::endl;
+    std::cout << argc << " command line arguments detected:" << std::endl;
+    for (int i = 0; i < argc; i++) {
+        std::cout << argv[i] << std::endl;
+    }
 
     PuzzleCLI puzzle_cli = PuzzleCLI();
-    puzzle_cli.input_data_and_initialize_puzzle("", "");
+    std::vector<std::string> languages = puzzle_cli.get_languages();
+    for (int i = 1; i < argc; i++) {
+        if (std::find(languages.begin(), languages.end(), argv[i]) != languages.end()) {
+            lang = argv[i];
+            continue;
+        }
+        if (does_path_exist(argv[i])) {
+            cw_path = argv[i];
+        }
+    }
+
+
+    puzzle_cli.input_data_and_initialize_puzzle(lang, cw_path);
 
     puzzle_cli.print_initial_info();
     std::cout << std::endl;
