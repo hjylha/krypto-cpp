@@ -8,6 +8,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <iostream>
 
 MatchingIndicesAndOthers::MatchingIndicesAndOthers(std::vector<std::pair<int, int>> matching_indices, std::vector<int> other_indices1, std::vector<int> other_indices2) {
     matching_indices = matching_indices;
@@ -162,7 +163,7 @@ CodewordPuzzle::CodewordPuzzle(std::vector<std::vector<int>> the_codewords, std:
     // what to do with problems?
     // if (max_num == 0 || min_num < 0) {}
 
-    for (int i = 0; i <= max_num; i++) {
+    for (int i = 0; i <= num_of_letters; i++) {
         substitution_vector.push_back(empty_symbol);
         substitution_vector_saved.push_back(empty_symbol);
     }
@@ -223,21 +224,24 @@ std::vector<std::string> CodewordPuzzle::substitution_vector_in_two_lines() {
     std::string line1 = "";
     std::string line2 = "";
     std::string delimiter = " | ";
-    char letter;
+    std::string letter;
     for (int i = 1; i <= num_of_letters; i++) {
         if (i > 1) {
             line1 += delimiter;
             line2 += delimiter;
         }
         line1 += std::to_string(i);
-        if (substitution_vector[i] = empty_symbol) {
-            letter = ' ';
+        letter = "";
+        if (substitution_vector[i] == empty_symbol) {
+            letter += ' ';
         }
         else {
-            letter = substitution_vector[i];
+            letter += substitution_vector[i];
         }
-        line2 += add_whitespace(std::to_string(letter), std::to_string(i).length());
+        line2 += add_whitespace(letter, std::to_string(i).length());
     }
+    lines.push_back(line1);
+    lines.push_back(line2);
 
     return lines;
 }
@@ -363,6 +367,7 @@ int CodewordPuzzle::add_to_substitution_vector(int num, char letter, std::map<st
     }
     if (letter == ' ') {
         substitution_vector[num] = empty_symbol;
+        std::cout << "Added in CodewordPuzzle " << num << " = " << empty_symbol << std::endl;
         set_matched_words();
         return 0;
     }
@@ -378,8 +383,17 @@ int CodewordPuzzle::add_to_substitution_vector(int num, char letter, std::map<st
         substitution_vector[previous_num] = empty_symbol;
     }
     substitution_vector[num] = letter;
+    // std::cout << "Added in CodewordPuzzle " << num << " = " << letter << std::endl;
+    // std::cout << "Confirmation: " << num << " = " << substitution_vector[num] << std::endl;
+    // std::cout << "Confirmation2: " << find_char_from_substitution_vector(letter) << " = " << letter << std::endl;
     set_matched_words();
     return 0;
+}
+
+void CodewordPuzzle::set_codeword_to_word(int codeword_index, std::string word) {
+    for (int i = 0; i < word.length(); i++) {
+        add_to_substitution_vector(codewords[codeword_index][i], word[i], std::map<std::string, int>(), true);
+    }
 }
 
 int CodewordPuzzle::find_char_from_substitution_vector(char letter) {

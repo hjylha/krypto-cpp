@@ -74,6 +74,7 @@ public:
     std::vector<int> sort_codewords();
     void clear_substitution_vector();
     int add_to_substitution_vector(int num, char letter, std::map<std::string, int> issues, bool override);
+    void set_codeword_to_word(int codeword_index, std::string word);
     int find_char_from_substitution_vector(char letter);
     std::vector<int> find_codeword(std::string search_string);
     std::vector<int> find_codeword_with_least_matches();
