@@ -69,6 +69,7 @@ public:
     std::pair<int, int> count_solved_codewords();
     bool does_word_match_to_substitution_vector(std::string word, std::vector<int> codeword);
     void set_matched_words();
+    void set_matched_words_from_start();
     std::vector<std::string> get_matched_words_for_codeword(int index_of_codeword);
     int get_num_of_matched_words(int index_of_codeword);
     std::vector<int> sort_codewords();
@@ -80,6 +81,7 @@ public:
     std::vector<int> find_codeword_with_least_matches();
     std::string get_decrypted_codeword(std::vector<int> codeword);
     std::vector<std::pair<std::string, std::string>> match_two_codewords(std::vector<int> codeword1, std::vector<int> codeword2, int maximum_matches);
+    std::vector<std::pair<std::string, std::string>> match_two_codewords(int codeword_index1, int codeword_index2, int maximum_matches);
     std::vector<CodewordWordPair> find_all_unique_pairs();
     std::pair<int, std::string> find_optimal_unique_pair();
 };

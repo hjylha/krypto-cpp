@@ -304,7 +304,7 @@ void PuzzleCLI::set_codeword_as_word() {
     for (int i = 0; i < word_input.length(); i++) {
         puzzle.add_to_substitution_vector(the_codeword[i], word_input[i], issues, true);
     }
-    puzzle.set_matched_words();
+    // puzzle.set_matched_words();
 }
     
 void PuzzleCLI::print_pairs(CodewordWordPair codeword_word_pair) {
@@ -390,11 +390,12 @@ void PuzzleCLI::try_to_solve_puzzle_methodically(std::chrono::time_point<std::ch
         std::string part1 = add_whitespace(std::to_string(found_words), puzzle.max_num_size);
         std::string part2 = current_language_map["best_match_text"];
         std::string part3 = add_whitespace(std::to_string(optimal_pair.first + 1), puzzle.max_num_size);
-        std::string part4 = add_whitespace(uppercase(optimal_pair.second), puzzle.max_word_length);
-        std::cout << part1 << " " << part2 << part3 << "  " << part4 << std::endl;
+        std::string part4 = add_whitespace(codeword_str, puzzle.max_codeword_str_length);
+        std::string part5 = add_whitespace(uppercase(optimal_pair.second), puzzle.max_word_length);
+        std::cout << part1 << " " << part2 << part3 << "  " << part4 << "  " << part5 << std::endl;
         
         puzzle.set_codeword_to_word(optimal_pair.first, optimal_pair.second);
-        puzzle.set_matched_words();
+        // puzzle.set_matched_words();
 
         optimal_pair = puzzle.find_optimal_unique_pair();
     }

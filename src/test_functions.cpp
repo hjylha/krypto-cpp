@@ -501,6 +501,8 @@ bool test_sort_codewords(CodewordPuzzle puzzle) {
 bool test_match_two_codewords(CodewordPuzzle puzzle) {
     vector<int> codeword1 = {3, 22, 24, 15};
     vector<int> codeword2 = {21, 15, 13, 11};
+    int codeword_index1 = 4;
+    int codeword_index2 = 5;
 
     std::vector<std::pair<std::string, std::string>> matching_pairs = puzzle.match_two_codewords(codeword1, codeword2, 999);
 
@@ -511,6 +513,15 @@ bool test_match_two_codewords(CodewordPuzzle puzzle) {
     passing *= passing1;
 
     bool passing2 = matching_pairs[0].second == "read";
+    passing *= passing2;
+
+    matching_pairs = puzzle.match_two_codewords(codeword_index1, codeword_index2, 999);
+    passing *= matching_pairs.size() == 1;
+
+    passing1 = matching_pairs[0].first == "some";
+    passing *= passing1;
+
+    passing2 = matching_pairs[0].second == "read";
     passing *= passing2;
 
     return passing;
