@@ -59,6 +59,10 @@ PuzzleCLI::~PuzzleCLI() {
 
 }
 
+// void PuzzleCLI::CallSelectedFunction(MemberFuncPtr func) {
+//     (this->*func)();
+// }
+
 std::pair<char, char> PuzzleCLI::get_yes_no_pair() {
     return std::pair<char, char>(current_language_map["yes"][0], current_language_map["no"][0]);
 }
@@ -340,7 +344,8 @@ void PuzzleCLI::print_pairs(CodewordWordPair codeword_word_pair) {
     std::cout << part1 << "   " << part2 << "   " << part3 << "  " << part4 << std::endl; 
 }
 
-std::vector<CodewordWordPair> PuzzleCLI::find_unique_pairs() {
+// std::vector<CodewordWordPair> PuzzleCLI::find_unique_pairs() {
+void PuzzleCLI::find_unique_pairs() {
     auto start_time = std::chrono::high_resolution_clock::now();
     std::vector<CodewordWordPair> unique_pairs = puzzle.find_all_unique_pairs();
     auto end_time = std::chrono::high_resolution_clock::now();
@@ -358,7 +363,7 @@ std::vector<CodewordWordPair> PuzzleCLI::find_unique_pairs() {
         print_pairs(codeword_word_pair);
     }
     // is return necessary?
-    return unique_pairs;
+    // return unique_pairs;
 }
 
 void PuzzleCLI::print_solving_stats(double elapsed_time) {
@@ -543,22 +548,57 @@ void PuzzleCLI::choose_main_choice() {
     print_substitution_vector();
     std::cout << std::endl;
 
+    MemberFuncPtr func = &PuzzleCLI::add_to_substitution_vector;
+
+    std::vector<std::string> descriptions = {current_language_map["set_number_letter"]};
+    std::vector<MemberFuncPtr> funcs = {&PuzzleCLI::add_to_substitution_vector};
+
+    descriptions.push_back(current_language_map["set_codeword_word"]);
+    funcs.push_back(&PuzzleCLI::set_codeword_as_word);
+
+    descriptions.push_back(current_language_map["missing_letters"]);
+    funcs.push_back(&PuzzleCLI::print_missing_chars);
+
+    descriptions.push_back(current_language_map["show_progress"]);
+    funcs.push_back(&PuzzleCLI::choose_progress_to_show);
+
+    descriptions.push_back(current_language_map["show_matching_words"]);
+    funcs.push_back(&PuzzleCLI::show_matching_words);
+
+    descriptions.push_back(current_language_map["find_unique_pairs"]);
+    funcs.push_back(&PuzzleCLI::find_unique_pairs);
+
+    // descriptions.push_back(current_language_map["solve_with_steps"]);
+    // funcs.push_back(&PuzzleCLI::try_to_solve_puzzle_with_steps);
+
+    descriptions.push_back(current_language_map["solve_methodically"]);
+    funcs.push_back(&PuzzleCLI::try_to_solve_puzzle_fully_methodically);
+
+    descriptions.push_back(current_language_map["restart"]);
+    funcs.push_back(&PuzzleCLI::restart);
+
+    // descriptions.push_back(current_language_map["clear_screen"]);
+    // funcs.push_back(&PuzzleCLI::clear_screen);
+
+    descriptions.push_back(current_language_map["exit"]);
+    funcs.push_back(&PuzzleCLI::exit_program);
+
     // std::function<void()> func = std::bind(&PuzzleCLI::add_to_substitution_vector, *this);
     // PuzzleCLI&
 
-    std::vector<std::pair<std::string, std::function<void(PuzzleCLI&)>>> choices = {
-        std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["set_number_letter"], add_to_substitution_vector),
-        std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["set_codeword_word"], set_codeword_as_word),
-        std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["missing_letters"], print_missing_chars),
-        std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["show_progress"], choose_progress_to_show),
-        std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["show_matching_words"], show_matching_words),
-        std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["find_unique_pairs"], find_unique_pairs),
-        // std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["solve_with_steps"], try_to_solve_puzzle_with_steps),
-        std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["solve_methodically"], try_to_solve_puzzle_fully_methodically),
-        std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["restart"], restart),
-        // std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["clear_screen"], clear_screen),
-        std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["exit"], exit_program)
-    };
+    // std::vector<std::pair<std::string, std::function<void(PuzzleCLI&)>>> choices = {
+    //     std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["set_number_letter"], add_to_substitution_vector),
+    //     std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["set_codeword_word"], set_codeword_as_word),
+    //     std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["missing_letters"], print_missing_chars),
+    //     std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["show_progress"], choose_progress_to_show),
+    //     std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["show_matching_words"], show_matching_words),
+    //     std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["find_unique_pairs"], find_unique_pairs),
+    //     // std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["solve_with_steps"], try_to_solve_puzzle_with_steps),
+    //     std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["solve_methodically"], try_to_solve_puzzle_fully_methodically),
+    //     std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["restart"], restart),
+    //     // std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["clear_screen"], clear_screen),
+    //     std::pair<std::string, std::function<void(PuzzleCLI&)>>(current_language_map["exit"], exit_program)
+    // };
 
     // std::vector<std::string> choices = {current_language_map["set_number_letter"], current_language_map["set_codeword_word"]};
     // choices.push_back(current_language_map["missing_letters"]);
@@ -573,7 +613,8 @@ void PuzzleCLI::choose_main_choice() {
 
     std::cout << current_language_map["choose_action"] << std::endl;
     int ordinal;
-    int num_of_choices = choices.size();
+    // int num_of_choices = choices.size();
+    int num_of_choices = descriptions.size();
     for (int i = 0; i < num_of_choices; i++) {
         if (i == num_of_choices - 1) {
             ordinal = 0;
@@ -581,7 +622,8 @@ void PuzzleCLI::choose_main_choice() {
         else {
             ordinal = i + 1;
         }
-        std::cout << ordinal << "    " << choices[i].first << std::endl;
+        // std::cout << ordinal << "    " << choices[i].first << std::endl;
+        std::cout << ordinal << "    " << descriptions[i] << std::endl;
     }
     std::cout << std::endl;
 
@@ -616,7 +658,9 @@ void PuzzleCLI::choose_main_choice() {
         
     }
 
-    choices[choice_num].second(*this);
+    (this->*funcs[choice_num])();
+    // this->CallSelectedFunction(funcs[choice_num]);
+    // choices[choice_num].second(*this);
     // choices[choice_num].second();
 
 }

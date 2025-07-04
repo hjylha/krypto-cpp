@@ -40,6 +40,9 @@ public:
     bool running = true;
     PuzzleCLI();
     ~PuzzleCLI();
+    // A function pointer to member functions
+    typedef void (PuzzleCLI::*MemberFuncPtr)();
+    // void CallSelectedFunction(MemberFuncPtr func);
     std::pair<char, char> get_yes_no_pair();
     bool yes_no_question(std::string question_text);
     void set_language(std::string new_language);
@@ -53,7 +56,8 @@ public:
     void add_to_substitution_vector();
     void set_codeword_as_word();
     void print_pairs(CodewordWordPair codeword_word_pair);
-    std::vector<CodewordWordPair> find_unique_pairs();
+    // std::vector<CodewordWordPair> find_unique_pairs();
+    void find_unique_pairs();
     void print_solving_stats(double elapsed_time);
     void try_to_solve_puzzle_fully_methodically();
     void try_to_solve_puzzle_methodically(std::chrono::time_point<std::chrono::high_resolution_clock> start_time);
