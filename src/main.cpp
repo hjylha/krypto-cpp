@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 // #include <ctime>
+#include <clocale>
 #include <chrono>
 #include "file_operations.h"
 #include "codewordpuzzle.h"
@@ -11,6 +12,8 @@
 
 int main(int argc, char* argv[])
 {
+    setlocale(LC_ALL, "utf-8");
+
     // auto start_time = std::chrono::high_resolution_clock::now();
     std::string lang = "";
     std::string cw_path = "";
