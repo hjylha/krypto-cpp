@@ -15,7 +15,8 @@ std::string remove_whitespace(std::string text) {
 std::string add_whitespace(std::string text, int total_length) {
     text = text.substr(0, total_length);
     // std::string whitespace = " ";
-    for (int i = 0; i < total_length - text.length(); i++) {
+    int text_length = text.length();
+    for (int i = 0; i < total_length - text_length; i++) {
         text += " ";
     }
     return text;

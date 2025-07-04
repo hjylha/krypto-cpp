@@ -29,6 +29,8 @@ int main()
     // cout << "remove_whitespace works: " << remove_whitespace_works << endl;
     show_test_result(test_remove_whitespace(), "test_remove_whitespace");
 
+    show_test_result(test_add_whitespace(), "test_add_whitespace");
+
     // bool split_string_works = test_split_string();
     // cout << "split_string works: " << split_string_works << endl;
     show_test_result(test_split_string(), "test_split_string");
