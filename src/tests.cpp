@@ -1,4 +1,6 @@
 
+#include <clocale>
+#include <locale>
 #include <string>
 #include <map>
 #include <utility>
@@ -21,9 +23,21 @@ void show_test_result(bool test_result, string test_description) {
 
 int main()
 {
+    setlocale(LC_ALL, "utf-8");
+    // std::locale::global(std::locale(""));
+    // std::cout.imbue(std::locale());
+
+    // string something = "I \U0001F60D \u03A9";
+    // std::u32string something32 = "I \U0001F60D \u03A9";
+
+    // cout << "\'" << something << "\' is " << something.length() << " characters long" << endl;
+    // cout << "\'" << something32 << "\' is " << something32.length() << " characters long" << endl;
+
     auto start_time = std::chrono::high_resolution_clock::now();
 
     cout << "\nTesting basic_functions:" << endl;
+
+    show_test_result(test_get_minimum(), "test_get_minimum");
 
     // bool remove_whitespace_works = test_remove_whitespace();
     // cout << "remove_whitespace works: " << remove_whitespace_works << endl;
@@ -31,9 +45,15 @@ int main()
 
     show_test_result(test_add_whitespace(), "test_add_whitespace");
 
+    show_test_result(test_add_whitespace2(), "test_add_whitespace2");
+
     // bool split_string_works = test_split_string();
     // cout << "split_string works: " << split_string_works << endl;
     show_test_result(test_split_string(), "test_split_string");
+
+    show_test_result(test_utf8_split(), "test_utf8_split");
+
+    show_test_result(test_join_string(), "test_join_string");
 
     // bool lowercase_works = test_lowercase();
     // cout << "lowercase works: " << lowercase_works << endl;
@@ -42,6 +62,10 @@ int main()
     // bool uppercase_works = test_uppercase();
     // cout << "uppercase works: " << uppercase_works << endl;
     show_test_result(test_uppercase(), "test_uppercase");
+
+    show_test_result(test_find_string(), "test_find_string");
+
+    show_test_result(test_find_int(), "test_find_int");
 
     // bool codeword_as_str_works = test_codeword_as_str();
     // cout << "codeword_as_str works: " << codeword_as_str_works << endl;
@@ -59,13 +83,19 @@ int main()
     // cout << "are_letters_in_alphabet works: " << are_letters_in_alphabet_works << endl;
     show_test_result(test_are_letters_in_alphabet(), "test_are_letters_in_alphabet");
 
+    show_test_result(test_are_letters_in_alphabet2(), "test_are_letters_in_alphabet2");
+
     // bool does_word_match_works = test_does_word_match();
     // cout << "does_word_match works: " << does_word_match_works << endl;
     show_test_result(test_does_word_match(), "test_does_word_match");
 
+    show_test_result(test_does_word_match2(), "test_does_word_match2");
+
     // bool get_matched_words_works = test_get_matched_words();
     // cout << "get_matched_words works: " << get_matched_words_works << endl;
     show_test_result(test_get_matched_words(), "test_get_matched_words");
+
+    show_test_result(test_get_matched_words2(), "test_get_matched_words2");
 
 
     cout << "\nTesting file_operations:" << endl;
@@ -90,6 +120,8 @@ int main()
     // bool get_wordlist_works = test_get_wordlist(test_wordlist_path);
     // cout << "get_wordlist works: " << get_wordlist_works << endl;
     show_test_result(test_get_wordlist(test_wordlist_path), "test_get_wordlist");
+
+    show_test_result(test_get_wordlist_vector(test_wordlist_path), "test_get_wordlist_vector");
 
     string test_codeword_path = "test_codewords.csv";
     // bool get_codewords_works = test_get_codewords(test_codeword_path);
@@ -118,9 +150,11 @@ int main()
     pair<vector<string>, vector<vector<int>>> codewords_n_comments = get_codewords(test_codeword_path);
     vector<vector<int>> codewords = codewords_n_comments.second;
     vector<string> comments = codewords_n_comments.first;
-    vector<string> wordlist = get_wordlist(test_wordlist_path);
+    // vector<string> wordlist = get_wordlist(test_wordlist_path);
+    vector<vector<string>> wordlist = get_wordlist_vector(test_wordlist_path);
     map<string, map<string, string>> config = read_config(test_config_path);
-    string alphabet = config["tag"]["alphabet"];
+    // string alphabet = config["tag"]["alphabet"];
+    vector<string> alphabet = utf8_split(config["tag"]["alphabet"]);
     CodewordPuzzle puzzle = CodewordPuzzle(codewords, wordlist, alphabet, comments);
 
     // cout << "alphabet: " << alphabet << endl;

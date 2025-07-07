@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 // #include <ctime>
+#include <locale>
 #include <clocale>
 #include <chrono>
 #include "file_operations.h"
@@ -13,15 +14,17 @@
 int main(int argc, char* argv[])
 {
     setlocale(LC_ALL, "utf-8");
+    // std::locale::global(std::locale("utf-8"));
+    // std::cout.imbue(std::locale());
 
     // auto start_time = std::chrono::high_resolution_clock::now();
     std::string lang = "";
     std::string cw_path = "";
 
-    std::cout << argc << " command line arguments detected:" << std::endl;
-    for (int i = 0; i < argc; i++) {
-        std::cout << argv[i] << std::endl;
-    }
+    // std::cout << argc << " command line arguments detected:" << std::endl;
+    // for (int i = 0; i < argc; i++) {
+    //     std::cout << argv[i] << std::endl;
+    // }
 
     PuzzleCLI puzzle_cli = PuzzleCLI();
     std::vector<std::string> languages = puzzle_cli.get_languages();

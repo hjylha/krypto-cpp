@@ -110,6 +110,26 @@ std::vector<std::string> get_wordlist(const std::string& filepath) {
     return wordlist;
 }
 
+std::vector<std::vector<std::string>> get_wordlist_vector(const std::string& filepath) {
+    std::vector<std::vector<std::string>> wordlist;
+    std::ifstream file(filepath);
+
+    if (!file.is_open()) {
+        std::cerr << "Could not open file: " << filepath << std::endl;
+        return wordlist;
+    }
+
+    std::string line;
+    while (std::getline(file, line)) {
+        line = lowercase(remove_whitespace(line));
+        // lowercase?
+        wordlist.push_back(utf8_split(line));
+    }
+    file.close();
+
+    return wordlist;
+}
+
 std::pair<std::vector<std::string>, std::vector<std::vector<int>>> get_codewords(const std::string& filepath) {
     std::vector<std::string> comments;
     std::vector<std::vector<int>> codewords;
@@ -153,38 +173,38 @@ std::pair<std::vector<std::string>, std::vector<std::vector<int>>> get_codewords
     return std::pair(comments, codewords);
 }
 
-std::vector<std::vector<int>> readCSVIntegers(const std::string& filepath) {
-    std::vector<std::vector<int>> result;
-    std::ifstream file(filepath);
+// std::vector<std::vector<int>> readCSVIntegers(const std::string& filepath) {
+//     std::vector<std::vector<int>> result;
+//     std::ifstream file(filepath);
 
-    if (!file.is_open()) {
-        std::cerr << "Could not open file: " << filepath << std::endl;
-        return result;
-    }
+//     if (!file.is_open()) {
+//         std::cerr << "Could not open file: " << filepath << std::endl;
+//         return result;
+//     }
 
-    std::string line;
-    while (std::getline(file, line)) {
-        std::vector<int> row;
-        std::stringstream ss(line);
-        std::string value;
+//     std::string line;
+//     while (std::getline(file, line)) {
+//         std::vector<int> row;
+//         std::stringstream ss(line);
+//         std::string value;
 
-        while (std::getline(ss, value, ',')) {
-            try {
-                row.push_back(std::stoi(value));
-            } catch (const std::invalid_argument&) {
-                // Handle parse error (skip non-integer values)
-                continue;
-            }
-        }
+//         while (std::getline(ss, value, ',')) {
+//             try {
+//                 row.push_back(std::stoi(value));
+//             } catch (const std::invalid_argument&) {
+//                 // Handle parse error (skip non-integer values)
+//                 continue;
+//             }
+//         }
 
-        if (!row.empty()) {
-            result.push_back(row);
-        }
-    }
+//         if (!row.empty()) {
+//             result.push_back(row);
+//         }
+//     }
 
-    file.close();
-    return result;
-}
+//     file.close();
+//     return result;
+// }
 
 std::vector<std::string> get_csv_files_in_folder(std::string folder_path) {
     std::vector<std::string> csv_files;

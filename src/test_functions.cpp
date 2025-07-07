@@ -13,6 +13,29 @@
 using std::string, std::map, std::vector, std::pair;
 
 
+bool test_get_minimum() {
+    int num1 = 1;
+    int num2 = 2;
+    bool passing = get_minimum(num1, num2) == num1;
+
+    num1 = 42;
+    num2 = 28;
+    bool passing1 = get_minimum(num1, num2) == num2;
+    passing *= passing1;
+
+    num1 = -1;
+    num2 = -2;
+    bool passing2 = get_minimum(num1, num2) == num2;
+    passing *= passing2;
+
+    num1 = -496;
+    num2 = 0;
+    bool passing3 = get_minimum(num1, num2) == num1;
+    passing *= passing3;
+
+    return passing;
+}
+
 bool test_remove_whitespace() {
     bool passing = true;
     std::string expected_result = "hello";
@@ -64,6 +87,21 @@ bool test_add_whitespace() {
     return passing;
 }
 
+bool test_add_whitespace2() {
+    vector<string> text_vector = {"h", "e", "l", "l", "o"};
+    int total_length = 7;
+    string expected_text = "hello  ";
+    bool passing = add_whitespace(text_vector, total_length) == expected_text;
+
+    text_vector = {"ä", "l", "ä", "m", "ö", "l", "ö"};
+    total_length = 10;
+    expected_text = "älämölö   ";
+    bool passing1 = add_whitespace(text_vector, total_length) == expected_text;
+    passing *= passing1;
+
+    return passing;
+}
+
 bool test_split_string() {
     bool passing = true;
 
@@ -87,6 +125,38 @@ bool test_split_string() {
     return passing;
 }
 
+bool test_utf8_split() {
+    string text = "";
+    bool passing = utf8_split(text).empty();
+
+    text = "abcd";
+    vector<string> expected_split = {"a", "b", "c", "d"};
+    bool passing1 = utf8_split(text) == expected_split;
+    passing *= passing1;
+
+    text = "älämölö";
+    expected_split = {"ä", "l", "ä", "m", "ö", "l", "ö"};
+    bool passing2 = utf8_split(text) == expected_split;
+
+    passing *= passing2;
+
+    return passing;
+}
+
+bool test_join_string() {
+    vector<string> text_vector;
+    string expected_text = "";
+    bool passing = join_string(text_vector, ",.?") == expected_text;
+
+    text_vector = {"a", "b", "c", "d"};
+    expected_text = "abcd";
+
+    bool passing1 = join_string(text_vector, "") == expected_text;
+    passing *= passing1;
+
+    return passing;
+}
+
 bool test_lowercase() {
     string text = "AbCdEfG";
     string expected_text = "abcdefg";
@@ -96,6 +166,11 @@ bool test_lowercase() {
     expected_text = "abc123d e f";
     bool passing1 = lowercase(text) == expected_text;
     passing *= passing1;
+
+    text= "ÄO120 äo80";
+    expected_text = "äo120 äo80";
+    bool passing2 = lowercase(text) == expected_text;
+    passing *= passing2;
 
     return passing;
 }
@@ -109,6 +184,48 @@ bool test_uppercase() {
     expected_text = "ABC123D E F";
     bool passing1 = uppercase(text) == expected_text;
     passing *= passing1;
+
+    text= "ÄO120 äo80";
+    expected_text = "ÄO120 ÄO80";
+    bool passing2 = uppercase(text) == expected_text;
+    passing *= passing2;
+
+    return passing;
+}
+
+bool test_find_string() {
+    vector<string> text_vector = {"a", "b", "ö"};
+
+    string text = "a";
+    bool passing = find(text_vector, text) == 0;
+
+    text = "ö";
+    bool passing1 = find(text_vector, text) == 2;
+    passing *= passing1;
+
+    text = "c";
+    bool passing2 = find(text_vector, text) == -1;
+
+    return passing;
+}
+
+bool test_find_int() {
+    vector<int> int_vector = {1, -1, 5, 0};
+
+    int num = 1;
+    bool passing = find(int_vector, num) == 0;
+
+    num = -1;
+    bool passing1 = find(int_vector, num) == 1;
+    passing *= passing1;
+
+    num = 2;
+    bool passing2 = find(int_vector, num) == -1;
+    passing *= passing2;
+
+    num = 0;
+    bool passing3 = find(int_vector, num) == 3;
+    passing *= passing3;
 
     return passing;
 }
@@ -197,6 +314,52 @@ bool test_are_letters_in_alphabet() {
     bool passing4 = are_letters_in_alphabet(text, alphabet);
     passing *= passing4;
 
+    text = "öljytynnyri";
+    bool passing5 = are_letters_in_alphabet(text, alphabet);
+    passing *= passing5;
+    // std::cout << text << " has " << text.length() << " letters" << std::endl;
+    // std::cout << text[0] << " is the first letter of " << text << std::endl;
+    // std::cout << alphabet[alphabet.length() - 1] << " is the last letter of " << alphabet << std::endl;
+    // std::cout << alphabet << " has " << alphabet.length() << " letters" << std::endl;
+    // std::cout << text.substr(0, 3) << " " << alphabet.substr(alphabet.length()- 3, 3) << std::endl;
+    // for (int i = 1; i < text.length(); i++) {
+    //     std::cout << text.substr(0, i) << " == " << "ö: " << (text.substr(0, i) == "ö") << std::endl; 
+    // }
+
+    return passing;
+}
+
+bool test_are_letters_in_alphabet2() {
+    vector<string> text = {"a", "b", "c"};
+    vector<string> alphabet = {"d", "e", "f"};
+    bool passing = !are_letters_in_alphabet(text, alphabet);
+
+    alphabet = {"a", "b", "c", "d", "e", "f", "g",
+        "h", "i", "j", "k", "l", "m", "n",
+        "o", "p", "q", "r", "s", "t", "u",
+        "v", "w", "x", "y", "z"
+    };
+    text = alphabet;
+    bool passing1 = are_letters_in_alphabet(text, alphabet);
+    passing *= passing1;
+
+    text = {"n", "o", "?"};
+    bool passing2 = !are_letters_in_alphabet(text, alphabet);
+    passing *= passing2;
+
+    alphabet.push_back("?");
+    text = {"y", "e", "s", "?"};
+    bool passing3 = are_letters_in_alphabet(text, alphabet);
+    passing *= passing3;
+
+    alphabet.pop_back();
+    alphabet.push_back("å");
+    alphabet.push_back("ä");
+    alphabet.push_back(("ö"));
+    text = {"ä", "l", "ä", "m", "ö", "l", "ö"};
+    bool passing4 = are_letters_in_alphabet(text, alphabet);
+    passing *= passing4;
+
     return passing;
 }
 
@@ -215,14 +378,70 @@ bool test_does_word_match() {
     bool passing2 = !does_word_match(word, codeword);
     passing *= passing2;
 
+    word = "öljytynnyri";
+    codeword = {4,24,10,9,27,9,7,7,9,2,12};
+    bool passing3 = does_word_match(word, codeword);
+    passing *= passing3;
+
+    return passing;
+}
+
+bool test_does_word_match2() {
+    vector<string> word_vector = {"h", "e", "l", "l", "o"};
+    vector<int> codeword = {1, 2, 3, 3, 4};
+    bool passing = does_word_match(word_vector, codeword);
+
+    word_vector = {"w", "o", "r", "l", "d"};
+    codeword = {1, 2, 3, 4, 2};
+    bool passing1 = !(does_word_match(word_vector, codeword));
+    passing *= passing1;
+
+    word_vector = {"h", "e", "r", "e"};
+    codeword = {3, 22, 24, 15};
+    bool passing2 = !does_word_match(word_vector, codeword);
+    passing *= passing2;
+
+    word_vector = {"ö", "l", "j", "y", "t", "y", "n", "n", "y", "r", "i"};
+    codeword = {4,24,10,9,27,9,7,7,9,2,12};
+    bool passing3 = does_word_match(word_vector, codeword);
+    passing *= passing3;
+
     return passing;
 }
 
 bool test_get_matched_words() {
     vector<int> codeword = {1, 2, 3, 3, 4};
-    vector<string> wordlist = {"hello", "world", "tiny", "english", "abccd"};
+    vector<string> wordlist = {"hello", "world", "tiny", "english", "abccd", "öljytynnyri"};
     vector<string> expected_words = {"hello", "abccd"};
     bool passing = get_matched_words(codeword, wordlist, -1) == expected_words;
+
+    codeword = {4,24,10,9,27,9,7,7,9,2,12};
+    expected_words = {"öljytynnyri"};
+    bool passing1 = get_matched_words(codeword, wordlist, -1) == expected_words;
+    passing *= passing1;
+
+    return passing;
+}
+
+bool test_get_matched_words2() {
+    vector<int> codeword = {1, 2, 3, 3, 4};
+    vector<vector<string>> wordlist = {
+        {"h", "e", "l", "l", "o"},
+        {"w", "o", "r", "l", "d"},
+        {"t", "i", "n", "y"},
+        {"e", "n", "g", "l", "i", "s", "h"},
+        {"a", "b", "c", "c", "d"},
+        {"ö", "l", "j", "y", "t", "y", "n", "n", "y", "r", "i"}
+    };
+    // vector<string> expected_words = {"hello", "abccd"};
+    vector<vector<string>> expected_words = {{"h", "e", "l", "l", "o"}, {"a", "b", "c", "c", "d"}};
+    bool passing = get_matched_words(codeword, wordlist, -1) == expected_words;
+
+    codeword = {4,24,10,9,27,9,7,7,9,2,12};
+    expected_words = {{"ö", "l", "j", "y", "t", "y", "n", "n", "y", "r", "i"}};
+    bool passing1 = get_matched_words(codeword, wordlist, -1) == expected_words;
+    passing *= passing1;
+
     return passing;
 }
 
@@ -264,13 +483,13 @@ bool test_read_config(string test_default_filepath)
     string lang1 = "tag";
     string lang2 = "another_tag";
     bool passing1 = config[lang1]["name"] == "default";
-    bool passing2 = config[lang1]["alphabet"] == "abcdefg";
+    bool passing2 = config[lang1]["alphabet"] == "abcdefghijklmnopqrstuvwxyzåäö";
     bool passing3 = config[lang1]["wordlist_path"] == "test_stuff/test_wordlist";
     bool passing4 = config[lang1]["codeword_folder_path"] == "test_stuff";
     passing = passing && passing1 && passing2 && passing3 && passing4;
 
     bool passing5 = config[lang2]["name"] == "second";
-    bool passing6 = config[lang2]["alphabet"] == "abcdefghijklmnopqrstuvwxyzåäö";
+    bool passing6 = config[lang2]["alphabet"] == "abcdefg";
     bool passing7 = config[lang2]["wordlist_path"] == "";
     bool passing8 = config[lang2]["codeword_folder_path"] == "";
     passing = passing && passing5 && passing6 && passing7 && passing8;
@@ -305,10 +524,44 @@ bool test_get_language_map(string test_language_file_path)
 
 bool test_get_wordlist(string test_wordlist_path) {
     vector<string> wordlist = get_wordlist(test_wordlist_path);
-    vector<string> expected_wordlist = {"some", "words", "here", "to", "be", "read", "by", "someone", "or", "something", "cola", "camp"};
+    vector<string> expected_wordlist = {
+        "some",
+        "words",
+        "here",
+        "to",
+        "be",
+        "read",
+        "by",
+        "someone",
+        "or",
+        "something",
+        "cola",
+        "camp",
+        "öljytynnyri"};
 
     bool passing = wordlist == expected_wordlist;
 
+    return passing;
+}
+
+bool test_get_wordlist_vector(string test_wordlist_path) {
+    vector<vector<string>> wordlist = get_wordlist_vector(test_wordlist_path);
+    vector<vector<string>> expected_wordlist = {
+        {"s", "o", "m", "e"},
+        {"w", "o", "r", "d", "s"},
+        {"h", "e", "r", "e"},
+        {"t", "o"},
+        {"b", "e"},
+        {"r", "e", "a", "d"},
+        {"b", "y"},
+        {"s", "o", "m", "e", "o", "n", "e"},
+        {"o", "r"},
+        {"s", "o", "m", "e", "t", "h", "i", "n", "g"},
+        {"c", "o", "l", "a"},
+        {"c", "a", "m", "p"},
+        {"ö", "l", "j", "y", "t", "y", "n", "n", "y", "r", "i"}
+    };
+    bool passing = wordlist == expected_wordlist;
     return passing;
 }
 
@@ -322,6 +575,7 @@ bool test_get_codewords(string test_codeword_path) {
     expected_codewords.push_back({10, 12, 13});
     expected_codewords.push_back({3, 22, 24, 15});
     expected_codewords.push_back({21, 15, 13, 11});
+    expected_codewords.push_back({4,24,10,9,27,9,7,7,9,2,12});
 
     pair<vector<string>, vector<vector<int>>> result = get_codewords(test_codeword_path);
 
@@ -395,8 +649,10 @@ bool test_get_matching_indices() {
 }
 
 bool test_do_words_match_to_matching_indices() {
-    string word1 = "hello";
-    string word2 = "live";
+    // string word1 = "hello";
+    // string word2 = "live";
+    vector<string> word1 = {"h", "e", "l", "l", "o"};
+    vector<string> word2 = {"l", "i", "v", "e"};
     vector<pair<int, int>> matching_indices = {pair<int, int>(1, 3), pair<int, int>(2, 0)};
     vector<int> indices_in_word1 = {0, 4};
     vector<int> indices_in_word2 = {1, 2};
@@ -409,8 +665,9 @@ bool test_do_words_match_to_matching_indices() {
 bool test_CodewordWordPair() {
     vector<int> codeword1 = {};
     vector<int> codeword2 = {};
-    string word1 = "";
-    string word2 = "";
+    // string word1 = "";
+    // string word2 = "";
+    vector<string> word1, word2;
     CodewordWordPair cw_w_pair = CodewordWordPair(codeword1, codeword2, word1, word2);
 
     bool passing = cw_w_pair.codeword1 == codeword1;
@@ -434,37 +691,48 @@ bool test_CodewordPuzzle(CodewordPuzzle puzzle) {
     expected_codewords.push_back({10, 12, 13});
     expected_codewords.push_back({3, 22, 24, 15});
     expected_codewords.push_back({21, 15, 13, 11});
+    expected_codewords.push_back({4,24,10,9,27,9,7,7,9,2,12});
 
     bool passing = puzzle.get_comments() == expected_comments;
     bool passing1 = puzzle.get_codewords() == expected_codewords;
     passing *= passing1;
     // more things to test
 
-    vector<vector<string>> expected_matches = {{}, {}, {}, {}, {"some", "read", "cola", "camp"}, {"some", "read", "cola", "camp"}};
+    // vector<vector<string>> expected_matches = {{}, {}, {}, {}, {"some", "read", "cola", "camp"}, {"some", "read", "cola", "camp"}};
+    vector<vector<vector<string>>> expected_matches = {
+        {},
+        {},
+        {},
+        {},
+        {{"s", "o", "m", "e"}, {"r", "e", "a", "d"}, {"c", "o", "l", "a"}, {"c", "a", "m", "p"}},
+        {{"s", "o", "m", "e"}, {"r", "e", "a", "d"}, {"c", "o", "l", "a"}, {"c", "a", "m", "p"}},
+        {{"ö", "l", "j", "y", "t", "y", "n", "n", "y", "r", "i"}}
+    };
     bool passing2 = true;
     vector<int> codeword;
-    vector<string> m_words;
+    // vector<string> m_words;
+    vector<vector<string>> m_words;
     for (int i = 0; i < expected_matches.size(); i++) {
         m_words = puzzle.get_matched_words_for_codeword(i);
         passing2 = m_words == expected_matches[i];
         passing *= passing2;
-        if (!passing2) {
-            vector<int> codeword = puzzle.get_codewords()[i];
-            std::cout << "codeword" << std::endl;
-            for (int j = 0; j < codeword.size(); j++) {
-                std::cout << codeword[j] << "  ";
-            }
-            std::cout << std::endl << "matched words" << std::endl;
-            for (string word : m_words) {
-                std::cout << word << ", ";
-            }
-            std::cout << std::endl << "expected words" << std::endl;
-            for (string word : expected_matches[i]) {
-                std::cout << word << ", ";
-            }
-            std::cout << std::endl;
+        // if (!passing2) {
+        //     vector<int> codeword = puzzle.get_codewords()[i];
+        //     std::cout << "codeword" << std::endl;
+        //     for (int j = 0; j < codeword.size(); j++) {
+        //         std::cout << codeword[j] << "  ";
+        //     }
+        //     std::cout << std::endl << "matched words" << std::endl;
+        //     for (string word : m_words) {
+        //         std::cout << word << ", ";
+        //     }
+        //     std::cout << std::endl << "expected words" << std::endl;
+        //     for (string word : expected_matches[i]) {
+        //         std::cout << word << ", ";
+        //     }
+        //     std::cout << std::endl;
             
-        }
+        // }
     }
     // passing *= passing2;
 
@@ -475,9 +743,10 @@ bool test_substitution_vector_things(CodewordPuzzle puzzle) {
     bool passing = puzzle.get_letters_in_substitution_vector().empty();
 
     int the_number = 1;
-    char the_letter = 'b';
+    // char the_letter = 'b';
+    string the_letter = "b";
     int result = puzzle.add_to_substitution_vector(the_number, the_letter, std::map<string, int>(), false);
-    vector<char> expected_chars;
+    vector<string> expected_chars;
     expected_chars.push_back(the_letter);
     bool passing1 = puzzle.get_letters_in_substitution_vector() == expected_chars;
     passing *= passing1;
@@ -489,40 +758,51 @@ bool test_substitution_vector_things(CodewordPuzzle puzzle) {
     bool passing3 = puzzle.count_solved_numbers() == 0;
     passing *= passing3;
 
+    the_letter = "ö";
+    expected_chars.clear();
+    expected_chars.push_back(the_letter);
+    result = puzzle.add_to_substitution_vector(the_number, the_letter, std::map<string, int>(), false);
+    bool passing4 = puzzle.get_letters_in_substitution_vector() == expected_chars;
+
+    puzzle.clear_substitution_vector();
+
     return passing;
 }
 
 bool test_sort_codewords(CodewordPuzzle puzzle) {
-    vector<int> expected_indices = {4, 5};
+    vector<int> expected_indices = {6, 4, 5};
     bool passing = puzzle.sort_codewords() == expected_indices;
     return passing;
 }
 
 bool test_match_two_codewords(CodewordPuzzle puzzle) {
-    vector<int> codeword1 = {3, 22, 24, 15};
-    vector<int> codeword2 = {21, 15, 13, 11};
+    // vector<int> codeword1 = {3, 22, 24, 15};
+    // vector<int> codeword2 = {21, 15, 13, 11};
     int codeword_index1 = 4;
     int codeword_index2 = 5;
 
-    std::vector<std::pair<std::string, std::string>> matching_pairs = puzzle.match_two_codewords(codeword1, codeword2, 999);
+    // std::vector<std::pair<std::string, std::string>> matching_pairs = puzzle.match_two_codewords(codeword1, codeword2, 999);
+    std::vector<std::pair<std::vector<std::string>, std::vector<std::string>>> matching_pairs = puzzle.match_two_codewords(codeword_index1, codeword_index2, 999);
 
     bool passing = matching_pairs.size() == 1;
     // std::cout << "Found " << matching_pairs.size() << " pairs" << std::endl;
 
-    bool passing1 = matching_pairs[0].first == "some";
+    // bool passing1 = matching_pairs[0].first == "some";
+    bool passing1 = join_string(matching_pairs[0].first, "") == "some";
     passing *= passing1;
 
-    bool passing2 = matching_pairs[0].second == "read";
+    // bool passing2 = matching_pairs[0].second == "read";
+    bool passing2 = join_string(matching_pairs[0].second, "") == "read";
     passing *= passing2;
 
-    matching_pairs = puzzle.match_two_codewords(codeword_index1, codeword_index2, 999);
-    passing *= matching_pairs.size() == 1;
+    // matching_pairs = puzzle.match_two_codewords(codeword_index1, codeword_index2, 999);
+    // passing *= matching_pairs.size() == 1;
 
-    passing1 = matching_pairs[0].first == "some";
-    passing *= passing1;
+    // passing1 = matching_pairs[0].first == "some";
+    // passing *= passing1;
 
-    passing2 = matching_pairs[0].second == "read";
-    passing *= passing2;
+    // passing2 = matching_pairs[0].second == "read";
+    // passing *= passing2;
 
     return passing;
 }
@@ -530,7 +810,17 @@ bool test_match_two_codewords(CodewordPuzzle puzzle) {
 bool test_find_all_unique_pairs(CodewordPuzzle puzzle) {
     vector<CodewordWordPair> unique_pairs = puzzle.find_all_unique_pairs();
 
-    bool passing = unique_pairs.size() == 1;
+    // (3, 22, 24, 15) - (21, 15, 13, 11) = some - read
+    // (3, 24, 24, 15) - (4,24,10,9,27,9,7,7,9,2,12) = cola - öljytynnyri
+    // others?
+
+    bool passing = unique_pairs.size() == 2;
+
+    // for (auto p : unique_pairs) {
+    //     std::cout << "pair" << std::endl;
+    //     std::cout << codeword_as_str(p.codeword1) << "  " << codeword_as_str(p.codeword2) << std::endl;
+    //     std::cout << join_string(p.word1, "") << "  " << join_string(p.word2, "")  << std::endl;
+    // }
 
     // MORE TO COME
 

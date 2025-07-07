@@ -20,6 +20,7 @@ private:
     std::string DEFAULT_CONFIG_PATH = "krypto.cfg";
     std::string NAME_KEY = "name";
     std::string ALPHABET_KEY = "alphabet";
+    std::string ALPHABET_UPPER_KEY = "alphabet_upper";
     std::string WORDLIST_PATH_KEY = "wordlist_path";
     std::string CODEWORD_FOLDER_PATH_KEY = "codeword_folder_path";
 
@@ -34,6 +35,9 @@ private:
     std::map<std::string, std::string> current_language_map;
     std::string wordlist_path, codeword_path;
 
+    std::vector<std::string> alphabet;
+    std::vector<std::string> alphabet_upper;
+
     CodewordPuzzle puzzle;
     
 public:
@@ -45,6 +49,10 @@ public:
     // void CallSelectedFunction(MemberFuncPtr func);
     std::pair<char, char> get_yes_no_pair();
     bool yes_no_question(std::string question_text);
+    std::string to_upper(std::string text);
+    std::string to_lower(std::string text);
+    std::string to_upper(std::vector<std::string> text_vector);
+    std::string to_lower(std::vector<std::string> text_vector);
     void set_language(std::string new_language);
     std::vector<std::string> get_languages();
     void choose_language();

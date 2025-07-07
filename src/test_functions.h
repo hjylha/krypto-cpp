@@ -9,20 +9,29 @@
 #include "file_operations.h"
 #include "codewordpuzzle.h"
 
-using std::cout, std::endl, std::string, std::map, std::vector, std::pair;
+using std::string, std::map, std::vector, std::pair;
 
 // basic_functions
+bool test_get_minimum();
 bool test_remove_whitespace();
 bool test_add_whitespace();
+bool test_add_whitespace2();
 bool test_split_string();
+bool test_utf8_split();
+bool test_join_string();
 bool test_lowercase();
 bool test_uppercase();
+bool test_find_string();
+bool test_find_int();
 bool test_codeword_as_str();
 bool test_mass_replace();
 bool test_get_nums_in_codewords();
 bool test_are_letters_in_alphabet();
+bool test_are_letters_in_alphabet2();
 bool test_does_word_match();
+bool test_does_word_match2();
 bool test_get_matched_words();
+bool test_get_matched_words2();
 
 // file_operations
 bool test_does_path_exist();
@@ -30,6 +39,7 @@ bool test_does_path_exist_folder_edition();
 bool test_read_config(string test_default_filepath);
 bool test_get_language_map(string test_language_file_path);
 bool test_get_wordlist(string test_wordlist_path);
+bool test_get_wordlist_vector(string test_wordlist_path);
 bool test_get_codewords(string test_codeword_path);
 bool test_get_csv_files_in_folder();
 
