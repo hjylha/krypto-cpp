@@ -40,6 +40,7 @@ bool test_read_config(string test_default_filepath);
 bool test_get_language_map(string test_language_file_path);
 bool test_get_wordlist(string test_wordlist_path);
 bool test_get_wordlist_vector(string test_wordlist_path);
+bool test_get_wordlist_as_int_vector(string test_wordlist_path);
 bool test_get_codewords(string test_codeword_path);
 bool test_get_csv_files_in_folder();
 

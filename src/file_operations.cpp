@@ -130,6 +130,47 @@ std::vector<std::vector<std::string>> get_wordlist_vector(const std::string& fil
     return wordlist;
 }
 
+std::vector<std::vector<int>> get_wordlist_as_int_vector(const std::string& filepath) {
+    std::vector<std::vector<int>> wordlist;
+    std::map<std::string, int> letter_to_int_map;
+    int num_of_letters = 0;
+    std::ifstream file(filepath);
+
+    if (!file.is_open()) {
+        std::cerr << "Could not open file: " << filepath << std::endl;
+        return wordlist;
+    }
+
+    std::string line;
+    std::vector<std::string> line_vector;
+    std::vector<int> num_vector;
+    int num;
+
+    while (std::getline(file, line)) {
+        num_vector.clear();
+        line = lowercase(remove_whitespace(line));
+        if (line == "") {
+            continue;
+        }
+        // lowercase?
+        line_vector = utf8_split(line);
+        for (std::string letter : line_vector) {
+            num = letter_to_int_map[letter];
+            if (num == 0) {
+                num_of_letters++;
+                letter_to_int_map[letter] = num_of_letters;
+                num_vector.push_back(num_of_letters);
+                continue;
+            }
+            num_vector.push_back(num);
+        }
+        wordlist.push_back(num_vector);
+    }
+    file.close();
+
+    return wordlist;
+}
+
 std::pair<std::vector<std::string>, std::vector<std::vector<int>>> get_codewords(const std::string& filepath) {
     std::vector<std::string> comments;
     std::vector<std::vector<int>> codewords;

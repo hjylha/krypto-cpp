@@ -123,6 +123,8 @@ int main()
 
     show_test_result(test_get_wordlist_vector(test_wordlist_path), "test_get_wordlist_vector");
 
+    show_test_result(test_get_wordlist_as_int_vector(test_wordlist_path), "test_get_wordlist_as_int_vector");
+
     string test_codeword_path = "test_codewords.csv";
     // bool get_codewords_works = test_get_codewords(test_codeword_path);
     // cout << "get_codewords works: " << get_codewords_works << endl;

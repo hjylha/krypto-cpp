@@ -565,6 +565,39 @@ bool test_get_wordlist_vector(string test_wordlist_path) {
     return passing;
 }
 
+bool test_get_wordlist_as_int_vector(string test_wordlist_path) {
+    vector<vector<int>> wordlist = get_wordlist_as_int_vector(test_wordlist_path);
+    vector<vector<int>> expected_wordlist = {
+        {1, 2, 3, 4},
+        {5, 2, 6, 7, 1},
+        {8, 4, 6, 4},
+        {9, 2},
+        {10, 4},
+        {6, 4, 11, 7},
+        {10, 12},
+        {1, 2, 3, 4, 2, 13, 4},
+        {2, 6},
+        {1, 2, 3, 4, 9, 8, 14, 13, 15},
+        {16, 2, 17, 11},
+        {16, 11, 3, 18},
+        {19, 17, 20, 12, 9, 12, 13, 13, 12, 6, 14}
+    };
+    bool passing = wordlist.size() == expected_wordlist.size();
+
+    bool passing1 = wordlist == expected_wordlist;
+    passing *= passing1;
+
+    for (int i = 0; i < wordlist.size(); i++) {
+        if (wordlist[i] != expected_wordlist[i]) {
+            for (int num : wordlist[i]) {
+                std::cout << num << "  ";
+            }
+            std::cout << std::endl;
+        }
+    }
+    return passing;   
+}
+
 bool test_get_codewords(string test_codeword_path) {
     bool passing = true;
     vector<string> expected_comments = {"this is a comment", "another line"};

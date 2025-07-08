@@ -202,9 +202,10 @@ CodewordPuzzle::CodewordPuzzle(std::vector<std::vector<int>> the_codewords, std:
         substitution_vector_saved.push_back(empty_symbol);
     }
 
+    std::vector<std::vector<std::string>> word_vectors;
     for (std::vector<int> codeword : codewords) {
         // std::vector<std::string> words = get_matched_words(codeword, wordlist, -1);
-        std::vector<std::vector<std::string>> word_vectors = get_matched_words(codeword, wordlist, -1);
+        word_vectors = get_matched_words(codeword, wordlist, num_of_words);
         matched_words.push_back(word_vectors);
         matched_words_all.push_back(word_vectors);
     }
