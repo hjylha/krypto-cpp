@@ -242,9 +242,18 @@ std::pair<std::vector<std::string>, std::vector<std::vector<int>>> get_codewords
             str_vector.emplace_back(line, last);
         }
         for (std::string num_str : str_vector) {
+            num_str = remove_whitespace(num_str);
             if (num_str != "") {
-                num_vector.push_back(std::stoi(num_str));
+                try {
+                    num_vector.push_back(std::stoi(num_str));
+                    continue;
+                } catch (const std::invalid_argument&) {
+                    std::cout << line << std::endl;
+                    continue;
+                }
+                
             }
+            break;
             
         }
         if (!num_vector.empty()) {
