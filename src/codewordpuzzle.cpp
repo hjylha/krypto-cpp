@@ -600,13 +600,13 @@ std::vector<CodewordWordPair> CodewordPuzzle::find_all_unique_pairs() {
     // std::cout << "starting search" << std::endl;
 
     std::vector<CodewordWordPair> unique_pairs;
-    std::vector<int> sorted_indices = sort_codewords();
-    // std::vector<int> sorted_indices;
-    // for (int i = 0; i < num_of_codewords; i++) {
-    //     if (!matched_words[i].empty()) {
-    //         sorted_indices.push_back(i);
-    //     }
-    // }
+    // std::vector<int> sorted_indices = sort_codewords();
+    std::vector<int> sorted_indices;
+    for (int i = 0; i < num_of_codewords; i++) {
+        if (!matched_words[i].empty()) {
+            sorted_indices.push_back(i);
+        }
+    }
 
     // std::cout << "indices sorted" << std::endl;
     // std::cout << sorted_indices.size() << " good indices" << std::endl;

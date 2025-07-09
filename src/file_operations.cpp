@@ -1,4 +1,5 @@
 
+#include <cstddef>
 #include <map>
 #include <vector>
 #include <string>
@@ -171,26 +172,18 @@ std::vector<std::vector<int>> get_wordlist_as_int_vector(const std::string& file
     return wordlist;
 }
 
-std::pair<std::vector<std::string>, std::vector<std::vector<int>>> get_codewords(const std::string& filepath) {
-    std::vector<std::string> comments;
-    std::vector<std::vector<int>> codewords;
+std::vector<std::vector<int>> get_wordlist_int(const std::string& filepath){
+    std::vector<std::vector<int>> wordlist;
     std::ifstream file(filepath);
 
     if (!file.is_open()) {
         std::cerr << "Could not open file: " << filepath << std::endl;
-        return std::pair(comments, codewords);
+        return wordlist;
     }
 
     std::string line;
     while (std::getline(file, line)) {
         line = remove_whitespace(line);
-
-        if (line.front() == '#') {
-            line.erase(0, 1);
-            line = remove_whitespace(line);
-            comments.push_back(line);
-            continue;
-        }
 
         std::vector<int> row;
         std::stringstream ss(line);
@@ -206,9 +199,89 @@ std::pair<std::vector<std::string>, std::vector<std::vector<int>>> get_codewords
         }
 
         if (!row.empty()) {
-            codewords.push_back(row);
+            wordlist.push_back(row);
         }
     }
+    file.close();
+
+    return wordlist;
+}
+
+std::pair<std::vector<std::string>, std::vector<std::vector<int>>> get_codewords(const std::string& filepath) {
+    std::vector<std::string> comments;
+    std::vector<std::vector<int>> codewords;
+    std::fstream file(filepath);
+
+    // char buffer[65536];
+    // file.rdbuf()->pubsetbuf(buffer, sizeof(buffer));
+
+    if (!file.is_open()) {
+        std::cerr << "Could not open file: " << filepath << std::endl;
+        return std::pair(comments, codewords);
+    }
+
+    std::string line;
+    std::vector<std::string> str_vector;
+    std::vector<int> num_vector;
+    while (std::getline(file, line)) {
+        size_t pos = 0;
+        if ((pos = line.find('#')) != std::string::npos) {
+            line.erase(0, pos + 1);
+            comments.push_back(remove_whitespace(line));
+            continue;
+        }
+        str_vector.clear();
+        num_vector.clear();
+        size_t last = 0;
+        
+        while ((pos = line.find(',', last)) != std::string::npos) {
+            str_vector.emplace_back(line, last, pos - last);
+            last = pos + 1;
+        }
+        if (last) {
+            str_vector.emplace_back(line, last);
+        }
+        for (std::string num_str : str_vector) {
+            if (num_str != "") {
+                num_vector.push_back(std::stoi(num_str));
+            }
+            
+        }
+        if (!num_vector.empty()) {
+            codewords.push_back(num_vector);
+        }
+        
+    }
+
+
+    // another way
+    // while (std::getline(file, line)) {
+    //     line = remove_whitespace(line);
+
+    //     if (line.front() == '#') {
+    //         line.erase(0, 1);
+    //         line = remove_whitespace(line);
+    //         comments.push_back(line);
+    //         continue;
+    //     }
+
+    //     std::vector<int> row;
+    //     std::stringstream ss(line);
+    //     std::string value;
+
+    //     while (std::getline(ss, value, ',')) {
+    //         try {
+    //             row.push_back(std::stoi(value));
+    //         } catch (const std::invalid_argument&) {
+    //             // Handle parse error (skip non-integer values)
+    //             continue;
+    //         }
+    //     }
+
+    //     if (!row.empty()) {
+    //         codewords.push_back(row);
+    //     }
+    // }
     file.close();
 
     return std::pair(comments, codewords);

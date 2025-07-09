@@ -345,6 +345,33 @@ bool does_int_word_match(std::vector<int> int_vector, std::vector<int> codeword)
     return true;
 }
 
+bool does_int_word_match2(std::vector<int> int_vector, std::vector<int> codeword) {
+    int word_length = int_vector.size();
+    if (word_length != codeword.size()) {
+        return false;
+    }
+    int letter;
+    int letter_prev;
+    int num;
+    int num_prev;
+    for (int i = 0; i < word_length; i++) {
+        letter = int_vector[i];
+        num = codeword[i];
+        for (int j = 0; j < i; j++) {
+            letter_prev = int_vector[j];
+            num_prev = codeword[j];
+            if (num == num_prev && letter != letter_prev) {
+                return false;
+            }
+            if (num != num_prev && letter == letter_prev) {
+                return false;
+            }
+            if (num == num_prev && letter == letter_prev) break;
+        }
+    }
+    return true;
+}
+
 std::vector<std::string> get_matched_words(std::vector<int> codeword, std::vector<std::string> wordlist, int maximum_matches) {
     std::vector<std::string> matched_words;
     int num_of_matches = 0;
@@ -402,13 +429,9 @@ std::vector<std::vector<std::string>> get_matched_words2(std::vector<int> codewo
     return matched_words;
 }
 
-std::vector<std::vector<std::string>> get_matched_words3(std::vector<int> codeword, int codeword_length, std::vector<std::vector<std::string>> wordlist, std::vector<int> word_lengths, int maximum_matches) {
+std::vector<std::vector<std::string>> get_matched_words3(std::vector<int> codeword, int codeword_length, std::vector<std::vector<std::string>> wordlist, std::vector<int> word_lengths) {
     std::vector<std::vector<std::string>> matched_words;
     int wordlist_length = wordlist.size();
-    int num_of_matches = 0;
-    if (maximum_matches < 0) {
-        maximum_matches = wordlist_length;
-    }
     int word_length;
     std::vector<std::string> word_vector;
     for (int i = 0; i < wordlist_length; i++) {
@@ -416,10 +439,6 @@ std::vector<std::vector<std::string>> get_matched_words3(std::vector<int> codewo
         word_length = word_lengths[i];
         if (does_word_match(word_vector, codeword, word_length, codeword_length)) {
             matched_words.push_back(word_vector);
-            num_of_matches++;
-            if (num_of_matches >= maximum_matches) {
-                return matched_words;
-            }
         }
     }
     return matched_words;
@@ -443,6 +462,21 @@ std::vector<std::vector<int>> get_matched_words_int(std::vector<int> codeword, s
             if (num_of_matches >= maximum_matches) {
                 return matched_words;
             }
+        }
+    }
+    return matched_words;
+}
+
+std::vector<std::vector<int>> get_matched_words_int2(std::vector<int> codeword, std::vector<std::vector<int>> wordlist_int) {
+    std::vector<std::vector<int>> matched_words;
+    int wordlist_length = wordlist_int.size();
+    int word_length;
+    std::vector<int> word_vector;
+    for (int i = 0; i < wordlist_length; i++) {
+        word_vector = wordlist_int[i];
+        word_length = word_vector.size();
+        if (does_int_word_match2(word_vector, codeword)) {
+            matched_words.push_back(word_vector);
         }
     }
     return matched_words;
