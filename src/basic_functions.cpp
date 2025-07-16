@@ -156,6 +156,18 @@ std::string codeword_as_str(std::vector<int> codeword) {
     return codeword_str.substr(0, codeword_str.length() - 1);
 }
 
+std::map<std::string, int> get_alphabet_map(std::string alphabet) {
+    std::vector<std::string> alphabet_vector = utf8_split(alphabet);
+
+    std::map<std::string, int> alphabet_map;
+
+    for (int i = 0; i < alphabet_vector.size(); i++) {
+        alphabet_map[alphabet_vector[i]] = i + 1;
+    }
+
+    return alphabet_map;
+}
+
 std::string mass_replace(std::string text, std::vector<std::string> replacements) {
     // lots to do here
     int start_index;

@@ -19,6 +19,7 @@ int find(std::vector<std::string> text_vector, std::string text);
 int find(std::vector<int> int_vector, int num);
 
 std::string codeword_as_str(std::vector<int> codeword);
+std::map<std::string, int> get_alphabet_map(std::string alphabet);
 std::string mass_replace(std::string text, std::vector<std::string> replacements);
 std::vector<int> get_nums_in_codewords(std::vector<std::vector<int>> codewords);
 
