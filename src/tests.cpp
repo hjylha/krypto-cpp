@@ -71,6 +71,8 @@ int main()
     // cout << "codeword_as_str works: " << codeword_as_str_works << endl;
     show_test_result(test_codeword_as_str(), "test_codeword_as_str");
 
+    show_test_result(test_get_alphabet_map(), "test_get_alphabet_map");
+
     // bool mass_replace_works = test_mass_replace();
     // cout << "mass_replace works: " << mass_replace_works << endl;
     show_test_result(test_mass_replace(), "test_mass_replace");
@@ -124,6 +126,8 @@ int main()
     show_test_result(test_get_wordlist_vector(test_wordlist_path), "test_get_wordlist_vector");
 
     show_test_result(test_get_wordlist_as_int_vector(test_wordlist_path), "test_get_wordlist_as_int_vector");
+
+    show_test_result(test_get_wordlist_as_int_vector_plus(test_wordlist_path), "test_get_wordlist_as_int_vector_plus");
 
     string test_codeword_path = "test_codewords.csv";
     // bool get_codewords_works = test_get_codewords(test_codeword_path);

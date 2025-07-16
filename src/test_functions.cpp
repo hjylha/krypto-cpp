@@ -248,6 +248,18 @@ bool test_codeword_as_str() {
     return passing;
 }
 
+bool test_get_alphabet_map() {
+    string alphabet = "abc";
+    map<string, int> expected_map;
+    expected_map["a"] = 1;
+    expected_map["b"] = 2;
+    expected_map["c"] = 3;
+
+    bool passing = get_alphabet_map(alphabet) == expected_map;
+
+    return passing;
+}
+
 bool test_mass_replace() {
     string text = "he%1%o";
     vector<string> replacements = {"ll"};
@@ -596,6 +608,56 @@ bool test_get_wordlist_as_int_vector(string test_wordlist_path) {
         }
     }
     return passing;   
+}
+
+bool test_get_wordlist_as_int_vector_plus(string test_wordlist_path) {
+    string alphabet = "abcdefghijklmnopqrstuvwxyzåäö";
+    map<string, int> alphabet_map = get_alphabet_map(alphabet);
+
+    vector<int> expected_lengths = {4, 5, 4, 2, 2, 4, 2, 7, 2, 9, 4, 4, 11};
+
+    vector<vector<int>> expected_wordlist = {
+        {19, 15, 13, 5},
+        {23, 15, 18, 4, 19},
+        {8, 5, 18, 5},
+        {20, 15},
+        {2, 5},
+        {18, 5, 1, 4},
+        {2, 25},
+        {19, 15, 13, 5, 15, 14, 5},
+        {15, 18},
+        {19, 15, 13, 5, 20, 8, 9, 14, 7},
+        {3, 15, 12, 1},
+        {3, 1, 13, 16},
+        {29, 12, 10, 25, 20, 25, 14, 14, 25, 18, 9}
+    };
+
+    pair<vector<int>, vector<vector<int>>> words_and_lengths = get_wordlist_as_int_vector_plus(test_wordlist_path, alphabet_map);
+
+    vector<int> word_lengths = words_and_lengths.first;
+    vector<vector<int>> wordlist = words_and_lengths.second;
+
+    bool passing = word_lengths.size() == wordlist.size();
+
+    bool passing1 = word_lengths == expected_lengths;
+    passing *= passing1;
+
+    bool passing2 = wordlist == expected_wordlist;
+    passing *= passing2;
+    // for (int i = 0; i < word_lengths.size(); i++) {
+    //     if (expected_wordlist[i] != wordlist[i]) {
+    //         std::cout << "expected:" << std::endl;
+    //         for (int num : expected_wordlist[i]) {
+    //             std::cout << num << " ";
+    //         }
+    //         std::cout << "\n" << "actual:" << std::endl;
+    //         for (int num : wordlist[i]) {
+    //             std::cout << num << " ";
+    //         }
+    //     }
+    // }
+
+    return passing;
 }
 
 bool test_get_codewords(string test_codeword_path) {

@@ -24,6 +24,7 @@ bool test_uppercase();
 bool test_find_string();
 bool test_find_int();
 bool test_codeword_as_str();
+bool test_get_alphabet_map();
 bool test_mass_replace();
 bool test_get_nums_in_codewords();
 bool test_are_letters_in_alphabet();
@@ -41,6 +42,7 @@ bool test_get_language_map(string test_language_file_path);
 bool test_get_wordlist(string test_wordlist_path);
 bool test_get_wordlist_vector(string test_wordlist_path);
 bool test_get_wordlist_as_int_vector(string test_wordlist_path);
+bool test_get_wordlist_as_int_vector_plus(string test_wordlist_path);
 bool test_get_codewords(string test_codeword_path);
 bool test_get_csv_files_in_folder();
 

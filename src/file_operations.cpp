@@ -8,6 +8,7 @@
 #include <iostream>
 #include <filesystem>
 #include "basic_functions.h"
+#include "file_operations.h"
 
 
 bool does_path_exist(std::string path) {
@@ -170,6 +171,51 @@ std::vector<std::vector<int>> get_wordlist_as_int_vector(const std::string& file
     file.close();
 
     return wordlist;
+}
+
+std::pair<std::vector<int>, std::vector<std::vector<int>>> get_wordlist_as_int_vector_plus(const std::string& filepath, std::map<std::string, int> alphabet_map) {
+    std::vector<int> word_lengths;
+    std::vector<std::vector<int>> wordlist;
+    std::ifstream file(filepath);
+
+    if (!file.is_open()) {
+        std::cerr << "Could not open file: " << filepath << std::endl;
+        return std::pair<std::vector<int>, std::vector<std::vector<int>>>(word_lengths, wordlist);
+    }
+
+    std::string line;
+    std::vector<std::string> line_vector;
+    std::vector<int> num_vector;
+    int num;
+    bool good_word;
+
+    while (std::getline(file, line)) {
+        num_vector.clear();
+        line.erase(0, line.find_first_not_of(" \t\r\n"));
+        line.erase(line.find_last_not_of(" \t\r\n") + 1);
+        if (line == "") {
+            continue;
+        }
+        // lowercase?
+        good_word = true;
+        line_vector = utf8_split(line);
+        for (std::string letter : line_vector) {
+            num = alphabet_map[letter];
+            if (num == 0) {
+                good_word = false;
+                continue;
+            }
+            num_vector.push_back(num);
+        }
+        if (good_word) {
+            wordlist.push_back(num_vector);
+            word_lengths.push_back(num_vector.size());
+        }
+        
+    }
+    file.close();
+
+    return std::pair<std::vector<int>, std::vector<std::vector<int>>>(word_lengths, wordlist);
 }
 
 std::vector<std::vector<int>> get_wordlist_int(const std::string& filepath){
@@ -356,4 +402,76 @@ std::vector<std::string> get_csv_files_in_folder(std::string folder_path) {
         std::cerr << "Filesystem error: " << e.what() << std::endl;
     }
     return csv_files;
+}
+
+
+CodewordsAndComments::CodewordsAndComments() {
+
+}
+
+CodewordsAndComments::CodewordsAndComments(std::vector<std::string> the_comments, std::vector<int> the_codeword_lengths, std::vector<std::vector<int>> the_codewords) {
+    comments = the_comments;
+    codeword_lengths = the_codeword_lengths;
+    codewords = the_codewords;
+}
+
+CodewordsAndComments get_codewords_and_comments(const std::string& filepath) {
+    std::vector<std::string> comments;
+    std::vector<std::vector<int>> codewords;
+    std::vector<int> codeword_lengths;
+    std::fstream file(filepath);
+
+    // char buffer[65536];
+    // file.rdbuf()->pubsetbuf(buffer, sizeof(buffer));
+
+    if (!file.is_open()) {
+        std::cerr << "Could not open file: " << filepath << std::endl;
+        return CodewordsAndComments(comments, codeword_lengths, codewords);
+    }
+
+    std::string line;
+    std::vector<std::string> str_vector;
+    std::vector<int> num_vector;
+    while (std::getline(file, line)) {
+        size_t pos = 0;
+        if ((pos = line.find('#')) != std::string::npos) {
+            line.erase(0, pos + 1);
+            comments.push_back(remove_whitespace(line));
+            continue;
+        }
+        str_vector.clear();
+        num_vector.clear();
+        size_t last = 0;
+        
+        while ((pos = line.find(',', last)) != std::string::npos) {
+            str_vector.emplace_back(line, last, pos - last);
+            last = pos + 1;
+        }
+        if (last) {
+            str_vector.emplace_back(line, last);
+        }
+        for (std::string num_str : str_vector) {
+            num_str = remove_whitespace(num_str);
+            if (num_str != "") {
+                try {
+                    num_vector.push_back(std::stoi(num_str));
+                    continue;
+                } catch (const std::invalid_argument&) {
+                    std::cout << line << std::endl;
+                    continue;
+                }
+                
+            }
+            break;
+            
+        }
+        if (!num_vector.empty()) {
+            codewords.push_back(num_vector);
+            codeword_lengths.push_back(num_vector.size());
+        }
+        
+    }
+    file.close();
+
+    return CodewordsAndComments(comments, codeword_lengths, codewords);
 }
