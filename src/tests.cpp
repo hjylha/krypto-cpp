@@ -59,9 +59,13 @@ int main()
     // cout << "lowercase works: " << lowercase_works << endl;
     show_test_result(test_lowercase(), "test_lowercase");
 
+    show_test_result(test_lowercase_nonascii(), "test_lowercase_nonascii");
+
     // bool uppercase_works = test_uppercase();
     // cout << "uppercase works: " << uppercase_works << endl;
     show_test_result(test_uppercase(), "test_uppercase");
+
+    show_test_result(test_uppercase_nonascii(), "test_uppercase_nonascii");
 
     show_test_result(test_find_string(), "test_find_string");
 
@@ -89,13 +93,13 @@ int main()
 
     // bool does_word_match_works = test_does_word_match();
     // cout << "does_word_match works: " << does_word_match_works << endl;
-    show_test_result(test_does_word_match(), "test_does_word_match");
+    show_test_result(test_does_word_match(), "test_does_word_match (öljytynnyri fails)");
 
     show_test_result(test_does_word_match2(), "test_does_word_match2");
 
     // bool get_matched_words_works = test_get_matched_words();
     // cout << "get_matched_words works: " << get_matched_words_works << endl;
-    show_test_result(test_get_matched_words(), "test_get_matched_words");
+    show_test_result(test_get_matched_words(), "test_get_matched_words (öljytynnyri fails)");
 
     show_test_result(test_get_matched_words2(), "test_get_matched_words2");
 
@@ -133,6 +137,8 @@ int main()
     // bool get_codewords_works = test_get_codewords(test_codeword_path);
     // cout << "get_codewords works: " << get_codewords_works << endl;
     show_test_result(test_get_codewords(test_codeword_path), "test_get_codewords");
+
+    show_test_result(test_get_codewords_and_comments(test_codeword_path), "test_get_codewords_and_comments");
 
     // bool get_csv_files_in_folder_works = test_get_csv_files_in_folder();
     // cout << "get_csv_files_in_folder works: " << get_csv_files_in_folder_works << endl;

@@ -167,10 +167,18 @@ bool test_lowercase() {
     bool passing1 = lowercase(text) == expected_text;
     passing *= passing1;
 
-    text= "ÄO120 äo80";
-    expected_text = "äo120 äo80";
-    bool passing2 = lowercase(text) == expected_text;
-    passing *= passing2;
+    return passing;
+}
+
+bool test_lowercase_nonascii() {
+    string text= "ÄO120 äo80";
+    string expected_text = "äo120 äo80";
+    bool passing = lowercase(text) == expected_text;
+
+    text = "ÅÄÖ";
+    expected_text = "åäö";
+    bool passing1 = uppercase(text) == expected_text;
+    passing *= passing1;
 
     return passing;
 }
@@ -185,10 +193,18 @@ bool test_uppercase() {
     bool passing1 = uppercase(text) == expected_text;
     passing *= passing1;
 
-    text= "ÄO120 äo80";
-    expected_text = "ÄO120 ÄO80";
-    bool passing2 = uppercase(text) == expected_text;
-    passing *= passing2;
+    return passing;
+}
+
+bool test_uppercase_nonascii() {
+    string text= "ÄO120 äo80";
+    string expected_text = "ÄO120 ÄO80";
+    bool passing = uppercase(text) == expected_text;
+
+    text = "åäö";
+    expected_text = "ÅÄÖ";
+    bool passing1 = uppercase(text) == expected_text;
+    passing *= passing1;
 
     return passing;
 }
@@ -709,6 +725,31 @@ bool test_get_csv_files_in_folder() {
     csv_files = get_csv_files_in_folder(folder_path);
     string only_file = "test.csv";
     bool passing2 = csv_files[0].substr(csv_files[0].length() - only_file.length(), only_file.length()) == only_file;
+    passing *= passing2;
+
+    return passing;
+}
+
+bool test_get_codewords_and_comments(string test_codeword_path) {
+    vector<string> expected_comments = {"this is a comment", "another line"};
+    vector<vector<int>> expected_codewords;
+    expected_codewords.push_back({1, 2, 3, 4, 5, 6});
+    expected_codewords.push_back({3, 7, 9});
+    expected_codewords.push_back({8, 10, 11});
+    expected_codewords.push_back({10, 12, 13});
+    expected_codewords.push_back({3, 22, 24, 15});
+    expected_codewords.push_back({21, 15, 13, 11});
+    expected_codewords.push_back({4,24,10,9,27,9,7,7,9,2,12});
+    vector<int> expected_lengths = {6, 3, 3, 3, 4, 4, 11};
+
+    CodewordsAndComments c_n_c = get_codewords_and_comments(test_codeword_path);
+
+    bool passing = c_n_c.comments == expected_comments;
+
+    bool passing1 = c_n_c.codewords == expected_codewords;
+    passing *= passing1;
+
+    bool passing2 = c_n_c.codeword_lengths == expected_lengths;
     passing *= passing2;
 
     return passing;

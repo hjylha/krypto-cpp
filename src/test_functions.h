@@ -20,7 +20,9 @@ bool test_split_string();
 bool test_utf8_split();
 bool test_join_string();
 bool test_lowercase();
+bool test_lowercase_nonascii();
 bool test_uppercase();
+bool test_uppercase_nonascii();
 bool test_find_string();
 bool test_find_int();
 bool test_codeword_as_str();
@@ -45,6 +47,7 @@ bool test_get_wordlist_as_int_vector(string test_wordlist_path);
 bool test_get_wordlist_as_int_vector_plus(string test_wordlist_path);
 bool test_get_codewords(string test_codeword_path);
 bool test_get_csv_files_in_folder();
+bool test_get_codewords_and_comments(string test_codeword_path);
 
 // CodewordPuzzle
 bool test_get_matching_indices();
