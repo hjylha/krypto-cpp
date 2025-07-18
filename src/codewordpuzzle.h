@@ -23,6 +23,7 @@ public:
 MatchingIndicesAndOthers get_matching_indices(std::vector<int> codeword1, std::vector<int> codeword2);
 // bool do_words_match_to_matching_indices(std::string word1, std::string word2, MatchingIndicesAndOthers matching_indices_n_others);
 bool do_words_match_to_matching_indices(std::vector<std::string> word_vector1, std::vector<std::string> word_vector2, MatchingIndicesAndOthers matching_indices_n_others);
+bool do_words_match_to_matching_indices(std::vector<int> word_vector1, std::vector<int> word_vector2, MatchingIndicesAndOthers matching_indices_n_others);
 
 struct CodewordWordPair
 {
@@ -37,6 +38,20 @@ public:
     std::vector<std::string> word2;
     // CodewordWordPair(std::vector<int> the_codeword1, std::vector<int> the_codeword2, std::string the_word1, std::string the_word2);
     CodewordWordPair(std::vector<int> the_codeword1, std::vector<int> the_codeword2, std::vector<std::string> the_word1, std::vector<std::string> the_word2);
+    bool empty();
+};
+
+struct CodewordWordPair1
+{
+private:
+
+public:
+    std::vector<int> codeword1;
+    std::vector<int> codeword2;
+    std::vector<int> word1;
+    std::vector<int> word2;
+    // CodewordWordPair(std::vector<int> the_codeword1, std::vector<int> the_codeword2, std::string the_word1, std::string the_word2);
+    CodewordWordPair1(std::vector<int> the_codeword1, std::vector<int> the_codeword2, std::vector<int> the_word1, std::vector<int> the_word2);
     bool empty();
 };
 
@@ -99,6 +114,72 @@ public:
     std::vector<std::pair<std::vector<std::string>, std::vector<std::string>>> match_two_codewords(int codeword_index1, int codeword_index2, int maximum_matches);
     std::vector<CodewordWordPair> find_all_unique_pairs();
     std::pair<int, std::string> find_optimal_unique_pair();
+};
+
+
+class CodewordPuzzle1
+{
+private:
+    int num_of_letters_in_alphabet;
+
+    std::vector<std::vector<int>> codewords;
+    std::vector<int> codeword_lengths;
+
+    std::vector<std::vector<int>> wordlist;
+    std::vector<int> word_lengths;
+
+    std::vector<std::string> comments;
+
+    std::vector<int> substitution_vector;
+    std::vector<int> substitution_vector_saved;
+    std::vector<int> substitution_vector_opp;
+    std::vector<int> substitution_vector_opp_saved;
+    // std::map<int, std::vector<std::string>> wordlists;
+    // std::vector<std::vector<std::string>> matched_words_all;
+    // std::vector<std::vector<std::string>> matched_words;
+    std::vector<std::vector<std::vector<int>>> matched_words_all;
+    std::vector<std::vector<std::vector<int>>> matched_words;
+public:
+    // std::string empty_symbol = "_";
+    int num_of_codewords, num_of_words, num_of_letters, max_codeword_str_length, max_word_length, max_num_size;
+    CodewordPuzzle1();
+    // CodewordPuzzle(std::vector<std::vector<int>> the_codewords, std::vector<std::string> the_wordlist, std::string the_alphabet, std::vector<std::string> the_comments);
+    CodewordPuzzle1(std::vector<std::vector<int>> the_codewords, std::vector<int> the_codeword_lengths, std::vector<std::vector<int>> the_wordlist, std::vector<int> the_word_lengths, int the_num_of_letters, std::vector<std::string> the_comments);
+    ~CodewordPuzzle1();
+    std::vector<std::vector<int>> get_codewords();
+    // std::vector<std::string> get_wordlist();
+    std::vector<std::vector<int>> get_wordlist();
+    std::vector<std::string> get_comments();
+    std::vector<int> get_substitution_vector();
+    // std::vector<std::string> get_letters_in_substitution_vector();
+    // std::vector<std::string> substitution_vector_in_two_lines();
+    int count_solved_numbers();
+    void save_substitution_vector();
+    void load_substitution_vector();
+    int get_codeword_index(std::vector<int> codeword);
+    bool is_codeword_solved(std::vector<int> codeword);
+    std::pair<int, int> count_solved_codewords();
+    // bool does_word_match_to_substitution_vector(std::string word, std::vector<int> codeword);
+    bool does_word_match_to_substitution_vector(std::vector<int> word_vector, std::vector<int> codeword);
+    void set_matched_words();
+    void set_matched_words_from_start();
+    // std::vector<std::string> get_matched_words_for_codeword(int index_of_codeword);
+    std::vector<std::vector<int>> get_matched_words_for_codeword(int index_of_codeword);
+    int get_num_of_matched_words(int index_of_codeword);
+    std::vector<int> sort_codewords();
+    void clear_substitution_vector();
+    int add_to_substitution_vector(int num, int letter, std::map<std::string, int> issues, bool override);
+    // void set_codeword_to_word(int codeword_index, std::string word);
+    void set_codeword_to_word(int codeword_index, std::vector<int> word_vector);
+    // int find_char_from_substitution_vector(std::string letter);
+    std::vector<int> find_codeword(std::string search_string);
+    std::vector<int> find_codeword_with_least_matches();
+    std::vector<int> get_decrypted_codeword(std::vector<int> codeword);
+    // std::vector<std::pair<std::string, std::string>> match_two_codewords(std::vector<int> codeword1, std::vector<int> codeword2, int maximum_matches);
+    // std::vector<std::pair<std::string, std::string>> match_two_codewords(int codeword_index1, int codeword_index2, int maximum_matches);
+    std::vector<std::pair<std::vector<int>, std::vector<int>>> match_two_codewords(int codeword_index1, int codeword_index2, int maximum_matches);
+    std::vector<CodewordWordPair1> find_all_unique_pairs();
+    // std::pair<int, std::vector<int>> find_optimal_unique_pair();
 };
 
 
