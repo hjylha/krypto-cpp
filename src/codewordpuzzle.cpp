@@ -1176,52 +1176,72 @@ std::vector<CodewordWordPair1> CodewordPuzzle1::find_all_unique_pairs() {
     return unique_pairs;
 }
 
-// std::pair<int, std::vector<int>> CodewordPuzzle1::find_optimal_unique_pair() {
-//     std::vector<CodewordWordPair1> unique_pairs = find_all_unique_pairs();
-//     if (unique_pairs.empty()) {
-//         return std::pair<int, std::vector<int>>(-1, {});
-//     }
-//     std::map<std::pair<int, std::string>, int> num_of_appearances;
-//     std::vector<int> codeword1, codeword2;
-//     std::vector<int> word1, word2;
-//     // std::vector<std::string> word1, word2;
-//     int index1, index2;
-//     for (CodewordWordPair1 cw_w_pair : unique_pairs) {
-//         codeword1 = cw_w_pair.codeword1;
-//         index1 = std::find(codewords.begin(), codewords.end(), codeword1) - codewords.begin();
-//         // word1 = cw_w_pair.word1;
-//         // word1 = join_string(cw_w_pair.word1, "");
-//         if (!is_codeword_solved(codeword1)) {
-//             if (num_of_appearances.count(std::pair<int, std::vector<int>>(index1, word1)) == 0) {
-//                 num_of_appearances[std::pair<int, std::vector<int>>(index1, word1)] = 1;
-//             }
-//             else {
-//                 num_of_appearances[std::pair<int, std::string>(index1, word1)] += 1;
-//             }
-//         }
-//         codeword2 = cw_w_pair.codeword2;
-//         // word2 = cw_w_pair.word2;
-//         word2 = join_string(cw_w_pair.word2, "");
-//         index2 = std::find(codewords.begin(), codewords.end(), codeword2) - codewords.begin();
-//         if (!is_codeword_solved(codeword2)) {
-//             if (num_of_appearances.count(std::pair<int, std::string>(index2, word2)) == 0) {
-//                 num_of_appearances[std::pair<int, std::string>(index2, word2)] = 1;
-//             }
-//             else {
-//                 num_of_appearances[std::pair<int, std::string>(index2, word2)] += 1;
-//             }
-//         }
-//     }
-//     std::pair<int, std::string> optimal_pair;
-//     std::pair<int, std::string> match;
-//     int max_num_of_appearances = 0;
-//     for (auto match_n_num : num_of_appearances) {
-//         match = match_n_num.first;
-//         if (match_n_num.second > max_num_of_appearances) {
-//             optimal_pair = match;
-//             max_num_of_appearances = match_n_num.second;
-//         }
-//     }
-//     return optimal_pair;
-// }
+std::pair<int, std::vector<int>> CodewordPuzzle1::find_optimal_match() {
+    std::vector<CodewordWordPair1> unique_pairs = find_all_unique_pairs();
+    if (unique_pairs.empty()) {
+        return std::pair<int, std::vector<int>>(-1, {});
+    }
+    // std::map<std::pair<int, std::string>, int> num_of_appearances;
+    std::vector<int> num_of_appearances;
+    std::vector<std::pair<int, std::vector<int>>> matches;
+    std::vector<int> codeword1, codeword2;
+    std::vector<int> word1, word2;
+    // std::vector<std::string> word1, word2;
+    int codeword1_index, codeword2_index;
+    int index = -1;
+    for (CodewordWordPair1 cw_w_pair : unique_pairs) {
+        codeword1 = cw_w_pair.codeword1;
+        codeword1_index = std::find(codewords.begin(), codewords.end(), codeword1) - codewords.begin();
+        word1 = cw_w_pair.word1;
+        // word1 = join_string(cw_w_pair.word1, "");
+        if (!is_codeword_solved(codeword1)) {
+            index = -1;
+            for (int i = 0; i < matches.size(); i++) {
+                if (matches[i].first == codeword1_index && matches[i].second == word1) {
+                    index = i;
+                }
+            }
+            if (index == -1) {
+                num_of_appearances.push_back(1);
+                matches.push_back(std::pair<int, std::vector<int>>(codeword1_index, word1));
+            }
+            else {
+                num_of_appearances[index] += 1;
+            }
+            
+        }
+        codeword2 = cw_w_pair.codeword2;
+        word2 = cw_w_pair.word2;
+        // word2 = join_string(cw_w_pair.word2, "");
+        codeword2_index = std::find(codewords.begin(), codewords.end(), codeword2) - codewords.begin();
+        
+        if (!is_codeword_solved(codeword2)) {
+            index = -1;
+            for (int i = 0; i < matches.size(); i++) {
+                if (matches[i].first == codeword2_index && matches[i].second == word2) {
+                    index = i;
+                }
+            }
+            if (index == -1) {
+                num_of_appearances.push_back(1);
+                matches.push_back(std::pair<int, std::vector<int>>(codeword2_index, word2));
+            }
+            else {
+                num_of_appearances[index] += 1;
+            }
+            
+        }
+    }
+    std::pair<int, std::vector<int>> optimal_match;
+    // std::pair<int, std::vector<int>> match;
+    int max_num_of_appearances = 0;
+    for (int i = 0; i < num_of_appearances.size(); i++) {
+        // match = matches[i];
+        if (num_of_appearances[i] > max_num_of_appearances) {
+            optimal_match = matches[i];
+            max_num_of_appearances = num_of_appearances[i];
+        }
+    }
+    return optimal_match;
+}
 

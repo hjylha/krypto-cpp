@@ -179,7 +179,7 @@ public:
     // std::vector<std::pair<std::string, std::string>> match_two_codewords(int codeword_index1, int codeword_index2, int maximum_matches);
     std::vector<std::pair<std::vector<int>, std::vector<int>>> match_two_codewords(int codeword_index1, int codeword_index2, int maximum_matches);
     std::vector<CodewordWordPair1> find_all_unique_pairs();
-    // std::pair<int, std::vector<int>> find_optimal_unique_pair();
+    std::pair<int, std::vector<int>> find_optimal_match();
 };
 
 
