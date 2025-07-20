@@ -843,6 +843,10 @@ std::vector<int> CodewordPuzzle1::get_substitution_vector() {
     return substitution_vector;
 }
 
+std::vector<int> CodewordPuzzle1::get_substitution_vector_opp() {
+    return substitution_vector_opp;
+}
+
 int CodewordPuzzle1::count_solved_numbers() {
     int num_of_solved_nums = 0;
     for (int i = 1; i <= num_of_letters; i++) {

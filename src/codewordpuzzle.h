@@ -151,6 +151,7 @@ public:
     std::vector<std::vector<int>> get_wordlist();
     std::vector<std::string> get_comments();
     std::vector<int> get_substitution_vector();
+    std::vector<int> get_substitution_vector_opp();
     // std::vector<std::string> get_letters_in_substitution_vector();
     // std::vector<std::string> substitution_vector_in_two_lines();
     int count_solved_numbers();
