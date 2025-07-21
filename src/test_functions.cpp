@@ -962,3 +962,133 @@ bool test_find_all_unique_pairs(CodewordPuzzle puzzle) {
 
     return passing;
 }
+
+
+bool test_do_words_match_to_matching_indices_int() {
+    // vector<string> word1 = {"h", "e", "l", "l", "o"};
+    // vector<string> word2 = {"l", "i", "v", "e"};
+    vector<int> word1 = {8, 5, 12, 12, 15};
+    vector<int> word2 = {12, 9, 22, 5};
+    vector<pair<int, int>> matching_indices = {pair<int, int>(1, 3), pair<int, int>(2, 0)};
+    vector<int> indices_in_word1 = {0, 4};
+    vector<int> indices_in_word2 = {1, 2};
+    MatchingIndicesAndOthers match_ind_n_othr(matching_indices, indices_in_word1, indices_in_word2);
+    bool passing = do_words_match_to_matching_indices(word1, word2, match_ind_n_othr);
+    return passing;
+}
+
+bool test_CodewordWordPair1() {
+    vector<int> codeword1, codeword2;
+    vector<int> word1, word2;
+    CodewordWordPair1 cw_w_pair = CodewordWordPair1(codeword1, codeword2, word1, word2);
+
+    bool passing = cw_w_pair.codeword1 == codeword1;
+    bool passing1 = cw_w_pair.codeword2 == codeword2;
+    passing *= passing1;
+
+    bool passing2 = cw_w_pair.word1 == word1;
+    passing *= passing2;
+    bool passing3 = cw_w_pair.word2 == word2;
+    passing *= passing3;
+
+    return passing;
+}
+
+bool test_CodewordPuzzle1(CodewordPuzzle1 puzzle) {
+    vector<string> expected_comments = {"this is a comment", "another line"};
+    vector<vector<int>> expected_codewords;
+    expected_codewords.push_back({1, 2, 3, 4, 5, 6});
+    expected_codewords.push_back({3, 7, 9});
+    expected_codewords.push_back({8, 10, 11});
+    expected_codewords.push_back({10, 12, 13});
+    expected_codewords.push_back({3, 22, 24, 15});
+    expected_codewords.push_back({21, 15, 13, 11});
+    expected_codewords.push_back({4,24,10,9,27,9,7,7,9,2,12});
+
+    bool passing = puzzle.get_comments() == expected_comments;
+    bool passing1 = puzzle.get_codewords() == expected_codewords;
+    passing *= passing1;
+    // more things to test
+
+    // vector<vector<string>> expected_matches = {{}, {}, {}, {}, {"some", "read", "cola", "camp"}, {"some", "read", "cola", "camp"}};
+    vector<vector<vector<int>>> expected_matches = {
+        {},
+        {},
+        {},
+        {},
+        {{19, 15, 13, 5}, {18, 5, 1, 4}, {3, 15, 12, 1}, {3, 1, 13, 16}},
+        {{19, 15, 13, 5}, {18, 5, 1, 4}, {3, 15, 12, 1}, {3, 1, 13, 16}},
+        {{29, 12, 10, 25, 20, 25, 14, 14, 25, 18, 9}}
+    };
+    bool passing2 = true;
+    vector<int> codeword;
+    // vector<string> m_words;
+    vector<vector<int>> m_words;
+    for (int i = 0; i < expected_matches.size(); i++) {
+        m_words = puzzle.get_matched_words_for_codeword(i);
+        passing2 = m_words == expected_matches[i];
+        passing *= passing2;
+        // if (!passing2) {
+        //     vector<int> codeword = puzzle.get_codewords()[i];
+        //     std::cout << "codeword" << std::endl;
+        //     for (int j = 0; j < codeword.size(); j++) {
+        //         std::cout << codeword[j] << "  ";
+        //     }
+        //     std::cout << std::endl << "matched words" << std::endl;
+        //     for (string word : m_words) {
+        //         std::cout << word << ", ";
+        //     }
+        //     std::cout << std::endl << "expected words" << std::endl;
+        //     for (string word : expected_matches[i]) {
+        //         std::cout << word << ", ";
+        //     }
+        //     std::cout << std::endl;
+            
+        // }
+    }
+    // passing *= passing2;
+
+    return passing;
+}
+
+bool test_substitution_vector_things1(CodewordPuzzle1 puzzle) {
+    bool passing = true;
+    for (int num : puzzle.get_substitution_vector()) {
+        if (num != 0) {
+            passing = false;
+        }
+    }
+
+    int the_number = 1;
+    // char the_letter = 'b';
+    // string the_letter = "b";
+    int the_letter = 2;
+    int result = puzzle.add_to_substitution_vector(the_number, the_letter, std::map<string, int>(), false);
+    // vector<int> expected_chars;
+    // expected_chars.push_back(the_letter);
+    bool passing1 = puzzle.get_substitution_vector()[the_number] == the_letter;
+    passing *= passing1;
+    bool passing1_2 = puzzle.get_substitution_vector_opp()[the_letter] == the_number;
+    passing *= passing1_2;
+
+    bool passing2 = puzzle.count_solved_numbers() == 1;
+    passing *= passing2;
+
+    puzzle.clear_substitution_vector();
+    bool passing3 = puzzle.count_solved_numbers() == 0;
+    passing *= passing3;
+
+    // the_letter = "ö";
+    the_letter = 29;
+    // expected_chars.clear();
+    // expected_chars.push_back(the_letter);
+    result = puzzle.add_to_substitution_vector(the_number, the_letter, std::map<string, int>(), false);
+    bool passing4 = puzzle.get_substitution_vector()[the_number] == the_letter;
+    passing *= passing4;
+    bool passing4_2 = puzzle.get_substitution_vector_opp()[the_letter] == the_number;
+    passing *= passing4_2;
+
+    puzzle.clear_substitution_vector();
+
+    return passing;
+}

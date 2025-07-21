@@ -187,6 +187,26 @@ int main()
     show_test_result(test_find_all_unique_pairs(puzzle), "test_find_all_unique_pairs");
 
 
+    cout << "\nTesting CodewordPuzzle1:" << endl;
+
+    show_test_result(test_do_words_match_to_matching_indices_int(), "test_do_words_match_to_matching_indices_int");
+
+    show_test_result(test_CodewordWordPair1(), "test_CodewordWordPair1");
+
+    CodewordsAndComments comments_and_codewords = get_codewords_and_comments(test_codeword_path);
+    map<string, int> alphabet_map = get_alphabet_map(config["tag"]["alphabet"]);
+    pair<vector<int>, vector<vector<int>>> wordlist_n_lengths = get_wordlist_as_int_vector_plus(test_wordlist_path, alphabet_map);
+    CodewordPuzzle1 puzzle1 = CodewordPuzzle1(comments_and_codewords.codewords,
+        comments_and_codewords.codeword_lengths, 
+        wordlist_n_lengths.second, 
+        wordlist_n_lengths.first, 
+        alphabet.size(), 
+        comments_and_codewords.comments);
+
+    show_test_result(test_CodewordPuzzle1(puzzle1), "test_CodewordPuzzle1");
+
+    show_test_result(test_substitution_vector_things1(puzzle1), "test_substitution_vector_things1");
+
 
     auto end_time = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);

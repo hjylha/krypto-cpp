@@ -59,4 +59,10 @@ bool test_sort_codewords(CodewordPuzzle puzzle);
 bool test_match_two_codewords(CodewordPuzzle puzzle);
 bool test_find_all_unique_pairs(CodewordPuzzle puzzle);
 
+// CodewordPuzzle1
+bool test_do_words_match_to_matching_indices_int();
+bool test_CodewordWordPair1();
+bool test_CodewordPuzzle1(CodewordPuzzle1 puzzle);
+bool test_substitution_vector_things1(CodewordPuzzle1 puzzle);
+
 #endif
