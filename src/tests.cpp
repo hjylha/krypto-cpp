@@ -207,6 +207,12 @@ int main()
 
     show_test_result(test_substitution_vector_things1(puzzle1), "test_substitution_vector_things1");
 
+    show_test_result(test_sort_codewords1(puzzle1), "test_sort_codewords1");
+
+    show_test_result(test_match_two_codewords1(puzzle1), "test_match_two_codewords1");
+
+    show_test_result(test_find_all_unique_pairs1(puzzle1), "test_find_all_unique_pairs1");
+
 
     auto end_time = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);

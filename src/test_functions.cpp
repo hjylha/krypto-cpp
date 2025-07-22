@@ -1092,3 +1092,66 @@ bool test_substitution_vector_things1(CodewordPuzzle1 puzzle) {
 
     return passing;
 }
+
+bool test_sort_codewords1(CodewordPuzzle1 puzzle) {
+    vector<int> expected_indices = {6, 4, 5};
+    bool passing = puzzle.sort_codewords() == expected_indices;
+    return passing;
+}
+
+bool test_match_two_codewords1(CodewordPuzzle1 puzzle) {
+    // vector<int> codeword1 = {3, 22, 24, 15};
+    // vector<int> codeword2 = {21, 15, 13, 11};
+    int codeword_index1 = 4;
+    int codeword_index2 = 5;
+
+    // std::vector<std::pair<std::string, std::string>> matching_pairs = puzzle.match_two_codewords(codeword1, codeword2, 999);
+    std::vector<std::pair<std::vector<int>, std::vector<int>>> matching_pairs = puzzle.match_two_codewords(codeword_index1, codeword_index2, 999);
+
+    bool passing = matching_pairs.size() == 1;
+    // std::cout << "Found " << matching_pairs.size() << " pairs" << std::endl;
+
+    // bool passing1 = matching_pairs[0].first == "some";
+    vector<int> expected1 = {19, 15, 13, 5};
+    bool passing1 = matching_pairs[0].first == expected1;
+    // bool passing1 = join_string(matching_pairs[0].first, "") == "some";
+    passing *= passing1;
+
+    // bool passing2 = matching_pairs[0].second == "read";
+    vector<int> expected2 = {18, 5, 1, 4};
+    bool passing2 = matching_pairs[0].second == expected2;
+    // bool passing2 = join_string(matching_pairs[0].second, "") == "read";
+    passing *= passing2;
+
+    // matching_pairs = puzzle.match_two_codewords(codeword_index1, codeword_index2, 999);
+    // passing *= matching_pairs.size() == 1;
+
+    // passing1 = matching_pairs[0].first == "some";
+    // passing *= passing1;
+
+    // passing2 = matching_pairs[0].second == "read";
+    // passing *= passing2;
+
+    return passing;
+}
+
+bool test_find_all_unique_pairs1(CodewordPuzzle1 puzzle) {
+    vector<CodewordWordPair1> unique_pairs = puzzle.find_all_unique_pairs();
+
+    // (3, 22, 24, 15) - (21, 15, 13, 11) = some - read
+    // (3, 24, 24, 15) - (4,24,10,9,27,9,7,7,9,2,12) = cola - öljytynnyri
+    // others?
+
+    bool passing = unique_pairs.size() == 2;
+
+    // for (auto p : unique_pairs) {
+    //     std::cout << "pair" << std::endl;
+    //     std::cout << codeword_as_str(p.codeword1) << "  " << codeword_as_str(p.codeword2) << std::endl;
+    //     std::cout << join_string(p.word1, "") << "  " << join_string(p.word2, "")  << std::endl;
+    // }
+
+    // MORE TO COME
+
+    return passing;
+}
+
