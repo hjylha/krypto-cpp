@@ -141,6 +141,7 @@ private:
     std::vector<std::vector<std::vector<int>>> matched_words;
 public:
     // std::string empty_symbol = "_";
+    int empty_num = 0;
     int num_of_codewords, num_of_words, num_of_letters, max_codeword_str_length, max_word_length, max_num_size;
     CodewordPuzzle1();
     // CodewordPuzzle(std::vector<std::vector<int>> the_codewords, std::vector<std::string> the_wordlist, std::string the_alphabet, std::vector<std::string> the_comments);

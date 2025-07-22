@@ -1265,7 +1265,7 @@ void PuzzleCLI1::print_substitution_vector() {
         }
         line1 += std::to_string(i);
         letter = "";
-        if (subst_vect[i] == 0) {
+        if (subst_vect[i] == puzzle.empty_num) {
             letter += ' ';
         }
         else {
@@ -1300,7 +1300,7 @@ void PuzzleCLI1::print_missing_chars() {
     // std::vector<std::string> alphabet = puzzle.get_alphabet();
     for (int i = 0; i < alphabet.size(); i++) {
         letter_str = alphabet[i];
-        if (subst_vect_opp[i + 1] == 0) {
+        if (subst_vect_opp[i + 1] == puzzle.empty_num) {
             // letter_str = "";
             // letter_str += letter;
             std::cout << to_upper(letter_str) << "  ";
