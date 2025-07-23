@@ -985,6 +985,9 @@ void CodewordPuzzle1::clear_substitution_vector() {
     for (int i = 0; i < substitution_vector.size(); i++) {
         substitution_vector[i] = empty_num;
     }
+    for (int i = 0; i < substitution_vector_opp.size(); i++) {
+        substitution_vector_opp[i] = empty_num;
+    }
     set_matched_words_from_start();
 }
 
