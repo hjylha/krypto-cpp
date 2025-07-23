@@ -97,11 +97,15 @@ int main()
 
     show_test_result(test_does_word_match2(), "test_does_word_match2");
 
+    show_test_result(test_does_int_word_match3(), "test_does_int_word_match3");
+
     // bool get_matched_words_works = test_get_matched_words();
     // cout << "get_matched_words works: " << get_matched_words_works << endl;
     show_test_result(test_get_matched_words(), "test_get_matched_words (öljytynnyri fails)");
 
     show_test_result(test_get_matched_words2(), "test_get_matched_words2");
+
+    show_test_result(test_get_matched_words_int3(), "test_get_matched_words_int3");
 
 
     cout << "\nTesting file_operations:" << endl;

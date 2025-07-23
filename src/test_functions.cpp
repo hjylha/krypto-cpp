@@ -273,6 +273,15 @@ bool test_get_alphabet_map() {
 
     bool passing = get_alphabet_map(alphabet) == expected_map;
 
+    alphabet = "åäö";
+    map<string, int> expected_map2;
+    expected_map2["å"] = 1;
+    expected_map2["ä"] = 2;
+    expected_map2["ö"] = 3;
+
+    bool passing1 = get_alphabet_map(alphabet) == expected_map2;
+    passing *= passing1;
+
     return passing;
 }
 
@@ -437,6 +446,29 @@ bool test_does_word_match2() {
     return passing;
 }
 
+bool test_does_int_word_match3() {
+    vector<int> word_vector = {8, 5, 12, 12, 15};
+    vector<int> codeword = {1, 2, 3, 3, 4};
+    bool passing = does_int_word_match3(word_vector, codeword, 5);
+
+    word_vector = {23, 15, 18, 12, 4};
+    codeword = {1, 2, 3, 4, 2};
+    bool passing1 = !(does_int_word_match3(word_vector, codeword, codeword.size()));
+    passing *= passing1;
+
+    word_vector = {8, 5, 18, 5};
+    codeword = {3, 22, 24, 15};
+    bool passing2 = !does_int_word_match3(word_vector, codeword, codeword.size());
+    passing *= passing2;
+
+    word_vector = {29, 12, 10, 25, 20, 25, 14, 14, 25, 18, 9};
+    codeword = {4,24,10,9,27,9,7,7,9,2,12};
+    bool passing3 = does_int_word_match3(word_vector, codeword, codeword.size());
+    passing *= passing3;
+
+    return passing;
+}
+
 bool test_get_matched_words() {
     vector<int> codeword = {1, 2, 3, 3, 4};
     vector<string> wordlist = {"hello", "world", "tiny", "english", "abccd", "öljytynnyri"};
@@ -468,6 +500,36 @@ bool test_get_matched_words2() {
     codeword = {4,24,10,9,27,9,7,7,9,2,12};
     expected_words = {{"ö", "l", "j", "y", "t", "y", "n", "n", "y", "r", "i"}};
     bool passing1 = get_matched_words(codeword, wordlist, -1) == expected_words;
+    passing *= passing1;
+
+    return passing;
+}
+
+bool test_get_matched_words_int3() {
+    vector<int> codeword = {1, 2, 3, 3, 4};
+    vector<vector<int>> wordlist = {
+        // {"h", "e", "l", "l", "o"},
+        {8, 5, 12, 12, 15},
+        // {"w", "o", "r", "l", "d"},
+        {23, 15, 18, 12, 4},
+        // {"t", "i", "n", "y"},
+        {20, 9, 14, 25},
+        // {"e", "n", "g", "l", "i", "s", "h"},
+        {5, 14, 7, 12, 9, 19, 8},
+        // {"a", "b", "c", "c", "d"},
+        {1, 2, 3, 3, 4},
+        // {"ö", "l", "j", "y", "t", "y", "n", "n", "y", "r", "i"}
+        {29, 12, 10, 25, 20, 25, 14, 14, 25, 18, 9}
+    };
+    vector<int> word_lengths = {5, 5, 4, 7, 5, 11};
+    // vector<string> expected_words = {"hello", "abccd"};
+    vector<vector<int>> expected_words = {{8, 5, 12, 12, 15}, {1, 2, 3, 3, 4}};
+    bool passing = get_matched_words_int3(codeword, 5, wordlist, word_lengths) == expected_words;
+
+    codeword = {4,24,10,9,27,9,7,7,9,2,12};
+    // expected_words = {"öljytynnyri"};
+    expected_words = {{29, 12, 10, 25, 20, 25, 14, 14, 25, 18, 9}};
+    bool passing1 = get_matched_words_int3(codeword, 11, wordlist, word_lengths) == expected_words;
     passing *= passing1;
 
     return passing;

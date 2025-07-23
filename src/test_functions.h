@@ -33,8 +33,10 @@ bool test_are_letters_in_alphabet();
 bool test_are_letters_in_alphabet2();
 bool test_does_word_match();
 bool test_does_word_match2();
+bool test_does_int_word_match3();
 bool test_get_matched_words();
 bool test_get_matched_words2();
+bool test_get_matched_words_int3();
 
 // file_operations
 bool test_does_path_exist();

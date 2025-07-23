@@ -30,12 +30,14 @@ bool does_word_match(std::vector<std::string> word_vector, std::vector<int> code
 bool does_word_match(std::vector<std::string> word_vector, std::vector<int> codeword, int word_length, int codeword_length);
 bool does_int_word_match(std::vector<int> int_vector, std::vector<int> codeword);
 bool does_int_word_match2(std::vector<int> int_vector, std::vector<int> codeword);
+bool does_int_word_match3(std::vector<int> int_vector, std::vector<int> codeword, int codeword_length);
 std::vector<std::string> get_matched_words(std::vector<int> codeword, std::vector<std::string> wordlist, int maximum_matches);
 std::vector<std::vector<std::string>> get_matched_words(std::vector<int> codeword, std::vector<std::vector<std::string>> wordlist, int maximum_matches);
 std::vector<std::vector<std::string>> get_matched_words2(std::vector<int> codeword, std::vector<std::vector<std::string>> wordlist, int maximum_matches);
 std::vector<std::vector<std::string>> get_matched_words3(std::vector<int> codeword, int codeword_length, std::vector<std::vector<std::string>> wordlist, std::vector<int> word_lengths);
 std::vector<std::vector<int>> get_matched_words_int(std::vector<int> codeword, std::vector<std::vector<int>> wordlist_int, int maximum_matches);
 std::vector<std::vector<int>> get_matched_words_int2(std::vector<int> codeword, std::vector<std::vector<int>> wordlist_int);
+std::vector<std::vector<int>> get_matched_words_int3(std::vector<int> codeword, int codeword_length, std::vector<std::vector<int>> wordlist_int, std::vector<int> word_lengths);
 
 
 #endif

@@ -384,6 +384,29 @@ bool does_int_word_match2(std::vector<int> int_vector, std::vector<int> codeword
     return true;
 }
 
+bool does_int_word_match3(std::vector<int> int_vector, std::vector<int> codeword, int codeword_length) {
+    int letter;
+    int letter_prev;
+    int num;
+    int num_prev;
+    for (int i = 0; i < codeword_length; i++) {
+        letter = int_vector[i];
+        num = codeword[i];
+        for (int j = 0; j < i; j++) {
+            letter_prev = int_vector[j];
+            num_prev = codeword[j];
+            if (num == num_prev && letter != letter_prev) {
+                return false;
+            }
+            if (num != num_prev && letter == letter_prev) {
+                return false;
+            }
+            if (num == num_prev && letter == letter_prev) break;
+        }
+    }
+    return true;
+}
+
 std::vector<std::string> get_matched_words(std::vector<int> codeword, std::vector<std::string> wordlist, int maximum_matches) {
     std::vector<std::string> matched_words;
     int num_of_matches = 0;
@@ -488,6 +511,23 @@ std::vector<std::vector<int>> get_matched_words_int2(std::vector<int> codeword, 
         word_vector = wordlist_int[i];
         word_length = word_vector.size();
         if (does_int_word_match2(word_vector, codeword)) {
+            matched_words.push_back(word_vector);
+        }
+    }
+    return matched_words;
+}
+
+std::vector<std::vector<int>> get_matched_words_int3(std::vector<int> codeword, int codeword_length, std::vector<std::vector<int>> wordlist_int, std::vector<int> word_lengths) {
+    std::vector<std::vector<int>> matched_words;
+    int wordlist_length = wordlist_int.size();
+    int word_length;
+    std::vector<int> word_vector;
+    for (int i = 0; i < wordlist_length; i++) {
+        if (codeword_length != word_lengths[i]) {
+            continue;
+        }
+        word_vector = wordlist_int[i];
+        if (does_int_word_match3(word_vector, codeword, codeword_length)) {
             matched_words.push_back(word_vector);
         }
     }
