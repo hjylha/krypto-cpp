@@ -811,18 +811,26 @@ std::string PuzzleCLI1::to_lower(std::vector<std::string> text_vector) {
     return result_text;
 }
 
-std::string PuzzleCLI1::to_upper(std::vector<int> text_vector) {
+std::string PuzzleCLI1::to_upper_int(std::vector<int> text_vector) {
     std::vector<std::string> word_vector;
     for (int num : text_vector) {
+        if (num == 0) {
+            word_vector.push_back(empty_symbol);
+            continue;
+        }
         word_vector.push_back(alphabet_upper[num - 1]);
     }
 
     return to_upper(word_vector);
 }
 
-std::string PuzzleCLI1::to_lower(std::vector<int> text_vector) {
+std::string PuzzleCLI1::to_lower_int(std::vector<int> text_vector) {
     std::vector<std::string> word_vector;
     for (int num : text_vector) {
+        if (num == 0) {
+            word_vector.push_back(empty_symbol);
+            continue;
+        }
         word_vector.push_back(alphabet[num - 1]);
     }
 
@@ -847,6 +855,9 @@ void PuzzleCLI1::set_language(std::string new_language) {
     }
     else {
         language = new_language;
+        alphabet = utf8_split(config[language][ALPHABET_KEY]);
+        alphabet_upper = utf8_split(config[language][ALPHABET_UPPER_KEY]);
+        alphabet_map = get_alphabet_map(config[language][ALPHABET_KEY]);
     }
     current_language_map = language_map[language];
 }
@@ -1114,7 +1125,9 @@ void PuzzleCLI1::set_codeword_as_word() {
     if (!are_letters_in_alphabet(word_input_vector, alphabet) && !are_letters_in_alphabet(word_input_vector, alphabet_upper)) {
         // THIS IS NOT THE CORRECT TEXT
         // text_to_show = replace2("not_in_alphabet_text", alphabet[letters[i] - 1], join_string(alphabet, ""));
+        // text_to_show = replace2("letters_not_in_alphabet_text", word_input, join_string(alphabet, ""));
         // std::cout << text_to_show << std::endl;
+        std::cout << replace2("letters_not_in_alphabet_text", word_input, join_string(alphabet, "")) << std::endl;
         return;
     }
 
@@ -1133,10 +1146,10 @@ void PuzzleCLI1::print_pairs(CodewordWordPair1 codeword_word_pair) {
     // THIS IS BAD
     std::vector<std::string> word_vector1, word_vector2;
     for (int num : codeword_word_pair.word1) {
-        word_vector1.push_back(alphabet[num]);
+        word_vector1.push_back(alphabet[num - 1]);
     }
     for (int num : codeword_word_pair.word2) {
-        word_vector2.push_back(alphabet[num]);
+        word_vector2.push_back(alphabet[num - 1]);
     }
     std::string word1 = join_string(word_vector1, "");
     std::string word2 = join_string(word_vector2, "");
@@ -1318,8 +1331,11 @@ void PuzzleCLI1::print_codeword_progress(std::vector<std::vector<int>> codewords
     std::string word, codeword_str, part1, part2, part3, part4;
     for (std::vector<int> codeword : codewords_here) {
         actual_index = puzzle.get_codeword_index(codeword);
-        word = to_upper(puzzle.get_decrypted_codeword(codeword));
+        // std::cout << "actual index = " << actual_index << std::endl;
+        word = to_upper_int(puzzle.get_decrypted_codeword(codeword));
+        // std::cout << "word = " << word << std::endl;
         codeword_str = codeword_as_str(codeword);
+        // std::cout << "codeword string = " << codeword_str << std::endl;
         num_of_matched_words = puzzle.get_num_of_matched_words(actual_index);
         part1 = add_whitespace(utf8_split(std::to_string(actual_index + 1)), puzzle.max_num_size);
         part2 = add_whitespace(word, puzzle.max_word_length);
@@ -1406,7 +1422,7 @@ void PuzzleCLI1::show_matching_words() {
     std::cout << replace3("words_matching_codeword_text", std::to_string(words.size()), std::to_string(index_to_show), codeword_str) << std::endl;
     
     for (std::vector<int> word_vector : words) {
-        std::cout << to_upper(word_vector) << std::endl;
+        std::cout << to_upper_int(word_vector) << std::endl;
     }
 }
 

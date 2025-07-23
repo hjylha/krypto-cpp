@@ -95,6 +95,7 @@ private:
     double SOLUTION_SUCCESS_THRESHOLD = 0.75;
 
     char solved_char = '*';
+    std::string empty_symbol = "_";
 
     std::map<std::string, int> issues;
 
@@ -122,8 +123,8 @@ public:
     std::string to_lower(std::string text);
     std::string to_upper(std::vector<std::string> text_vector);
     std::string to_lower(std::vector<std::string> text_vector);
-    std::string to_upper(std::vector<int> text_vector);
-    std::string to_lower(std::vector<int> text_vector);
+    std::string to_upper_int(std::vector<int> text_vector);
+    std::string to_lower_int(std::vector<int> text_vector);
     std::string replace1(std::string text_key, std::string replacement_text);
     std::string replace2(std::string text_key, std::string replacement_text1, std::string replacement_text2);
     std::string replace3(std::string text_key, std::string replacement_text1, std::string replacement_text2, std::string replacement_text3);
