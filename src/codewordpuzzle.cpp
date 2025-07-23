@@ -800,9 +800,9 @@ CodewordPuzzle1::CodewordPuzzle1(std::vector<std::vector<int>> the_codewords, st
     }
 
     std::vector<std::vector<int>> word_vectors;
-    for (std::vector<int> codeword : codewords) {
+    for (int i = 0; i < codewords.size(); i++) {
         // std::vector<std::string> words = get_matched_words(codeword, wordlist, -1);
-        word_vectors = get_matched_words_int2(codeword, wordlist);
+        word_vectors = get_matched_words_int3(codewords[i], codeword_lengths[i], wordlist, word_lengths);
         matched_words.push_back(word_vectors);
         matched_words_all.push_back(word_vectors);
     }
