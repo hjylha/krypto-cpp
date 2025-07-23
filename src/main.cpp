@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
     //     std::cout << argv[i] << std::endl;
     // }
 
-    PuzzleCLI puzzle_cli = PuzzleCLI();
+    PuzzleCLI1 puzzle_cli = PuzzleCLI1();
     std::vector<std::string> languages = puzzle_cli.get_languages();
     for (int i = 1; i < argc; i++) {
         if (std::find(languages.begin(), languages.end(), argv[i]) != languages.end()) {
