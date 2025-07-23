@@ -13,7 +13,8 @@
 
 int main(int argc, char* argv[])
 {
-    setlocale(LC_ALL, "utf-8");
+    // setlocale(LC_ALL, "utf-8");
+    setlocale(LC_ALL, ".UTF-8");
     // std::locale::global(std::locale("utf-8"));
     // std::cout.imbue(std::locale());
 
