@@ -34,6 +34,7 @@ letter_prompt;Kirjain (tai kirjaimet pilkuilla erotettuina): ;Letter (or letters
 missing_letters_text;Kirjaimet, joita ei vielä ole ratkaistu:;Letters yet to be included in substitution table:;
 invalid_number_text;%1% ei ole sallittu numero;%1% is not a valid number;
 not_in_alphabet_text;%1% ei ole aakkosissa (%2%);%1% not in alphabet (%2%);
+letters_not_in_alphabet_text;Sanan %1% kaikki kirjaimet eivät ole aakkosissa (%2%);All the letters of the word %1% are not in alphabet (%2%);
 already_in_table_text;%1% on jo ratkaistu (%2%);%1% already in table (%2%);
 codeword_prompt;Kryptosana (indeksinumero tai numerot pilkuilla erotettuina): ;Codeword (index number or numbers separated by commas): ;
 cancelled;Toimi peruutettu;Action cancelled;
