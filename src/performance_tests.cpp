@@ -15,25 +15,47 @@
 using std::cout, std::endl, std::vector, std::string, std::map, std::pair, std::chrono::time_point, std::chrono::high_resolution_clock;
 
 
-void show_elapsed_time(string description, time_point<high_resolution_clock> start_time, time_point<high_resolution_clock> end_time, string unit) {
+double show_elapsed_time(string description, time_point<high_resolution_clock> start_time, time_point<high_resolution_clock> end_time, string unit) {
+    double elapsed_time;
     if (unit == "micro") {
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);
-        cout << description << " " << duration.count() << " microseconds" << endl;
-        return;
+        elapsed_time = duration.count();
+        cout << description << " " << elapsed_time << " microseconds" << endl;
+        return elapsed_time;
     }
     if (unit == "milli") {
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);
-        cout << description << " " << duration.count() / 1000.0 << " milliseconds" << endl;
-        return;
+        elapsed_time = duration.count();
+        cout << description << " " << elapsed_time / 1000.0 << " milliseconds" << endl;
+        return elapsed_time;
     }
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);
-    cout << description << " " << duration.count() / 1000000.0 << " seconds" << endl;
+    elapsed_time = duration.count();
+    cout << description << " " << elapsed_time / 1000000.0 << " seconds" << endl;
+    return elapsed_time;
 }
+
+
+class PerformanceTest
+{
+private:
+    /* data */
+public:
+    PerformanceTest(/* args */)
+    {
+
+    }
+    ~PerformanceTest() {
+
+    }
+};
+
+
 
 
 int main(int argc, char* argv[])
 {
-    setlocale(LC_ALL, "utf-8");
+    setlocale(LC_ALL, ".UTF-8");
     // std::locale::global(std::locale("utf-8"));
     // std::cout.imbue(std::locale());
 

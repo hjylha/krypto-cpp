@@ -23,7 +23,7 @@ void show_test_result(bool test_result, string test_description) {
 
 int main()
 {
-    setlocale(LC_ALL, "utf-8");
+    setlocale(LC_ALL, ".UTF-8");
     // std::locale::global(std::locale(""));
     // std::cout.imbue(std::locale());
 
