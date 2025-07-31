@@ -1,6 +1,7 @@
 
 #include <algorithm>
 #include <string>
+#include <utility>
 #include <vector>
 #include <iostream>
 // #include <ctime>
@@ -39,14 +40,166 @@ double show_elapsed_time(string description, time_point<high_resolution_clock> s
 class PerformanceTest
 {
 private:
-    /* data */
-public:
-    PerformanceTest(/* args */)
-    {
+    string DEFAULT_LANGUAGE_FILE_PATH = "language_file.csv";
+    string DEFAULT_CONFIG_PATH = "krypto.cfg";
+    string NAME_KEY = "name";
+    string ALPHABET_KEY = "alphabet";
+    string ALPHABET_UPPER_KEY = "alphabet_upper";
+    string WORDLIST_PATH_KEY = "wordlist_path";
+    string CODEWORD_FOLDER_PATH_KEY = "codeword_folder_path";
 
+    string language_tag = "";
+    string codeword_path = "";
+
+    string wordlist_path = "";
+
+    map<string, map<string, string>> language_map;
+    map<string, map<string, string>> config;
+
+    std::vector<std::string> alphabet;
+    std::vector<std::string> alphabet_upper;
+    std::map<std::string, int> alphabet_map;
+
+    vector<string> wordlist;
+
+
+    vector<vector<int>> wordlist_int;
+    vector<int> word_lengths;
+    vector<vector<int>> codewords;
+    vector<int> codeword_lengths;
+    vector<string> comments;
+public:
+    PerformanceTest(string language, string codewords_filepath)
+    {
+        language_tag = language;
+        codeword_path = codewords_filepath;
     }
+
     ~PerformanceTest() {
 
+    }
+
+    void read_config_and_set_values() {
+        config = read_config(DEFAULT_CONFIG_PATH);
+
+        alphabet = utf8_split(config[language_tag][ALPHABET_KEY]);
+        alphabet_upper = utf8_split(config[language_tag][ALPHABET_UPPER_KEY]);
+        alphabet_map = get_alphabet_map(config[language_tag][ALPHABET_KEY]);
+
+        wordlist_path = config[language_tag][WORDLIST_PATH_KEY];
+    }
+
+    double get_language_map_duration() {
+        auto start_time = std::chrono::high_resolution_clock::now();
+        language_map = get_language_map(DEFAULT_LANGUAGE_FILE_PATH);
+        auto end_time = std::chrono::high_resolution_clock::now();
+        string description = "get_language_map";
+        return show_elapsed_time(description, start_time, end_time, "micro");
+    }
+
+    double read_config_duration() {
+        auto start_time = std::chrono::high_resolution_clock::now();
+        read_config_and_set_values();
+        auto end_time = std::chrono::high_resolution_clock::now();
+
+        string description = "read_config";
+        return show_elapsed_time(description, start_time, end_time, "micro");
+    }
+
+    double get_wordlist_duration() {
+        
+        if (wordlist_path == "") {
+            read_config_and_set_values();
+        }
+
+        auto start_time = std::chrono::high_resolution_clock::now();
+        wordlist = get_wordlist(wordlist_path);
+        auto end_time = std::chrono::high_resolution_clock::now();
+        string description = "get_wordlist (";
+        description += wordlist_path;
+        description += ")";
+        return show_elapsed_time(description, start_time, end_time, "milli");
+    }
+
+    // std::pair<std::vector<int>, std::vector<std::vector<int>>> wordlist_stuff = get_wordlist_as_int_vector_plus(wordlist_path, alphabet_map);
+    double get_wordlist_as_int_vector_plus_duration() {
+        if (wordlist_path == "") {
+            read_config_and_set_values();
+        }
+
+        auto start_time = std::chrono::high_resolution_clock::now();
+        pair<vector<int>, vector<vector<int>>> wordlist_plus = get_wordlist_as_int_vector_plus(wordlist_path, alphabet_map);
+        auto end_time = std::chrono::high_resolution_clock::now();
+
+        wordlist_int = wordlist_plus.second;
+        word_lengths = wordlist_plus.first;
+
+        string description = "get_wordlist_as_int_vector_plus (";
+        description += wordlist_path;
+        description += ")";
+        return show_elapsed_time(description, start_time, end_time, "milli");
+    }
+
+    double get_codewords_duration() {
+        auto start_time = std::chrono::high_resolution_clock::now();
+        // string codeword_filepath = "k24-51-52.csv";
+        pair<vector<string>, vector<vector<int>>> comments_n_codewords = get_codewords(codeword_path);
+        vector<vector<int>> codewords = comments_n_codewords.second;
+        auto end_time = std::chrono::high_resolution_clock::now();
+        string description = "get_codewords (";
+        description += codeword_path;
+        description += ")";
+        return show_elapsed_time(description, start_time, end_time, "micro");
+    }
+
+    double get_codewords_and_comments_duration() {
+        auto start_time = std::chrono::high_resolution_clock::now();
+        // string codeword_filepath = "k24-51-52.csv";
+        CodewordsAndComments codewords_n_comments = get_codewords_and_comments(codeword_path);
+        // vector<vector<int>> codewords = comments_n_codewords.second;
+        auto end_time = std::chrono::high_resolution_clock::now();
+
+        codewords = codewords_n_comments.codewords;
+        codeword_lengths = codewords_n_comments.codeword_lengths;
+        comments = codewords_n_comments.comments;
+
+        string description = "get_codewords (";
+        description += codeword_path;
+        description += ")";
+        return show_elapsed_time(description, start_time, end_time, "micro");
+    }
+
+
+    double get_matched_words_duration() {
+        auto start_time = std::chrono::high_resolution_clock::now();
+        vector<vector<vector<int>>> matched_words5;
+        vector<vector<int>> word_vectors5;
+        for (vector<int> codeword : codewords) {
+            word_vectors5 = get_matched_words_int2(codeword, wordlist_int);
+            matched_words5.push_back(word_vectors5);
+        }
+        auto end_time = std::chrono::high_resolution_clock::now();
+        string description = "setting matched words (int2) (";
+        description += codeword_path;
+        description += ")";
+        return show_elapsed_time(description, start_time, end_time, "");
+    }
+
+    double run_performance_tests() {
+        vector<double> durations;
+        // language_map & config???
+        
+        durations.push_back(get_wordlist_as_int_vector_plus_duration());
+
+        durations.push_back((get_codewords_and_comments_duration()));
+
+        durations.push_back(get_matched_words_duration());
+
+        double total_duration = sum_vector(durations);
+
+        cout << "Total duration: " << total_duration / 1000000.0 << " seconds" << endl;
+
+        return total_duration;
     }
 };
 
@@ -235,6 +388,14 @@ int main(int argc, char* argv[])
         show_elapsed_time(description, start_time, end_time, "");
 
         cout << "\n" << endl;
+
+        PerformanceTest pt = PerformanceTest(lang_fi, codeword_filepath);
+
+        pt.run_performance_tests();
+
+        cout << "\n" << endl;
+
+
     }
 
 
@@ -273,6 +434,12 @@ int main(int argc, char* argv[])
         show_elapsed_time(description, start_time, end_time, "milli");
 
         cout << endl;
+
+        string codeword_filepath = "cw25-05-12.csv";
+
+        PerformanceTest pt = PerformanceTest(lang_en, codeword_filepath);
+
+        pt.run_performance_tests();
 
         cout << "\n" << endl;
     }
