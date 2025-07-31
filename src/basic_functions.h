@@ -7,6 +7,7 @@
 
 
 int get_minimum(int num1, int num2);
+double sum_vector(std::vector<double> doubles);
 std::string remove_whitespace(std::string text);
 std::string add_whitespace(std::string text, int total_length);
 std::string add_whitespace(std::vector<std::string> text_vector, int total_length);

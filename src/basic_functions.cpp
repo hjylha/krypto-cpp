@@ -12,6 +12,13 @@ int get_minimum(int num1, int num2) {
     return (num1 < num2) ? num1 : num2;
 }
 
+double sum_vector(std::vector<double> doubles) {
+    double sum = 0;
+    for (double num : doubles) {
+        sum += num;
+    }
+    return sum;
+}
 
 std::string remove_whitespace(std::string text) {
     text.erase(0, text.find_first_not_of(" \t\r\n"));

@@ -39,6 +39,8 @@ int main()
 
     show_test_result(test_get_minimum(), "test_get_minimum");
 
+    show_test_result(test_sum_vector(), "test_sum_vector");
+
     // bool remove_whitespace_works = test_remove_whitespace();
     // cout << "remove_whitespace works: " << remove_whitespace_works << endl;
     show_test_result(test_remove_whitespace(), "test_remove_whitespace");

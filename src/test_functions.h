@@ -13,6 +13,7 @@ using std::string, std::map, std::vector, std::pair;
 
 // basic_functions
 bool test_get_minimum();
+bool test_sum_vector();
 bool test_remove_whitespace();
 bool test_add_whitespace();
 bool test_add_whitespace2();

@@ -36,6 +36,29 @@ bool test_get_minimum() {
     return passing;
 }
 
+bool test_sum_vector() {
+    vector<double> nums;
+    double expected_result = 0;
+    bool passing = sum_vector(nums) == expected_result;
+
+    nums = {0.5, 0.25};
+    expected_result = 0.75;
+    bool passing1 = sum_vector(nums) == expected_result;
+    passing *= passing1;
+
+    nums = {0, 1, 2};
+    expected_result = 3;
+    bool passing2 = sum_vector(nums) == expected_result;
+    passing *= passing2;
+
+    nums = {-1, 1, 0.5};
+    expected_result = 0.5;
+    bool passing3 = sum_vector(nums) == expected_result;
+    passing *= passing3;
+
+    return passing;
+}
+
 bool test_remove_whitespace() {
     bool passing = true;
     std::string expected_result = "hello";
