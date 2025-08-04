@@ -558,6 +558,37 @@ bool test_get_matched_words_int3() {
     return passing;
 }
 
+bool test_does_word_match_to_substitution_maps() {
+    map<int, int> substitution_map, substitution_map_opp;
+    // {5, 4, 6, 3, 7} -> {22, 15, 18, 12, 4}
+    substitution_map[5] = 22;
+    substitution_map_opp[22] = 5;
+    substitution_map[4] = 15;
+    substitution_map_opp[15] = 4;
+    substitution_map[6] = 18;
+    substitution_map_opp[18] = 6;
+    substitution_map[3] = 12;
+    substitution_map_opp[12] = 3;
+    substitution_map[7] = 4;
+    substitution_map_opp[4] = 7;
+
+    vector<int> codeword = {1, 2, 3, 3, 4};
+    vector<int> word_vector = {8, 5, 12, 12, 15};
+    bool passing = does_word_match_to_substitution_maps(word_vector, codeword, codeword.size(), substitution_map, substitution_map_opp);
+
+    codeword = {1, 3};
+    word_vector = {1, 10};
+    bool passing1 = !does_word_match_to_substitution_maps(word_vector, codeword, codeword.size(), substitution_map, substitution_map_opp);
+    passing *= passing1;
+
+    codeword = {1, 3};
+    word_vector = {4, 12};
+    bool passing2 = !does_word_match_to_substitution_maps(word_vector, codeword, 2, substitution_map, substitution_map_opp);
+    passing *= passing2;
+
+    return passing;
+}
+
 
 bool test_does_path_exist() {
 
@@ -1049,6 +1080,40 @@ bool test_find_all_unique_pairs(CodewordPuzzle puzzle) {
 }
 
 
+bool test_get_matching_indices_as_vector() {
+    vector<int> codeword1 = {1, 1};
+    vector<int> codeword2 = {2, 2};
+    vector<vector<int>> exp_match_ind_n_othr = {{}, {}, {0}, {0}};
+    vector<vector<int>> match_ind_n_othr = get_matching_indices_as_vector(codeword1, codeword2);
+    bool passing = exp_match_ind_n_othr == match_ind_n_othr;
+
+    codeword1 = {1, 2};
+    codeword2 = {2, 1};
+    exp_match_ind_n_othr = {{0, 1}, {1, 0}, {}, {}};
+    bool passing1 = exp_match_ind_n_othr == get_matching_indices_as_vector(codeword1, codeword2);
+    passing *= passing1;
+
+    codeword1 = {1, 2, 3, 3, 4};
+    codeword2 = {3, 5, 6, 2};
+    exp_match_ind_n_othr = {{1, 2}, {3, 0}, {0, 4}, {1, 2}};
+    bool passing2 = exp_match_ind_n_othr == get_matching_indices_as_vector(codeword1, codeword2);
+    passing *= passing2;
+
+    codeword1 = {3, 22, 24, 15};
+    codeword2 = {21, 15, 13, 11};
+    exp_match_ind_n_othr = {{3}, {1}, {0, 1, 2}, {0, 2, 3}};
+    bool passing3 = exp_match_ind_n_othr == get_matching_indices_as_vector(codeword1, codeword2);
+    passing *= passing3;
+
+    codeword1 = {1, 1, 2, 3, 3, 4, 4, 2, 1};
+    codeword2 = {5, 1, 3, 6, 7, 1, 3};
+    exp_match_ind_n_othr = {{0, 3}, {1, 2}, {2, 5}, {0, 3, 4}};
+    bool passing4 = exp_match_ind_n_othr == get_matching_indices_as_vector(codeword1, codeword2);
+    passing *= passing4;
+
+    return passing;
+}
+
 bool test_do_words_match_to_matching_indices_int() {
     // vector<string> word1 = {"h", "e", "l", "l", "o"};
     // vector<string> word2 = {"l", "i", "v", "e"};
@@ -1059,6 +1124,33 @@ bool test_do_words_match_to_matching_indices_int() {
     vector<int> indices_in_word2 = {1, 2};
     MatchingIndicesAndOthers match_ind_n_othr(matching_indices, indices_in_word1, indices_in_word2);
     bool passing = do_words_match_to_matching_indices(word1, word2, match_ind_n_othr);
+    return passing;
+}
+
+bool test_do_words_match_to_matching_indices_int_plus() {
+    vector<int> word1 = {8, 5, 12, 12, 15};
+    vector<int> word2 = {12, 9, 22, 5};
+
+    map<int, int> substitution_map_opp;
+    substitution_map_opp[8] = 1;
+    substitution_map_opp[15] = 1;
+    vector<vector<int>> match_ind_n_othr = {{1, 2}, {3, 0}, {0, 4}, {1, 2}};
+    bool passing = do_words_match_to_matching_indices(word1, word2, match_ind_n_othr, substitution_map_opp);
+
+    word1 = {1, 2, 3, 3, 4};
+    word2 = {3, 5, 6, 3};
+    substitution_map_opp.clear();
+    substitution_map_opp[1] = 1;
+    substitution_map_opp[4] = 1;
+    bool passing1 = !do_words_match_to_matching_indices(word1, word2, match_ind_n_othr, substitution_map_opp);
+    passing *= passing1;
+
+    word1 = {1, 2, 3, 3, 4};
+    word2 = {3, 1, 5, 2};
+    bool passing2 = !do_words_match_to_matching_indices(word1, word2, match_ind_n_othr, substitution_map_opp);
+    passing *= passing2;
+
+
     return passing;
 }
 
@@ -1184,7 +1276,7 @@ bool test_sort_codewords1(CodewordPuzzle1 puzzle) {
     return passing;
 }
 
-bool test_match_two_codewords1(CodewordPuzzle1 puzzle) {
+bool test_match_two_codewords0(CodewordPuzzle1 puzzle) {
     // vector<int> codeword1 = {3, 22, 24, 15};
     // vector<int> codeword2 = {21, 15, 13, 11};
     int codeword_index1 = 4;
@@ -1220,8 +1312,120 @@ bool test_match_two_codewords1(CodewordPuzzle1 puzzle) {
     return passing;
 }
 
-bool test_find_all_unique_pairs1(CodewordPuzzle1 puzzle) {
+bool test_match_two_codewords1(CodewordPuzzle1 puzzle) {
+    // vector<int> codeword1 = {3, 22, 24, 15};
+    // vector<int> codeword2 = {21, 15, 13, 11};
+    int codeword_index1 = 4;
+    int codeword_index2 = 5;
+
+    // std::vector<std::pair<std::string, std::string>> matching_pairs = puzzle.match_two_codewords(codeword1, codeword2, 999);
+    std::vector<std::pair<std::vector<int>, std::vector<int>>> matching_pairs = puzzle.match_two_codewords1(codeword_index1, codeword_index2, 999);
+
+    bool passing = matching_pairs.size() == 1;
+    // std::cout << "Found " << matching_pairs.size() << " pairs" << std::endl;
+
+    // bool passing1 = matching_pairs[0].first == "some";
+    vector<int> expected1 = {19, 15, 13, 5};
+    bool passing1 = matching_pairs[0].first == expected1;
+    // bool passing1 = join_string(matching_pairs[0].first, "") == "some";
+    passing *= passing1;
+
+    // bool passing2 = matching_pairs[0].second == "read";
+    vector<int> expected2 = {18, 5, 1, 4};
+    bool passing2 = matching_pairs[0].second == expected2;
+    // bool passing2 = join_string(matching_pairs[0].second, "") == "read";
+    passing *= passing2;
+
+    // matching_pairs = puzzle.match_two_codewords(codeword_index1, codeword_index2, 999);
+    // passing *= matching_pairs.size() == 1;
+
+    // passing1 = matching_pairs[0].first == "some";
+    // passing *= passing1;
+
+    // passing2 = matching_pairs[0].second == "read";
+    // passing *= passing2;
+
+    return passing;
+}
+
+bool test_match_two_codewords2(CodewordPuzzle1 puzzle) {
+    // vector<int> codeword1 = {3, 22, 24, 15};
+    // vector<int> codeword2 = {21, 15, 13, 11};
+    int codeword_index1 = 4;
+    int codeword_index2 = 5;
+
+    // std::vector<std::pair<std::string, std::string>> matching_pairs = puzzle.match_two_codewords(codeword1, codeword2, 999);
+    std::vector<std::pair<std::vector<int>, std::vector<int>>> matching_pairs = puzzle.match_two_codewords2(codeword_index1, codeword_index2, 999);
+
+    bool passing = matching_pairs.size() == 1;
+    // std::cout << "Found " << matching_pairs.size() << " pairs" << std::endl;
+
+    // bool passing1 = matching_pairs[0].first == "some";
+    vector<int> expected1 = {19, 15, 13, 5};
+    bool passing1 = matching_pairs[0].first == expected1;
+    // bool passing1 = join_string(matching_pairs[0].first, "") == "some";
+    passing *= passing1;
+
+    // bool passing2 = matching_pairs[0].second == "read";
+    vector<int> expected2 = {18, 5, 1, 4};
+    bool passing2 = matching_pairs[0].second == expected2;
+    // bool passing2 = join_string(matching_pairs[0].second, "") == "read";
+    passing *= passing2;
+
+    // matching_pairs = puzzle.match_two_codewords(codeword_index1, codeword_index2, 999);
+    // passing *= matching_pairs.size() == 1;
+
+    // passing1 = matching_pairs[0].first == "some";
+    // passing *= passing1;
+
+    // passing2 = matching_pairs[0].second == "read";
+    // passing *= passing2;
+
+    return passing;
+}
+
+bool test_find_all_unique_pairs0(CodewordPuzzle1 puzzle) {
     vector<CodewordWordPair1> unique_pairs = puzzle.find_all_unique_pairs();
+
+    // (3, 22, 24, 15) - (21, 15, 13, 11) = some - read
+    // (3, 24, 24, 15) - (4,24,10,9,27,9,7,7,9,2,12) = cola - öljytynnyri
+    // others?
+
+    bool passing = unique_pairs.size() == 2;
+
+    // for (auto p : unique_pairs) {
+    //     std::cout << "pair" << std::endl;
+    //     std::cout << codeword_as_str(p.codeword1) << "  " << codeword_as_str(p.codeword2) << std::endl;
+    //     std::cout << join_string(p.word1, "") << "  " << join_string(p.word2, "")  << std::endl;
+    // }
+
+    // MORE TO COME
+
+    return passing;
+}
+
+bool test_find_all_unique_pairs1(CodewordPuzzle1 puzzle) {
+    vector<CodewordWordPair1> unique_pairs = puzzle.find_all_unique_pairs1();
+
+    // (3, 22, 24, 15) - (21, 15, 13, 11) = some - read
+    // (3, 24, 24, 15) - (4,24,10,9,27,9,7,7,9,2,12) = cola - öljytynnyri
+    // others?
+
+    bool passing = unique_pairs.size() == 2;
+
+    // for (auto p : unique_pairs) {
+    //     std::cout << "pair" << std::endl;
+    //     std::cout << codeword_as_str(p.codeword1) << "  " << codeword_as_str(p.codeword2) << std::endl;
+    //     std::cout << join_string(p.word1, "") << "  " << join_string(p.word2, "")  << std::endl;
+    // }
+
+    // MORE TO COME
+
+    return passing;
+}
+
+bool test_find_all_unique_pairs2(CodewordPuzzle1 puzzle) {
+    vector<CodewordWordPair1> unique_pairs = puzzle.find_all_unique_pairs2();
 
     // (3, 22, 24, 15) - (21, 15, 13, 11) = some - read
     // (3, 24, 24, 15) - (4,24,10,9,27,9,7,7,9,2,12) = cola - öljytynnyri

@@ -39,6 +39,7 @@ std::vector<std::vector<std::string>> get_matched_words3(std::vector<int> codewo
 std::vector<std::vector<int>> get_matched_words_int(std::vector<int> codeword, std::vector<std::vector<int>> wordlist_int, int maximum_matches);
 std::vector<std::vector<int>> get_matched_words_int2(std::vector<int> codeword, std::vector<std::vector<int>> wordlist_int);
 std::vector<std::vector<int>> get_matched_words_int3(std::vector<int> codeword, int codeword_length, std::vector<std::vector<int>> wordlist_int, std::vector<int> word_lengths);
+bool does_word_match_to_substitution_maps(std::vector<int> word_vector, std::vector<int> codeword, int codeword_length, std::map<int, int> substitution_map, std::map<int, int> substitution_map_opp);
 
 
 #endif

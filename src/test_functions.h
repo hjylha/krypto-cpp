@@ -38,6 +38,7 @@ bool test_does_int_word_match3();
 bool test_get_matched_words();
 bool test_get_matched_words2();
 bool test_get_matched_words_int3();
+bool test_does_word_match_to_substitution_maps();
 
 // file_operations
 bool test_does_path_exist();
@@ -63,12 +64,18 @@ bool test_match_two_codewords(CodewordPuzzle puzzle);
 bool test_find_all_unique_pairs(CodewordPuzzle puzzle);
 
 // CodewordPuzzle1
+bool test_get_matching_indices_as_vector();
 bool test_do_words_match_to_matching_indices_int();
+bool test_do_words_match_to_matching_indices_int_plus();
 bool test_CodewordWordPair1();
 bool test_CodewordPuzzle1(CodewordPuzzle1 puzzle);
 bool test_substitution_vector_things1(CodewordPuzzle1 puzzle);
 bool test_sort_codewords1(CodewordPuzzle1 puzzle);
+bool test_match_two_codewords0(CodewordPuzzle1 puzzle);
 bool test_match_two_codewords1(CodewordPuzzle1 puzzle);
+bool test_match_two_codewords2(CodewordPuzzle1 puzzle);
+bool test_find_all_unique_pairs0(CodewordPuzzle1 puzzle);
 bool test_find_all_unique_pairs1(CodewordPuzzle1 puzzle);
+bool test_find_all_unique_pairs2(CodewordPuzzle1 puzzle);
 
 #endif

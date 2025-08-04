@@ -109,6 +109,8 @@ int main()
 
     show_test_result(test_get_matched_words_int3(), "test_get_matched_words_int3");
 
+    show_test_result(test_does_word_match_to_substitution_maps(), "test_does_word_match_to_substitution_maps");
+
 
     cout << "\nTesting file_operations:" << endl;
 
@@ -195,7 +197,11 @@ int main()
 
     cout << "\nTesting CodewordPuzzle1:" << endl;
 
+    show_test_result(test_get_matching_indices_as_vector(), "test_get_matching_indices_as_vector");
+
     show_test_result(test_do_words_match_to_matching_indices_int(), "test_do_words_match_to_matching_indices_int");
+
+    show_test_result(test_do_words_match_to_matching_indices_int_plus(), "test_do_words_match_to_matching_indices_int_plus");
 
     show_test_result(test_CodewordWordPair1(), "test_CodewordWordPair1");
 
@@ -215,9 +221,13 @@ int main()
 
     show_test_result(test_sort_codewords1(puzzle1), "test_sort_codewords1");
 
+    show_test_result(test_match_two_codewords0(puzzle1), "test_match_two_codewords");
     show_test_result(test_match_two_codewords1(puzzle1), "test_match_two_codewords1");
+    show_test_result(test_match_two_codewords2(puzzle1), "test_match_two_codewords2");
 
+    show_test_result(test_find_all_unique_pairs0(puzzle1), "test_find_all_unique_pairs");
     show_test_result(test_find_all_unique_pairs1(puzzle1), "test_find_all_unique_pairs1");
+    show_test_result(test_find_all_unique_pairs2(puzzle1), "test_find_all_unique_pairs2");
 
 
     auto end_time = std::chrono::high_resolution_clock::now();

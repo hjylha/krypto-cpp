@@ -540,3 +540,24 @@ std::vector<std::vector<int>> get_matched_words_int3(std::vector<int> codeword, 
     }
     return matched_words;
 }
+
+
+bool does_word_match_to_substitution_maps(std::vector<int> word_vector, std::vector<int> codeword, int codeword_length, std::map<int, int> substitution_map, std::map<int, int> substitution_map_opp) {
+    for (int i = 0; i < codeword_length; i++) {
+        if (substitution_map[codeword[i]] == 0 && substitution_map_opp[word_vector[i]] == 0) {
+            continue;
+        }
+        if (substitution_map[codeword[i]] == word_vector[i]) {
+            continue;
+        }
+        return false;
+        if (substitution_map[codeword[i]] != 0 && substitution_map[codeword[i]] != word_vector[i]) {
+            return false;
+        }
+        if (substitution_map[codeword[i]] == 0 && substitution_map_opp[word_vector[i]] != 0) {
+            return false;
+        }
+        
+    }
+    return true;
+}
