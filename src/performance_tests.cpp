@@ -68,6 +68,8 @@ private:
     vector<vector<int>> codewords;
     vector<int> codeword_lengths;
     vector<string> comments;
+
+    CodewordPuzzle1 puzzle1;
 public:
     PerformanceTest(string language, string codewords_filepath)
     {
@@ -185,6 +187,46 @@ public:
         return show_elapsed_time(description, start_time, end_time, "");
     }
 
+    double CodewordPuzzle1_duration() {
+        auto start_time = std::chrono::high_resolution_clock::now();
+
+        puzzle1 = CodewordPuzzle1(codewords, codeword_lengths, wordlist_int, word_lengths, alphabet.size(), comments);
+
+        auto end_time = std::chrono::high_resolution_clock::now();
+        string description = "CodewordPuzzle1 init";
+        return show_elapsed_time(description, start_time, end_time, "");
+    }
+
+    double find_all_unique_pairs_duration() {
+        auto start_time = std::chrono::high_resolution_clock::now();
+
+        vector<CodewordWordPair1> unique_pairs = puzzle1.find_all_unique_pairs();
+
+        auto end_time = std::chrono::high_resolution_clock::now();
+        string description = "find_all_unique_pairs";
+        return show_elapsed_time(description, start_time, end_time, "");
+    }
+
+    double find_all_unique_pairs1_duration() {
+        auto start_time = std::chrono::high_resolution_clock::now();
+
+        vector<CodewordWordPair1> unique_pairs = puzzle1.find_all_unique_pairs1();
+
+        auto end_time = std::chrono::high_resolution_clock::now();
+        string description = "find_all_unique_pairs1";
+        return show_elapsed_time(description, start_time, end_time, "");
+    }
+
+    double find_all_unique_pairs2_duration() {
+        auto start_time = std::chrono::high_resolution_clock::now();
+
+        vector<CodewordWordPair1> unique_pairs = puzzle1.find_all_unique_pairs2();
+
+        auto end_time = std::chrono::high_resolution_clock::now();
+        string description = "find_all_unique_pairs2";
+        return show_elapsed_time(description, start_time, end_time, "");
+    }
+
     double run_performance_tests() {
         vector<double> durations;
         // language_map & config???
@@ -193,7 +235,15 @@ public:
 
         durations.push_back((get_codewords_and_comments_duration()));
 
-        durations.push_back(get_matched_words_duration());
+        // durations.push_back(get_matched_words_duration());
+
+        durations.push_back((CodewordPuzzle1_duration()));
+
+        durations.push_back(find_all_unique_pairs_duration());
+
+        durations.push_back(find_all_unique_pairs1_duration());
+
+        durations.push_back(find_all_unique_pairs2_duration());
 
         double total_duration = sum_vector(durations);
 
@@ -352,42 +402,42 @@ int main(int argc, char* argv[])
         // description = "setting matched words (try2) (k24-51-52.csv)";
         // show_elapsed_time(description, start_time, end_time, "");
 
-        start_time = std::chrono::high_resolution_clock::now();
-        vector<vector<vector<string>>> matched_words3;
-        vector<vector<string>> word_vectors3;
-        for (vector<int> codeword : codewords) {
-            word_vectors3 = get_matched_words3(codeword, codeword.size(), wordlist_vector_fi, word_lengths_fi);
-            matched_words3.push_back(word_vectors3);
-        }
-        end_time = std::chrono::high_resolution_clock::now();
-        description = "setting matched words (try3) (k24-51-52.csv)";
-        show_elapsed_time(description, start_time, end_time, "");
+        // start_time = std::chrono::high_resolution_clock::now();
+        // vector<vector<vector<string>>> matched_words3;
+        // vector<vector<string>> word_vectors3;
+        // for (vector<int> codeword : codewords) {
+        //     word_vectors3 = get_matched_words3(codeword, codeword.size(), wordlist_vector_fi, word_lengths_fi);
+        //     matched_words3.push_back(word_vectors3);
+        // }
+        // end_time = std::chrono::high_resolution_clock::now();
+        // description = "setting matched words (try3) (k24-51-52.csv)";
+        // show_elapsed_time(description, start_time, end_time, "");
 
 
-        start_time = std::chrono::high_resolution_clock::now();
-        vector<vector<vector<int>>> matched_words4;
-        vector<vector<int>> word_vectors4;
-        for (vector<int> codeword : codewords) {
-            word_vectors4 = get_matched_words_int(codeword, wordlist_int_fi, -1);
-            matched_words4.push_back(word_vectors4);
-        }
-        end_time = std::chrono::high_resolution_clock::now();
-        description = "setting matched words (int) (k24-51-52.csv)";
-        show_elapsed_time(description, start_time, end_time, "");
+        // start_time = std::chrono::high_resolution_clock::now();
+        // vector<vector<vector<int>>> matched_words4;
+        // vector<vector<int>> word_vectors4;
+        // for (vector<int> codeword : codewords) {
+        //     word_vectors4 = get_matched_words_int(codeword, wordlist_int_fi, -1);
+        //     matched_words4.push_back(word_vectors4);
+        // }
+        // end_time = std::chrono::high_resolution_clock::now();
+        // description = "setting matched words (int) (k24-51-52.csv)";
+        // show_elapsed_time(description, start_time, end_time, "");
 
 
-        start_time = std::chrono::high_resolution_clock::now();
-        vector<vector<vector<int>>> matched_words5;
-        vector<vector<int>> word_vectors5;
-        for (vector<int> codeword : codewords) {
-            word_vectors5 = get_matched_words_int2(codeword, wordlist_int_fi);
-            matched_words5.push_back(word_vectors4);
-        }
-        end_time = std::chrono::high_resolution_clock::now();
-        description = "setting matched words (int2) (k24-51-52.csv)";
-        show_elapsed_time(description, start_time, end_time, "");
+        // start_time = std::chrono::high_resolution_clock::now();
+        // vector<vector<vector<int>>> matched_words5;
+        // vector<vector<int>> word_vectors5;
+        // for (vector<int> codeword : codewords) {
+        //     word_vectors5 = get_matched_words_int2(codeword, wordlist_int_fi);
+        //     matched_words5.push_back(word_vectors4);
+        // }
+        // end_time = std::chrono::high_resolution_clock::now();
+        // description = "setting matched words (int2) (k24-51-52.csv)";
+        // show_elapsed_time(description, start_time, end_time, "");
 
-        cout << "\n" << endl;
+        // cout << "\n" << endl;
 
         PerformanceTest pt = PerformanceTest(lang_fi, codeword_filepath);
 

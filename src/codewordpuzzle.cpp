@@ -103,6 +103,62 @@ MatchingIndicesAndOthers get_matching_indices(std::vector<int> codeword1, std::v
     return MatchingIndicesAndOthers(matching_indices, other_indices1, other_indices2);
 }
 
+std::vector<std::vector<int>> get_matching_indices_as_vector(std::vector<int> codeword1, std::vector<int> codeword2) {
+    std::vector<std::vector<int>> all_the_things_in_a_vector;
+    std::vector<int> matching_indices1, matching_indices2, other_indices1, other_indices2;
+
+    std::vector<int> nums_in_codeword1;
+
+    int len1 = codeword1.size();
+    int len2 = codeword2.size();
+
+    for (int i1 = 0; i1 < len1; i1++) {
+        if (std::find(nums_in_codeword1.begin(), nums_in_codeword1.end(), codeword1[i1]) == nums_in_codeword1.end()) {
+        // if (std::find(nums_in_codeword1.begin(), end, codeword1[i1]) == end) {
+        // if (find(nums_in_codeword1, codeword1[i1] == -1)) {
+            nums_in_codeword1.push_back(codeword1[i1]);
+        }
+        else {
+            continue;
+        }
+        bool found_match = false;
+        for (int i2 = 0; i2 < len2; i2++) {
+            if (codeword1[i1] == codeword2[i2]) {
+                matching_indices1.push_back(i1);
+                matching_indices2.push_back(i2);
+                found_match = true;
+                break;
+            }
+        }
+        if (!found_match) {
+            other_indices1.push_back(i1);
+        }
+    }
+    bool found = false;
+    for (int i = 0; i < len2; i++) {
+        if (std::find(nums_in_codeword1.begin(), nums_in_codeword1.end(), codeword2[i]) == nums_in_codeword1.end()) {
+        // if (std::find(nums_in_codeword1.begin(), end, codeword2[i]) == end) {
+        // if (find(nums_in_codeword1, codeword2[i] == -1)) {
+            for (int j = 0; j < other_indices2.size(); j++) {
+                if (codeword2[other_indices2[j]] == codeword2[i]) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                other_indices2.push_back(i);
+            }
+        }
+    }
+
+
+    all_the_things_in_a_vector.push_back(matching_indices1);
+    all_the_things_in_a_vector.push_back(matching_indices2);
+    all_the_things_in_a_vector.push_back(other_indices1);
+    all_the_things_in_a_vector.push_back(other_indices2);
+    return all_the_things_in_a_vector;
+}
+
 // bool do_words_match_to_matching_indices(std::string word1, std::string word2, MatchingIndicesAndOthers matching_indices_n_others) {
 bool do_words_match_to_matching_indices(std::vector<std::string> word_vector1, std::vector<std::string> word_vector2, MatchingIndicesAndOthers matching_indices_n_others) {
     std::vector<std::pair<int, int>> matching_indices = matching_indices_n_others.matching_indices;
@@ -157,6 +213,31 @@ bool do_words_match_to_matching_indices(std::vector<int> word_vector1, std::vect
             return false;
         }
     }
+    return true;
+}
+
+bool do_words_match_to_matching_indices(std::vector<int> word_vector1, std::vector<int> word_vector2, std::vector<std::vector<int>> matching_indices_n_others, std::map<int, int> substitution_map_opp) {
+    int len1 = matching_indices_n_others[0].size();
+    for (int i = 0; i < len1; i++) {
+        if (word_vector1[matching_indices_n_others[0][i]] != word_vector2[matching_indices_n_others[1][i]]) {
+            return false;
+        }
+    }
+    std::vector<int> indices_to_check = matching_indices_n_others[3];
+    int num_of_indices = indices_to_check.size();
+    for (int i = 0; i < num_of_indices; i++) {
+        if (substitution_map_opp[word_vector2[indices_to_check[i]]] != 0) {
+            return false;
+        }
+    }
+    // for (int index1 : matching_indices_n_others[2]) {
+    //     for (int index2 : matching_indices_n_others[3]) {
+    //         if (word_vector1[index1] == word_vector2[index2]) {
+    //             return false;
+    //         }
+    //     }
+    // }
+
     return true;
 }
 
@@ -800,7 +881,7 @@ CodewordPuzzle1::CodewordPuzzle1(std::vector<std::vector<int>> the_codewords, st
     }
 
     std::vector<std::vector<int>> word_vectors;
-    for (int i = 0; i < codewords.size(); i++) {
+    for (int i = 0; i < num_of_codewords; i++) {
         // std::vector<std::string> words = get_matched_words(codeword, wordlist, -1);
         word_vectors = get_matched_words_int3(codewords[i], codeword_lengths[i], wordlist, word_lengths);
         matched_words.push_back(word_vectors);
@@ -925,7 +1006,7 @@ bool CodewordPuzzle1::does_word_match_to_substitution_vector(std::vector<int> wo
             return false;
         }
     }
-return true;
+    return true;
 }
 
 void CodewordPuzzle1::set_matched_words() {
@@ -1111,8 +1192,15 @@ std::vector<std::pair<std::vector<int>, std::vector<int>>> CodewordPuzzle1::matc
 
     MatchingIndicesAndOthers matching_indices_n_others = get_matching_indices(codewords[codeword_index1], codewords[codeword_index2]);
 
+    int num_of_word_match_attempts = 0;
+
     for (std::vector<int> word_vector1 : matched_words[codeword_index1]) {
         for (std::vector<int> word_vector2 : matched_words[codeword_index2]) {
+            // if (num_of_word_match_attempts % 1000000 == 0) {
+            //     std::cout << num_of_word_match_attempts / 1000000 << " million word matches attepted" << std::endl;
+            // }
+            // num_of_word_match_attempts++;
+            // original way
             if (do_words_match_to_matching_indices(word_vector1, word_vector2, matching_indices_n_others)) {
                 matching_pairs.push_back(std::pair<std::vector<int>, std::vector<int>>(word_vector1, word_vector2));
                 num_of_matched_pairs++;
@@ -1125,6 +1213,136 @@ std::vector<std::pair<std::vector<int>, std::vector<int>>> CodewordPuzzle1::matc
         }
     }
 
+
+    return matching_pairs;
+}
+
+std::vector<std::pair<std::vector<int>, std::vector<int>>> CodewordPuzzle1::match_two_codewords1(int codeword_index1, int codeword_index2, int maximum_matches) {
+    std::vector<std::pair<std::vector<int>, std::vector<int>>> matching_pairs;
+    int num_of_matched_pairs = 0;
+
+    std::vector<int> codeword1 = codewords[codeword_index1];
+    std::vector<int> codeword2 = codewords[codeword_index2];
+    int codeword1_length = codeword1.size();
+    int codeword2_length = codeword2.size();
+    bool match_found = true;
+    int codenum2;
+    int letter2;
+    std::map<int, int> substitution_map;
+    std::map<int, int> substitution_map_opp;
+
+    int num_of_word_match_attempts = 0;
+
+    for (std::vector<int> word_vector1 : matched_words[codeword_index1]) {
+        substitution_map.clear();
+        substitution_map_opp.clear();
+        for (int i = 0; i < codeword1_length; i++) {
+            substitution_map[codeword1[i]] = word_vector1[i];
+            substitution_map_opp[word_vector1[i]] = codeword1[i];
+        }
+        for (std::vector<int> word_vector2 : matched_words[codeword_index2]) {
+            // if (num_of_word_match_attempts % 1000000 == 0) {
+            //     std::cout << num_of_word_match_attempts / 1000000 << " million word matches attempteded" << std::endl;
+            // }
+            // num_of_word_match_attempts++;
+            match_found = true;
+            for (int i = 0; i < codeword2_length; i++) {
+                codenum2 = codeword2[i];
+                letter2 = word_vector2[i];
+                if (substitution_map[codenum2] == 0 && substitution_map_opp[letter2] == 0) {
+                    continue;
+                }
+                if (substitution_map[codenum2] == letter2) {
+                    continue;
+                }
+                match_found = false;
+                break;
+            }
+            if (match_found) {
+                matching_pairs.push_back(std::pair<std::vector<int>, std::vector<int>>(word_vector1, word_vector2));
+                num_of_matched_pairs++;
+                if (num_of_matched_pairs > maximum_matches) {
+                    // std::cout << "too many matched pairs" << std::endl;
+                    matching_pairs.clear();
+                    return matching_pairs;
+                }
+            }
+        }
+    }
+
+    return matching_pairs;
+}
+
+std::vector<std::pair<std::vector<int>, std::vector<int>>> CodewordPuzzle1::match_two_codewords2(int codeword_index1, int codeword_index2, int maximum_matches) {
+    std::vector<std::pair<std::vector<int>, std::vector<int>>> matching_pairs;
+    int num_of_matched_pairs = 0;
+    std::map<int, int> substitution_map, substitution_map_opp;
+
+    int num_of_word_match_attempts = 0;
+
+    std::vector<int> codeword1 = codewords[codeword_index1];
+    std::vector<int> codeword2 = codewords[codeword_index2];
+    int codeword1_length = codeword1.size();
+    int codeword2_length = codeword2.size();
+
+    std::vector<std::vector<int>> matching_indices_n_others = get_matching_indices_as_vector(codewords[codeword_index1], codewords[codeword_index2]);
+
+    for (std::vector<int> word_vector1 : matched_words[codeword_index1]) {
+        substitution_map.clear();
+        substitution_map_opp.clear();
+        for (int i = 0; i < codeword1_length; i++) {
+            substitution_map[codeword1[i]] = word_vector1[i];
+            substitution_map_opp[word_vector1[i]] = codeword1[i];
+        }
+        for (std::vector<int> word_vector2 : matched_words[codeword_index2]) {
+            // if (num_of_word_match_attempts % 1000000 == 0) {
+            //     std::cout << num_of_word_match_attempts / 1000000 << " million word matches attempted" << std::endl;
+            // }
+            // num_of_word_match_attempts++;
+            if (does_word_match_to_substitution_maps(word_vector2, codeword2, codeword2_length, substitution_map, substitution_map_opp)) {
+                matching_pairs.push_back(std::pair<std::vector<int>, std::vector<int>>(word_vector1, word_vector2));
+                num_of_matched_pairs++;
+                if (num_of_matched_pairs > maximum_matches) {
+                    matching_pairs.clear();
+                    return matching_pairs;
+                }
+            }
+        }
+    }
+
+    return matching_pairs;
+}
+
+std::vector<std::pair<std::vector<int>, std::vector<int>>> CodewordPuzzle1::match_two_codewords3(int codeword_index1, int codeword_index2, int maximum_matches) {
+    std::vector<std::pair<std::vector<int>, std::vector<int>>> matching_pairs;
+    int num_of_matched_pairs = 0;
+    std::map<int, int> substitution_map_opp;
+
+    int num_of_word_match_attempts = 0;
+
+    std::vector<std::vector<int>> matching_indices_n_others = get_matching_indices_as_vector(codewords[codeword_index1], codewords[codeword_index2]);
+
+    for (std::vector<int> word_vector1 : matched_words[codeword_index1]) {
+        substitution_vector_opp.clear();
+        for (int index1 : matching_indices_n_others[2]) {
+            // does this matter other than it should not be 0?
+            substitution_map_opp[word_vector1[index1]] = 1;
+        }
+        for (std::vector<int> word_vector2 : matched_words[codeword_index2]) {
+            // if (num_of_word_match_attempts % 1000000 == 0) {
+            //     std::cout << num_of_word_match_attempts / 1000000 << " million word matches attempted" << std::endl;
+            // }
+            // num_of_word_match_attempts++;
+            if (do_words_match_to_matching_indices(word_vector1, word_vector2, matching_indices_n_others, substitution_map_opp)) {
+                matching_pairs.push_back(std::pair<std::vector<int>, std::vector<int>>(word_vector1, word_vector2));
+                num_of_matched_pairs++;
+                if (num_of_matched_pairs > maximum_matches) {
+                    matching_pairs.clear();
+                    return matching_pairs;
+                }
+            }
+        }
+    }
 
     return matching_pairs;
 }
@@ -1145,7 +1363,7 @@ std::vector<CodewordWordPair1> CodewordPuzzle1::find_all_unique_pairs() {
     // std::cout << "indices sorted" << std::endl;
     // std::cout << sorted_indices.size() << " good indices" << std::endl;
 
-    // int checked_things = 0;
+    int checked_things = 0;
     // int good_things = 0;
 
     int index1, index2;
@@ -1162,6 +1380,7 @@ std::vector<CodewordWordPair1> CodewordPuzzle1::find_all_unique_pairs() {
             index2 = sorted_indices[i2];
             codeword2 = codewords[index2];
             // checked_things++;
+            // std::cout << checked_things << " codeword pairs about to be checked: " << matched_words[index1].size() * matched_words[index2].size() << " word pairs" << std::endl;
             // is_codeword2_solved = is_codeword_solved(codewords[sorted_indices[i2]]);
             is_codeword2_solved = is_codeword_solved(codeword2);
             if (is_codeword1_solved && is_codeword2_solved) {
@@ -1170,6 +1389,116 @@ std::vector<CodewordWordPair1> CodewordPuzzle1::find_all_unique_pairs() {
             // std::vector<std::pair<std::string, std::string>> matched_pairs = match_two_codewords(sorted_indices[i1], sorted_indices[i2], 1);
             // std::vector<std::pair<std::vector<std::string>, std::vector<std::string>>> matched_pairs = match_two_codewords(sorted_indices[i1], sorted_indices[i2], 1);
             std::vector<std::pair<std::vector<int>, std::vector<int>>> matched_pairs = match_two_codewords(index1, index2, 1);
+            if (!matched_pairs.empty()) {
+                // good_things++;
+                // std::cout << checked_things << " pair is good number " << good_things << std::endl;
+                // unique_pairs.push_back(CodewordWordPair(codewords[sorted_indices[i1]], codewords[sorted_indices[i2]], matched_pairs[0].first, matched_pairs[0].second));
+                unique_pairs.push_back(CodewordWordPair1(codeword1, codeword2, matched_pairs[0].first, matched_pairs[0].second));
+            }
+        }
+    }
+    // std::cout << checked_things << " things checked, " << good_things << " good things found" << std::endl;
+
+    return unique_pairs;
+}
+
+std::vector<CodewordWordPair1> CodewordPuzzle1::find_all_unique_pairs1() {
+
+    // std::cout << "starting search" << std::endl;
+
+    std::vector<CodewordWordPair1> unique_pairs;
+    // std::vector<int> sorted_indices = sort_codewords();
+    std::vector<int> sorted_indices;
+    for (int i = 0; i < num_of_codewords; i++) {
+        if (!matched_words[i].empty()) {
+            sorted_indices.push_back(i);
+        }
+    }
+
+    // std::cout << "indices sorted" << std::endl;
+    // std::cout << sorted_indices.size() << " good indices" << std::endl;
+
+    int checked_things = 0;
+    // int good_things = 0;
+
+    int index1, index2;
+    std::vector<int> codeword1, codeword2;
+
+    int num_of_good_codewords = sorted_indices.size();
+    bool is_codeword1_solved, is_codeword2_solved;
+    for (int i1 = 0; i1 < num_of_good_codewords; i1++) {
+        index1 = sorted_indices[i1];
+        codeword1 = codewords[index1];
+        // is_codeword1_solved = is_codeword_solved(codewords[sorted_indices[i1]]);
+        is_codeword1_solved = is_codeword_solved(codeword1);
+        for (int i2 = i1 + 1; i2 < num_of_good_codewords; i2++) {
+            index2 = sorted_indices[i2];
+            codeword2 = codewords[index2];
+            // checked_things++;
+            // std::cout << checked_things << " codeword pairs about to be checked: " << matched_words[index1].size() * matched_words[index2].size() << " word pairs" << std::endl;
+            // is_codeword2_solved = is_codeword_solved(codewords[sorted_indices[i2]]);
+            is_codeword2_solved = is_codeword_solved(codeword2);
+            if (is_codeword1_solved && is_codeword2_solved) {
+                continue;
+            }
+            // std::vector<std::pair<std::string, std::string>> matched_pairs = match_two_codewords(sorted_indices[i1], sorted_indices[i2], 1);
+            // std::vector<std::pair<std::vector<std::string>, std::vector<std::string>>> matched_pairs = match_two_codewords(sorted_indices[i1], sorted_indices[i2], 1);
+            std::vector<std::pair<std::vector<int>, std::vector<int>>> matched_pairs = match_two_codewords1(index1, index2, 1);
+            if (!matched_pairs.empty()) {
+                // good_things++;
+                // std::cout << checked_things << " pair is good number " << good_things << std::endl;
+                // unique_pairs.push_back(CodewordWordPair(codewords[sorted_indices[i1]], codewords[sorted_indices[i2]], matched_pairs[0].first, matched_pairs[0].second));
+                unique_pairs.push_back(CodewordWordPair1(codeword1, codeword2, matched_pairs[0].first, matched_pairs[0].second));
+            }
+        }
+    }
+    // std::cout << checked_things << " things checked, " << good_things << " good things found" << std::endl;
+
+    return unique_pairs;
+}
+
+std::vector<CodewordWordPair1> CodewordPuzzle1::find_all_unique_pairs2() {
+
+    // std::cout << "starting search" << std::endl;
+
+    std::vector<CodewordWordPair1> unique_pairs;
+    // std::vector<int> sorted_indices = sort_codewords();
+    std::vector<int> sorted_indices;
+    for (int i = 0; i < num_of_codewords; i++) {
+        if (!matched_words[i].empty()) {
+            sorted_indices.push_back(i);
+        }
+    }
+
+    // std::cout << "indices sorted" << std::endl;
+    // std::cout << sorted_indices.size() << " good indices" << std::endl;
+
+    int checked_things = 0;
+    // int good_things = 0;
+
+    int index1, index2;
+    std::vector<int> codeword1, codeword2;
+
+    int num_of_good_codewords = sorted_indices.size();
+    bool is_codeword1_solved, is_codeword2_solved;
+    for (int i1 = 0; i1 < num_of_good_codewords; i1++) {
+        index1 = sorted_indices[i1];
+        codeword1 = codewords[index1];
+        // is_codeword1_solved = is_codeword_solved(codewords[sorted_indices[i1]]);
+        is_codeword1_solved = is_codeword_solved(codeword1);
+        for (int i2 = i1 + 1; i2 < num_of_good_codewords; i2++) {
+            index2 = sorted_indices[i2];
+            codeword2 = codewords[index2];
+            // checked_things++;
+            // std::cout << checked_things << " codeword pairs about to be checked: " << matched_words[index1].size() * matched_words[index2].size() << " word pairs" << std::endl;
+            // is_codeword2_solved = is_codeword_solved(codewords[sorted_indices[i2]]);
+            is_codeword2_solved = is_codeword_solved(codeword2);
+            if (is_codeword1_solved && is_codeword2_solved) {
+                continue;
+            }
+            // std::vector<std::pair<std::string, std::string>> matched_pairs = match_two_codewords(sorted_indices[i1], sorted_indices[i2], 1);
+            // std::vector<std::pair<std::vector<std::string>, std::vector<std::string>>> matched_pairs = match_two_codewords(sorted_indices[i1], sorted_indices[i2], 1);
+            std::vector<std::pair<std::vector<int>, std::vector<int>>> matched_pairs = match_two_codewords2(index1, index2, 1);
             if (!matched_pairs.empty()) {
                 // good_things++;
                 // std::cout << checked_things << " pair is good number " << good_things << std::endl;

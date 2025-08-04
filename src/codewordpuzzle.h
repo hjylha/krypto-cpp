@@ -21,9 +21,11 @@ public:
 };
 
 MatchingIndicesAndOthers get_matching_indices(std::vector<int> codeword1, std::vector<int> codeword2);
+std::vector<std::vector<int>> get_matching_indices_as_vector(std::vector<int> codeword1, std::vector<int> codeword2);
 // bool do_words_match_to_matching_indices(std::string word1, std::string word2, MatchingIndicesAndOthers matching_indices_n_others);
 bool do_words_match_to_matching_indices(std::vector<std::string> word_vector1, std::vector<std::string> word_vector2, MatchingIndicesAndOthers matching_indices_n_others);
 bool do_words_match_to_matching_indices(std::vector<int> word_vector1, std::vector<int> word_vector2, MatchingIndicesAndOthers matching_indices_n_others);
+bool do_words_match_to_matching_indices(std::vector<int> word_vector1, std::vector<int> word_vector2, std::vector<std::vector<int>> matching_indices_n_others, std::map<int, int> substitution_map_opp);
 
 struct CodewordWordPair
 {
@@ -180,7 +182,12 @@ public:
     // std::vector<std::pair<std::string, std::string>> match_two_codewords(std::vector<int> codeword1, std::vector<int> codeword2, int maximum_matches);
     // std::vector<std::pair<std::string, std::string>> match_two_codewords(int codeword_index1, int codeword_index2, int maximum_matches);
     std::vector<std::pair<std::vector<int>, std::vector<int>>> match_two_codewords(int codeword_index1, int codeword_index2, int maximum_matches);
+    std::vector<std::pair<std::vector<int>, std::vector<int>>> match_two_codewords1(int codeword_index1, int codeword_index2, int maximum_matches);
+    std::vector<std::pair<std::vector<int>, std::vector<int>>> match_two_codewords2(int codeword_index1, int codeword_index2, int maximum_matches);
+    std::vector<std::pair<std::vector<int>, std::vector<int>>> match_two_codewords3(int codeword_index1, int codeword_index2, int maximum_matches);
     std::vector<CodewordWordPair1> find_all_unique_pairs();
+    std::vector<CodewordWordPair1> find_all_unique_pairs1();
+    std::vector<CodewordWordPair1> find_all_unique_pairs2();
     std::pair<int, std::vector<int>> find_optimal_match();
 };
 
