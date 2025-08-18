@@ -1232,12 +1232,15 @@ void PuzzleCLI1::try_to_solve_puzzle_methodically(std::chrono::time_point<std::c
 
     std::pair<int, std::vector<int>> optimal_pair = puzzle.find_optimal_match();
     std::string the_word = "";
+    std::vector<std::string> the_word_vector;
     while (optimal_pair.first > -1) {
         found_words++;
 
-        the_word = "";
+        // the_word = "";
+        the_word_vector.clear();
         for (int i = 0; i < optimal_pair.second.size(); i++) {
-            the_word += alphabet[optimal_pair.second[i] - 1];
+            // the_word += alphabet[optimal_pair.second[i] - 1];
+            the_word_vector.push_back(alphabet[optimal_pair.second[i] - 1]);
         }
 
         std::string codeword_str = codeword_as_str(puzzle.get_codewords()[optimal_pair.first]);
@@ -1245,7 +1248,8 @@ void PuzzleCLI1::try_to_solve_puzzle_methodically(std::chrono::time_point<std::c
         std::string part2 = current_language_map["best_match_text"];
         std::string part3 = add_whitespace(utf8_split(std::to_string(optimal_pair.first + 1)), puzzle.max_num_size);
         std::string part4 = add_whitespace(utf8_split(codeword_str), puzzle.max_codeword_str_length);
-        std::string part5 = to_upper(add_whitespace(the_word, puzzle.max_word_length));
+        // std::string part5 = to_upper(add_whitespace(the_word, puzzle.max_word_length));
+        std::string part5 = to_upper(add_whitespace(the_word_vector, puzzle.max_word_length));
         std::cout << part1 << " " << part2 << part3 << "  " << part4 << "  " << part5 << std::endl;
         
         // puzzle.set_codeword_to_word(optimal_pair.first, optimal_pair.second);
